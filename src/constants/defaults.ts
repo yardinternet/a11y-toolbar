@@ -1,8 +1,15 @@
 export const DEFAULTS = {
-  showReadSpeaker: true,
-  showTextSizeToggler: true,
-  showContrastToggler: true,
+  showReadSpeakerButton: true,
+  showTextSizeButton: true,
+  showContrastButton: true,
   showPrintButton: true,
-  showLanguageToggler: true,
-  readSpeakerID: '9999'
+  showLanguageButton: true,
+  readSpeakerID: '9999',
+  iconOptions: {
+    readSpeakerIcon: 'fa-light fa-volume',
+    textSizeIcon: 'fa-light fa-text-height',
+    contrastIcon: 'fa-light fa-adjust',
+    printIcon: 'fa-light fa-print',
+    languageIcon: 'fa-light fa-language'
+  }
 };
