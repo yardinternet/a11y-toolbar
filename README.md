@@ -23,17 +23,34 @@ document.addEventListener( 'DOMContentLoaded', function () {
 } );
 ```
 
-## ⚙️ Changing options
+## ⚙️ Options
 
-TBA.
+Currently available options and their defaults.
+
+```JS
+const options = {
+  showReadSpeakerButton: true,
+  showTextSizeButton: true,
+  showContrastButton: true,
+  showPrintButton: true,
+  showLanguageButton: true,
+  readSpeakerID: '9999',
+  iconOptions: {
+    readSpeakerIcon: 'fa-light fa-volume',
+    textSizeIcon: 'fa-light fa-text-height',
+    contrastIcon: 'fa-light fa-adjust',
+    printIcon: 'fa-light fa-print',
+    languageIcon: 'fa-light fa-language'
+  }
+};
+
+```
 
 ## 👷‍♀️ Package development
 
 1. Run `npm link` inside this project.
 2. Run `npm link @yardinternet/a11y-toolbar` inside the project or theme. This will create a symbolic link to the project folder.
 3. Run `npm run start` inside this project AND the equivalent script inside the project or theme.
-Note: Its important for the DTS-CLI to only output 1 format type, otherwise the live reloading wont work properly.
-We have chosen to use ESM, since its a smaller format than CSJ, but it does mean we don't support using this package with "require".
 
 ## 🚀 How to publish
 
