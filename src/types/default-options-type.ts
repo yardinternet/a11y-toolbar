@@ -1,4 +1,4 @@
-export interface A11yToolbarDefaultOptions {
+export interface DefaultOptionsType {
   showReadSpeakerButton?: boolean;
   showTextSizeButton?: boolean;
   showContrastButton?: boolean;
