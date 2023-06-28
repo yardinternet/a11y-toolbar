@@ -10,6 +10,10 @@ import { COOKIES } from '../constants/cookies';
 import { createButton } from '../utils/createButton';
 import { DefaultOptionsType } from '../types/default-options-type';
 
+const CONTRAST_BUTTON_LABEL_INCREASE = 'Vergroot schermcontrast';
+const CONTRAST_BUTTON_LABEL_DECREASE = 'Verklein schermcontrast';
+const CONTRAST_BODY_CLASS = 'a11y-toolbar-contrast';
+
 /**
  * Adds a button to the toolbar that toggles the contrast.
  *
@@ -17,30 +21,46 @@ import { DefaultOptionsType } from '../types/default-options-type';
  * @param {DefaultOptionsType} options - The options for the contrast button.
  */
 export const addContrastButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
-  if (!options || !options.showContrastButton) return;
+	if (!options || !options.showContrastButton) return;
 
-  const contrastIcon = options.iconOptions?.contrastIcon || '';
-  const contrastButton = createButton(
-    'js-a11y-toolbar-contrast-toggler',
-    'Vergroot leestekst',
-    contrastIcon
-  );
+	const contrastIcon = options.iconOptions?.contrastIcon || '';
+	const contrastButton = createButton(
+		'js-a11y-toolbar-contrast-toggler',
+		CONTRAST_BUTTON_LABEL_INCREASE,
+		contrastIcon
+	);
 
-  toolbar.appendChild(contrastButton);
+	toolbar.appendChild(contrastButton);
 
-  initContrastBodyClass();
-  addContrastButtonEventListener(contrastButton);
+	initContrastBodyClass();
+	initPressedStateButton(contrastButton);
+	addContrastButtonEventListener(contrastButton);
 };
 
 /**
- * Initialize the body class based on the cookie. Checks first if the cookie is already set server side.
+ * Initialize the body class based on the cookie. Checks first if the class is already set server side.
  */
 const initContrastBodyClass = (): void => {
-  const hasContrast = hasContrastCookie();
+	const hasContrast = hasContrastCookie();
 
-  if (hasContrast && !document.body.classList.contains('a11y-toolbar-contrast')) {
-    document.body.classList.toggle('a11y-toolbar-contrast');
-  }
+	if (hasContrast && !document.body.classList.contains(CONTRAST_BODY_CLASS)) {
+		document.body.classList.toggle(CONTRAST_BODY_CLASS);
+	}
+};
+
+/**
+ * Initializes the pressed state of the contrast button based on the contrast cookie.
+ *
+ * @param {HTMLElement} button - The contrast button element.
+ */
+const initPressedStateButton = (button: HTMLElement): void => {
+	const hasContrast = hasContrastCookie();
+
+	button.setAttribute('aria-pressed', hasContrast.toString());
+	button.setAttribute(
+		'aria-label',
+		hasContrast ? CONTRAST_BUTTON_LABEL_DECREASE : CONTRAST_BUTTON_LABEL_INCREASE
+	);
 };
 
 /**
@@ -49,23 +69,25 @@ const initContrastBodyClass = (): void => {
  * @param {HTMLElement} button - The contrast button element.
  */
 const addContrastButtonEventListener = (button: HTMLElement): void => {
-  button.addEventListener('click', () => {
-    const newContrastCookie = !hasContrastCookie();
-    Cookies.set(COOKIES.CONTRAST, newContrastCookie.toString(), { expires: 90 });
+	button.addEventListener('click', () => {
+		const newContrastCookie = !hasContrastCookie();
+		Cookies.set(COOKIES.CONTRAST, newContrastCookie.toString(), {
+			expires: 90,
+		});
 
-    button.setAttribute('aria-pressed', newContrastCookie.toString());
-    button.setAttribute(
-      'aria-label',
-      newContrastCookie ? 'Verminder schermcontrast' : 'Vergroot schermcontrast'
-    );
+		button.setAttribute('aria-pressed', newContrastCookie.toString());
+		button.setAttribute(
+			'aria-label',
+			newContrastCookie ? CONTRAST_BUTTON_LABEL_DECREASE : CONTRAST_BUTTON_LABEL_INCREASE
+		);
 
-    document.body.classList.toggle('a11y-toolbar-contrast');
-  });
+		document.body.classList.toggle(CONTRAST_BODY_CLASS);
+	});
 };
 
 /**
  * Checks if a contrast cookie ahs been set.
  */
 const hasContrastCookie = (): boolean => {
-  return Cookies.get(COOKIES.CONTRAST) === 'true';
+	return Cookies.get(COOKIES.CONTRAST) === 'true';
 };

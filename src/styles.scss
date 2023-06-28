@@ -1,6 +1,10 @@
 $a11y-toolbar: 'a11y-toolbar';
 $a11y-toolbar-zindex: 999;
 $a11y-toolbar-breakpoint: 768px;
+$a11y-toolbar-button-size: 45px;
+$a11y-toolbar-button-size-md: 60px;
+$a11y-toolbar-icon-size: 1.1rem;
+$a11y-toolbar-icon-size-md: 1.5rem;
 
 .#{$a11y-toolbar} {
 	position: fixed;
@@ -9,15 +13,161 @@ $a11y-toolbar-breakpoint: 768px;
 	left: 0;
 	z-index: $a11y-toolbar-zindex;
 	opacity: 0;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 	transform: translateX(-100%);
 	visibility: hidden;
 
 	@media screen and (min-width: $a11y-toolbar-breakpoint) {
 		right: 0;
 		left: auto;
-		box-shadow: none;
 		opacity: 1;
 		transform: translateX(0%);
 		visibility: visible;
+	}
+
+	&__button {
+		display: flex;
+		$size: 45px;
+		width: $a11y-toolbar-button-size;
+		height: $a11y-toolbar-button-size;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		border: 0;
+		background-color: #fff;
+		color: #000;
+		font-size: $a11y-toolbar-icon-size;
+		text-align: center;
+		transition: 0.1s ease all;
+
+		&[aria-pressed='true'],
+		&:hover {
+			background-color: #000;
+			color: #fff;
+
+			.#{$a11y-toolbar}__button-text {
+				color: #fff;
+			}
+		}
+
+		@media screen and (min-width: $a11y-toolbar-breakpoint) {
+			width: $a11y-toolbar-button-size-md;
+			height: $a11y-toolbar-button-size-md;
+			font-size: $a11y-toolbar-icon-size-md;
+		}
+	}
+
+	&__button-text {
+		font-size: 9px;
+
+		@media screen and (min-width: $a11y-toolbar-breakpoint) {
+			font-size: 12px;
+		}
+	}
+
+	&__flag {
+		width: 21px;
+		height: 24px;
+	}
+
+	&__translate {
+		$triangle: 10px;
+		position: absolute;
+		top: calc(100% + #{$triangle});
+		left: 10px;
+		width: 280px;
+		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+		opacity: 0;
+		transform: translateY(-7px);
+		transition: all 0.3s ease;
+		visibility: hidden;
+
+		&::before {
+			position: absolute;
+			top: -#{$triangle};
+			left: 5px;
+			width: 0;
+			height: 0;
+			border-right: $triangle solid transparent;
+			border-bottom: $triangle solid #fff;
+			border-left: $triangle solid transparent;
+			content: '';
+		}
+
+		@media screen and (min-width: $a11y-toolbar-breakpoint) {
+			right: 10px;
+			left: auto;
+
+			&::before {
+				right: 15px;
+				left: auto;
+			}
+		}
+
+		.goog-te-combo {
+			width: auto;
+			height: 33px;
+			padding: 0.2rem 0.5rem;
+			border: 1px solid gray('graphic');
+		}
+	}
+
+	// ReadSpeaker is a mess
+	.rsbtn_play {
+		display: flex !important;
+		width: $a11y-toolbar-button-size !important;
+		height: $a11y-toolbar-button-size !important;
+		box-sizing: border-box !important;
+		align-items: center;
+		justify-content: center;
+		border: none !important;
+		background: none !important;
+		border-radius: 0 !important;
+		font-size: $a11y-toolbar-icon-size !important;
+
+		&::after {
+			border: 0;
+			background-color: #fff;
+			color: #000;
+			content: '\f6a8' !important;
+			font-family: 'Font Awesome 6 Pro'; /* stylelint-disable-line */
+		}
+
+		&:hover {
+			background-color: #000 !important;
+			color: #fff;
+
+			&::after {
+				background-color: inherit;
+				color: inherit;
+			}
+		}
+
+		@media screen and (min-width: $a11y-toolbar-breakpoint) {
+			width: $a11y-toolbar-button-size-md !important;
+			height: $a11y-toolbar-button-size-md !important;
+			font-size: $a11y-toolbar-icon-size-md !important;
+		}
+
+		@at-root .rsexpanded {
+			.rsbtn_play {
+				width: 100% !important;
+			}
+		}
+	}
+
+	.rsbtn {
+		.rsbtn_tooltoggle {
+			display: none !important;
+		}
+
+		.rs-player-loadindicator {
+			left: 0 !important;
+		}
+
+		.rsbtn_exp_inner {
+			bottom: 18px;
+			background-color: #fff;
+		}
 	}
 }
