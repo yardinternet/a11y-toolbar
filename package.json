@@ -42,8 +42,10 @@
   "devDependencies": {
     "@size-limit/preset-small-lib": "^8.2.4",
     "@tsconfig/recommended": "^1.0.2",
-    "dts-cli": "^2.0.2",
+    "dts-cli": "^2.0.3",
     "husky": "^8.0.3",
+    "rollup-plugin-scss": "^4.0.0",
+    "sass": "^1.63.6",
     "size-limit": "^8.2.4",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4"

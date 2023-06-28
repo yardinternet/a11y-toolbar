@@ -1,0 +1,8 @@
+$block: 'a11y-toolbar';
+
+.#{$block} {
+  position: fixed;
+  z-index: 999;
+  top: 50%;
+  right: 0;
+}

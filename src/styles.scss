@@ -1,0 +1,23 @@
+$a11y-toolbar: 'a11y-toolbar';
+$a11y-toolbar-zindex: 999;
+$a11y-toolbar-breakpoint: 768px;
+
+.#{$a11y-toolbar} {
+	position: fixed;
+	z-index: 999;
+	top: 20vh;
+	left: 0;
+	z-index: $a11y-toolbar-zindex;
+	opacity: 0;
+	transform: translateX(-100%);
+	visibility: hidden;
+
+	@media screen and (min-width: $a11y-toolbar-breakpoint) {
+		right: 0;
+		left: auto;
+		box-shadow: none;
+		opacity: 1;
+		transform: translateX(0%);
+		visibility: visible;
+	}
+}

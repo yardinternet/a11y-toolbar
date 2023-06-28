@@ -10,6 +10,8 @@ import { addContrastButton } from './components/ContrastButton';
 import { addPrintButton } from './components/PrintButton';
 import { createButton } from './utils/createButton';
 
+import './styles.scss';
+
 export default class A11yToolbar {
   private readonly options: DefaultOptionsType;
   private readonly selector: string;
