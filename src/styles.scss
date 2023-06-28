@@ -70,17 +70,24 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 		height: 24px;
 	}
 
-	&__translate {
+	&__translate-dropdown {
 		$triangle: 10px;
+		background-color: #fff;
+		padding: 1rem;
 		position: absolute;
 		top: calc(100% + #{$triangle});
 		left: 10px;
 		width: 280px;
-		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+		box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 		opacity: 0;
 		transform: translateY(-7px);
 		transition: all 0.3s ease;
 		visibility: hidden;
+
+		p {
+			font-size: 0.9rem;
+			margin-bottom: 0.5rem;
+		}
 
 		&::before {
 			position: absolute;
@@ -109,6 +116,23 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 			height: 33px;
 			padding: 0.2rem 0.5rem;
 			border: 1px solid gray('graphic');
+		}
+	}
+
+	&__translate-close-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 0.5rem 1.1rem;
+		border: 0;
+		background-color: transparent;
+		color: #000;
+		font-size: 1.2rem;
+		text-align: center;
+		transition: 0.1s ease all;
+
+		i {
+			pointer-events: none;
 		}
 	}
 
@@ -169,5 +193,23 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 			bottom: 18px;
 			background-color: #fff;
 		}
+	}
+}
+
+// Class added to body class when a11y toolbar is open on small screens
+.a11y-toolbar-is-open {
+	.#{$a11y-toolbar} {
+		opacity: 1;
+		transform: translateX(0%);
+		visibility: visible;
+	}
+}
+
+// Class added to body when the translate module is open
+.a11y-toolbar-translate-open {
+	.#{$a11y-toolbar}__translate-dropdown {
+		opacity: 1;
+		transform: translateY(0);
+		visibility: visible;
 	}
 }
