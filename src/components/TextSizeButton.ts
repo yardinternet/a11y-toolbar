@@ -12,7 +12,7 @@ import { DefaultOptionsType } from '../types/default-options-type';
 
 const TEXT_SIZE_BUTTON_LABEL_INCREASE = 'Vergroot schermtekst';
 const TEXT_SIZE_BUTTON_LABEL_DECREASE = 'Verklein schermtekst';
-const TEXT_SIZE_BODY_CLASS = 'a11y-toolbar-text-size';
+const TEXT_SIZE_BODY_CLASS = 'a11y-toolbar--text-size';
 
 /**
  * Adds a button to the toolbar that toggles the text size.

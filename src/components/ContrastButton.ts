@@ -12,7 +12,7 @@ import { DefaultOptionsType } from '../types/default-options-type';
 
 const CONTRAST_BUTTON_LABEL_INCREASE = 'Vergroot schermcontrast';
 const CONTRAST_BUTTON_LABEL_DECREASE = 'Verklein schermcontrast';
-const CONTRAST_BODY_CLASS = 'a11y-toolbar-contrast';
+const CONTRAST_BODY_CLASS = 'a11y-toolbar--contrast';
 
 /**
  * Adds a button to the toolbar that toggles the contrast.
