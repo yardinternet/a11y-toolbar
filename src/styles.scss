@@ -1,17 +1,22 @@
 $a11y-toolbar: 'a11y-toolbar';
-$a11y-toolbar-zindex: 999;
-$a11y-toolbar-breakpoint: 768px;
-$a11y-toolbar-button-size: 45px;
-$a11y-toolbar-button-size-md: 60px;
-$a11y-toolbar-icon-size: 1.1rem;
-$a11y-toolbar-icon-size-md: 1.5rem;
+$a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media queries.
 
 .#{$a11y-toolbar} {
+	--a11y-toolbar-zindex: 999;
+	--a11y-toolbar-breakpoint: 768px;
+	--a11y-toolbar-button-size: 45px;
+	--a11y-toolbar-button-size-md: 60px;
+	--a11y-toolbar-icon-size: 1.1rem;
+	--a11y-toolbar-icon-size-md: 1.5rem;
+	--a11y-toolbar-color: #000;
+	--a11y-toolbar-color-hover: #000;
+	--a11y-toolbar-background-color: #fff;
+	--a11y-toolbar-background-color-hover: #f1f5f9;
+
 	position: fixed;
-	z-index: 999;
 	top: 20vh;
 	left: 0;
-	z-index: $a11y-toolbar-zindex;
+	z-index: var(--a11y-toolbar-zindex);
 	opacity: 0;
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 	transform: translateX(-100%);
@@ -28,7 +33,7 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 	&__toggle-button {
 		$size: 45px;
 		position: fixed;
-		z-index: $a11y-toolbar-zindex;
+		z-index: var(--a11y-toolbar-zindex);
 		right: 1rem;
 		bottom: 4.5rem;
 		display: block;
@@ -36,10 +41,10 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 		height: $size;
 		padding: 0;
 		border: 0;
-		background-color: #fff;
+		background-color: var(--a11y-toolbar-background-color);
 		border-radius: 50px;
 		box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-		color: #000;
+		color: var(--a11y-toolbar-color);
 		font-size: 1.6rem;
 
 		@media screen and (min-width: $a11y-toolbar-breakpoint) {
@@ -51,32 +56,32 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 		display: flex;
 		flex-direction: column;
 		$size: 45px;
-		width: $a11y-toolbar-button-size;
-		height: $a11y-toolbar-button-size;
+		width: var(--a11y-toolbar-button-size);
+		height: var(--a11y-toolbar-button-size);
 		align-items: center;
 		justify-content: center;
 		padding: 0;
 		border: 0;
-		background-color: #fff;
-		color: #000;
-		font-size: $a11y-toolbar-icon-size;
+		background-color: var(--a11y-toolbar-background-color);
+		color: var(--a11y-toolbar-color);
+		font-size: var(--a11y-toolbar-button-size);
 		text-align: center;
 		transition: 0.1s ease all;
 
 		&[aria-pressed='true'],
 		&:hover {
-			background-color: #000;
-			color: #fff;
+			background-color: var(--a11y-toolbar-background-color-hover);
+			color: var(--a11y-toolbar-color-hover);
 
 			.#{$a11y-toolbar}__button-text {
-				color: #fff;
+				color: var(--a11y-toolbar-color-hover);
 			}
 		}
 
 		@media screen and (min-width: $a11y-toolbar-breakpoint) {
-			width: $a11y-toolbar-button-size-md;
-			height: $a11y-toolbar-button-size-md;
-			font-size: $a11y-toolbar-icon-size-md;
+			width: var(--a11y-toolbar-button-size-md);
+			height: var(--a11y-toolbar-button-size-md);
+			font-size: var(--a11y-toolbar-icon-size-md);
 		}
 
 		&--language-button {
@@ -167,27 +172,27 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 	// ReadSpeaker is a mess
 	.rsbtn_play {
 		display: flex !important;
-		width: $a11y-toolbar-button-size !important;
-		height: $a11y-toolbar-button-size !important;
+		width: var(--a11y-toolbar-button-size) !important;
+		height: var(--a11y-toolbar-button-size) !important;
 		box-sizing: border-box !important;
 		align-items: center;
 		justify-content: center;
 		border: none !important;
 		background: none !important;
 		border-radius: 0 !important;
-		font-size: $a11y-toolbar-icon-size !important;
+		font-size: var(--a11y-toolbar-icon-size) !important;
 
 		&::after {
 			border: 0;
-			background-color: #fff;
-			color: #000;
+			background-color: var(--a11y-toolbar-background-color);
+			color: var(--a11y-toolbar-color);
 			content: '\f6a8' !important;
 			font-family: 'Font Awesome 6 Pro'; /* stylelint-disable-line */
 		}
 
 		&:hover {
-			background-color: #000 !important;
-			color: #fff;
+			background-color: var(--a11y-toolbar-background-color-hover) !important;
+			color: var(--a11y-toolbar-color-hover);
 
 			&::after {
 				background-color: inherit;
@@ -196,9 +201,9 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 		}
 
 		@media screen and (min-width: $a11y-toolbar-breakpoint) {
-			width: $a11y-toolbar-button-size-md !important;
-			height: $a11y-toolbar-button-size-md !important;
-			font-size: $a11y-toolbar-icon-size-md !important;
+			width: var(--a11y-toolbar-button-size-md) !important;
+			height: var(--a11y-toolbar-button-size-md) !important;
+			font-size: var(--a11y-toolbar-icon-size-md) !important;
 		}
 
 		@at-root .rsexpanded {
@@ -219,7 +224,7 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 
 		.rsbtn_exp_inner {
 			bottom: 18px;
-			background-color: #fff;
+			background-color: var(--a11y-toolbar-background-color);
 		}
 	}
 }
