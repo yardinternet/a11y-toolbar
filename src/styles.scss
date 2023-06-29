@@ -205,6 +205,11 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	}
 }
 
+// Remove popup when selecting text. Can't be done via ReadSpeaker API.
+.rspopup {
+	display: none !important;
+}
+
 // Class added to <body> when a11y toolbar is open on small screens
 .a11y-toolbar--is-open {
 	.#{$a11y-toolbar} {

@@ -30,7 +30,9 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 	 * the ReadSpeaker button, such as the gemeente-search-block.
 	 */
 	if (window.rsConf) {
-		window.rsConf = { general: { usePost: true } };
+		window.rsConf = {
+			general: { usePost: true },
+		};
 	}
 
 	const readSpeakerCustomerID = options.readSpeakerCustomerID || '';
@@ -60,7 +62,7 @@ const addReadSpeakerScriptToHead = (readSpeakerCustomerID: string): void => {
 	script.type = 'text/javascript';
 	script.crossOrigin = 'anonymous';
 	script.id = 'rs_req_Init';
-	script.src = `https://cdn-eu.readspeaker.com/script/${readSpeakerCustomerID}/webReader/webReader.js?pids=wr&&disable=settings,clicklisten,voicesettings,readhover,enlarge,textmode,pagemask,download,help,dictionary'`;
+	script.src = `https://cdn-eu.readspeaker.com/script/${readSpeakerCustomerID}/webReader/webReader.js?pids=wr&&disable=settings,clicklisten,voicesettings,readhover,enlarge,textmode,pagemask,download,help,dictionary,translation`;
 
 	document.head.appendChild(script);
 };
