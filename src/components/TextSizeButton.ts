@@ -24,10 +24,12 @@ export const addTextSizeButton = (toolbar: HTMLElement, options?: DefaultOptions
 	if (!options || !options.showTextSizeButton) return;
 
 	const textSizeIcon = options.iconOptions?.textSizeIcon || '';
+	const textSizeTextAfter = options.textAfterOptions?.textSizeTextAfter || '';
 	const textSizeButton = createButton(
-		'js-a11y-toolbar-text-size-toggler',
+		'text-size',
 		TEXT_SIZE_BUTTON_LABEL_INCREASE,
-		textSizeIcon
+		textSizeIcon,
+		textSizeTextAfter
 	);
 
 	toolbar.appendChild(textSizeButton);
@@ -70,15 +72,15 @@ const initPressedStateButton = (button: HTMLElement): void => {
  */
 const addTextSizeButtonEventListener = (button: HTMLElement): void => {
 	button.addEventListener('click', () => {
-		const newTextSizeCookie = !hasTextSizeCookie();
-		Cookies.set(COOKIES.TEXT_SIZE, newTextSizeCookie.toString(), {
+		const textSizeCookieValue = !hasTextSizeCookie();
+		Cookies.set(COOKIES.TEXT_SIZE, textSizeCookieValue.toString(), {
 			expires: 90,
 		});
 
-		button.setAttribute('aria-pressed', newTextSizeCookie.toString());
+		button.setAttribute('aria-pressed', textSizeCookieValue.toString());
 		button.setAttribute(
 			'aria-label',
-			newTextSizeCookie ? TEXT_SIZE_BUTTON_LABEL_DECREASE : TEXT_SIZE_BUTTON_LABEL_INCREASE
+			textSizeCookieValue ? TEXT_SIZE_BUTTON_LABEL_DECREASE : TEXT_SIZE_BUTTON_LABEL_INCREASE
 		);
 
 		document.body.classList.toggle(TEXT_SIZE_BODY_CLASS);

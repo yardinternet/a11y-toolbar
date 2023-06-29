@@ -25,8 +25,31 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 		visibility: visible;
 	}
 
+	&__toggle-button {
+		$size: 45px;
+		position: fixed;
+		z-index: $a11y-toolbar-zindex;
+		right: 1rem;
+		bottom: 4.5rem;
+		display: block;
+		width: $size;
+		height: $size;
+		padding: 0;
+		border: 0;
+		background-color: #fff;
+		border-radius: 50px;
+		box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+		color: #000;
+		font-size: 1.6rem;
+
+		@media screen and (min-width: $a11y-toolbar-breakpoint) {
+			display: none;
+		}
+	}
+
 	&__button {
 		display: flex;
+		flex-direction: column;
 		$size: 45px;
 		width: $a11y-toolbar-button-size;
 		height: $a11y-toolbar-button-size;
@@ -55,13 +78,19 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 			height: $a11y-toolbar-button-size-md;
 			font-size: $a11y-toolbar-icon-size-md;
 		}
+
+		&--language-button {
+			.#{$a11y-toolbar}__button-text-after {
+				margin-top: -0.4em;
+			}
+		}
 	}
 
-	&__button-text {
-		font-size: 9px;
+	&__button-text-after {
+		font-size: 8px;
 
 		@media screen and (min-width: $a11y-toolbar-breakpoint) {
-			font-size: 12px;
+			font-size: 11px;
 		}
 	}
 
@@ -115,7 +144,6 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 			width: auto;
 			height: 33px;
 			padding: 0.2rem 0.5rem;
-			border: 1px solid gray('graphic');
 		}
 	}
 
@@ -211,5 +239,12 @@ $a11y-toolbar-icon-size-md: 1.5rem;
 		opacity: 1;
 		transform: translateY(0);
 		visibility: visible;
+	}
+}
+
+// Class added to <html> when content is translated by Google Translate
+.translated-ltr {
+	.nav {
+		top: 38px;
 	}
 }

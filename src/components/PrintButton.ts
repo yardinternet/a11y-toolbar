@@ -14,7 +14,8 @@ export const addPrintButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	if (!options || !options.showPrintButton) return;
 
 	const printIcon = options.iconOptions?.printIcon || '';
-	const printButton = createButton('js-a11y-toolbar-print-button', 'Print pagina', printIcon);
+	const printTextAfter = options.textAfterOptions?.printTextAfter || '';
+	const printButton = createButton('print', 'Print pagina', printIcon, printTextAfter);
 	toolbar.appendChild(printButton);
 
 	printButton.addEventListener('click', () => {

@@ -1,10 +1,28 @@
 /**
+ * External dependencies
+ */
+import * as focusTrap from 'focus-trap';
+
+/**
  * Internal dependencies
  */
 import { createButton } from '../utils/createButton';
 import { DefaultOptionsType } from '../types/default-options-type';
+import { checkCanFocusTrap } from '../utils/checkCanFocusTrap';
 
 const LANGUAGE_BODY_CLASS = 'a11y-toolbar-translate-open';
+const trapFocusOptions = {
+	allowOutsideClick: true,
+	clickOutsideDeactivates: true,
+	checkCanFocusTrap,
+	onActivate: () => {
+		document.body.classList.add(LANGUAGE_BODY_CLASS);
+	},
+	onDeactivate: () => {
+		document.body.classList.remove(LANGUAGE_BODY_CLASS);
+	},
+};
+let trapFocus = false as any; // Couldn't get the type from the focus-trap package.
 
 /**
  * Adds a button to the toolbar that toggles the language options dropdown.
@@ -30,8 +48,7 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 
 	toolbar.appendChild(modal);
 
-	languageButton.addEventListener('click', () => handleButtonClick(languageButton));
-	document.addEventListener('click', (e) => handleOutsideClick(e, modal, languageButton));
+	languageButton.addEventListener('click', () => handleButtonClick());
 };
 
 /**
@@ -39,7 +56,7 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
  *
  * @param {HTMLElement} button - The language button element to add the event listener to.
  */
-const handleButtonClick = (button: HTMLElement): void => {
+const handleButtonClick = (): void => {
 	if (!document.body.classList.contains(LANGUAGE_BODY_CLASS)) {
 		openLanguageModal();
 	} else {
@@ -47,28 +64,14 @@ const handleButtonClick = (button: HTMLElement): void => {
 	}
 };
 
-const openLanguageModal = (): void => {
-	document.body.classList.add(LANGUAGE_BODY_CLASS);
-};
-
 const closeLanguageModal = (): void => {
-	document.body.classList.remove(LANGUAGE_BODY_CLASS);
+	if (!document.body.classList.contains(LANGUAGE_BODY_CLASS)) return;
+	trapFocus.deactivate();
 };
 
-/**
- * Handles the outside click event to close the modal.
- *
- * @param {Event} event - The click event.
- * @param {HTMLElement} modal - The modal element.
- * @param {HTMLElement} languageButton - The language button element.
- */
-const handleOutsideClick = (event: any, modal: HTMLElement, languageButton: HTMLElement) => {
-	if (
-		(!modal.contains(event.target) && !languageButton.contains(event.target)) ||
-		event.target.classList.contains('a11y-toolbar__translate-close-button')
-	) {
-		closeLanguageModal();
-	}
+const openLanguageModal = (): void => {
+	trapFocus = focusTrap.createFocusTrap('.a11y-toolbar__translate-dropdown', trapFocusOptions);
+	trapFocus.activate();
 };
 
 /**
@@ -85,6 +88,7 @@ const createLanguageModalContent = (): HTMLElement => {
 	const closeButton = document.createElement('button');
 	closeButton.classList.add('a11y-toolbar__translate-close-button');
 	closeButton.setAttribute('aria-label', 'Close translate modal');
+	closeButton.addEventListener('click', () => closeLanguageModal());
 
 	const closeIcon = document.createElement('i');
 	closeIcon.classList.add('fal', 'fa-times');

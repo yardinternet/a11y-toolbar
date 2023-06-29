@@ -24,10 +24,12 @@ export const addContrastButton = (toolbar: HTMLElement, options?: DefaultOptions
 	if (!options || !options.showContrastButton) return;
 
 	const contrastIcon = options.iconOptions?.contrastIcon || '';
+	const contrastTextAfter = options.textAfterOptions?.contrastTextAfter || '';
 	const contrastButton = createButton(
-		'js-a11y-toolbar-contrast-toggler',
+		'contrast',
 		CONTRAST_BUTTON_LABEL_INCREASE,
-		contrastIcon
+		contrastIcon,
+		contrastTextAfter
 	);
 
 	toolbar.appendChild(contrastButton);
@@ -70,15 +72,15 @@ const initPressedStateButton = (button: HTMLElement): void => {
  */
 const addContrastButtonEventListener = (button: HTMLElement): void => {
 	button.addEventListener('click', () => {
-		const newContrastCookie = !hasContrastCookie();
-		Cookies.set(COOKIES.CONTRAST, newContrastCookie.toString(), {
+		const contrastCookieValue = !hasContrastCookie();
+		Cookies.set(COOKIES.CONTRAST, contrastCookieValue.toString(), {
 			expires: 90,
 		});
 
-		button.setAttribute('aria-pressed', newContrastCookie.toString());
+		button.setAttribute('aria-pressed', contrastCookieValue.toString());
 		button.setAttribute(
 			'aria-label',
-			newContrastCookie ? CONTRAST_BUTTON_LABEL_DECREASE : CONTRAST_BUTTON_LABEL_INCREASE
+			contrastCookieValue ? CONTRAST_BUTTON_LABEL_DECREASE : CONTRAST_BUTTON_LABEL_INCREASE
 		);
 
 		document.body.classList.toggle(CONTRAST_BODY_CLASS);
