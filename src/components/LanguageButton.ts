@@ -10,7 +10,7 @@ import { createButton } from '../utils/createButton';
 import { DefaultOptionsType } from '../types/default-options-type';
 import { checkCanFocusTrap } from '../utils/checkCanFocusTrap';
 
-const LANGUAGE_BODY_CLASS = 'a11y-toolbar-translate-open';
+const LANGUAGE_BODY_CLASS = 'a11y-toolbar--translate-is-open';
 const trapFocusOptions = {
 	allowOutsideClick: true,
 	clickOutsideDeactivates: true,

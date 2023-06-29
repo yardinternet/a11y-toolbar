@@ -6,12 +6,12 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	--a11y-toolbar-breakpoint: 768px;
 	--a11y-toolbar-button-size: 45px;
 	--a11y-toolbar-button-size-md: 60px;
+	--a11y-toolbar-button-color: #000;
+	--a11y-toolbar-button-color-hover: #000;
+	--a11y-toolbar-button-background-color: #fff;
+	--a11y-toolbar-button-background-color-hover: #f1f5f9;
 	--a11y-toolbar-icon-size: 1.1rem;
 	--a11y-toolbar-icon-size-md: 1.5rem;
-	--a11y-toolbar-color: #000;
-	--a11y-toolbar-color-hover: #000;
-	--a11y-toolbar-background-color: #fff;
-	--a11y-toolbar-background-color-hover: #f1f5f9;
 
 	position: fixed;
 	top: 20vh;
@@ -21,6 +21,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 	transform: translateX(-100%);
 	visibility: hidden;
+	transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 
 	@media screen and (min-width: $a11y-toolbar-breakpoint) {
 		right: 0;
@@ -33,7 +34,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	&__toggle-button {
 		$size: 45px;
 		position: fixed;
-		z-index: var(--a11y-toolbar-zindex);
+		z-index: 999;
 		right: 1rem;
 		bottom: 4.5rem;
 		display: block;
@@ -41,10 +42,10 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		height: $size;
 		padding: 0;
 		border: 0;
-		background-color: var(--a11y-toolbar-background-color);
+		background-color: #fff;
 		border-radius: 50px;
 		box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-		color: var(--a11y-toolbar-color);
+		color: #000;
 		font-size: 1.6rem;
 
 		@media screen and (min-width: $a11y-toolbar-breakpoint) {
@@ -62,19 +63,19 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		justify-content: center;
 		padding: 0;
 		border: 0;
-		background-color: var(--a11y-toolbar-background-color);
-		color: var(--a11y-toolbar-color);
-		font-size: var(--a11y-toolbar-button-size);
+		background-color: var(--a11y-toolbar-button-background-color);
+		color: var(--a11y-toolbar-button-color);
+		font-size: var(--a11y-toolbar-icon-size);
 		text-align: center;
 		transition: 0.1s ease all;
 
 		&[aria-pressed='true'],
 		&:hover {
-			background-color: var(--a11y-toolbar-background-color-hover);
-			color: var(--a11y-toolbar-color-hover);
+			background-color: var(--a11y-toolbar-button-background-color-hover);
+			color: var(--a11y-toolbar-button-color-hover);
 
 			.#{$a11y-toolbar}__button-text {
-				color: var(--a11y-toolbar-color-hover);
+				color: var(--a11y-toolbar-button-color-hover);
 			}
 		}
 
@@ -184,15 +185,15 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 
 		&::after {
 			border: 0;
-			background-color: var(--a11y-toolbar-background-color);
-			color: var(--a11y-toolbar-color);
+			background-color: var(--a11y-toolbar-button-background-color);
+			color: var(--a11y-toolbar-button-color);
 			content: '\f6a8' !important;
-			font-family: 'Font Awesome 6 Pro'; /* stylelint-disable-line */
+			font-family: 'Font Awesome 6 Pro';
 		}
 
 		&:hover {
-			background-color: var(--a11y-toolbar-background-color-hover) !important;
-			color: var(--a11y-toolbar-color-hover);
+			background-color: var(--a11y-toolbar-button-background-color-hover) !important;
+			color: var(--a11y-toolbar-button-color-hover);
 
 			&::after {
 				background-color: inherit;
@@ -224,13 +225,13 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 
 		.rsbtn_exp_inner {
 			bottom: 18px;
-			background-color: var(--a11y-toolbar-background-color);
+			background-color: var(--a11y-toolbar-button-background-color);
 		}
 	}
 }
 
 // Class added to body class when a11y toolbar is open on small screens
-.a11y-toolbar-is-open {
+.a11y-toolbar--is-open {
 	.#{$a11y-toolbar} {
 		opacity: 1;
 		transform: translateX(0%);
@@ -239,7 +240,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 }
 
 // Class added to body when the translate module is open
-.a11y-toolbar-translate-open {
+.a11y-toolbar--translate-is-open {
 	.#{$a11y-toolbar}__translate-dropdown {
 		opacity: 1;
 		transform: translateY(0);

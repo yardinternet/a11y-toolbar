@@ -12,6 +12,8 @@ import { DefaultOptionsType } from './types/default-options-type';
 
 import './styles.scss';
 
+const IS_OPEN_BODY_CLASS = 'a11y-toolbar--is-open';
+
 export default class A11yToolbar {
 	private readonly options: DefaultOptionsType;
 	private readonly selector: string;
@@ -26,6 +28,7 @@ export default class A11yToolbar {
 	 */
 	init(): this {
 		const toolbar = this.createToolbar();
+		const toggleButton = this.createToggleButton();
 
 		addReadSpeakerButton(toolbar, this.options);
 		addTextSizeButton(toolbar, this.options);
@@ -34,18 +37,52 @@ export default class A11yToolbar {
 		addLanguageButton(toolbar, this.options);
 
 		const container = document.querySelector(this.selector);
+
 		container?.appendChild(toolbar);
+		container?.insertBefore(toggleButton, toolbar);
 
 		return this;
 	}
 
 	/**
-	 * Creates a new toolbar element with the necessary classes and ID.
+	 * Creates the toolbar element.
 	 */
 	private createToolbar(): HTMLElement {
 		const toolbar = document.createElement('div');
 		toolbar.id = 'js-a11y-toolbar';
 		toolbar.classList.add('a11y-toolbar');
 		return toolbar;
+	}
+
+	/**
+	 * Creates mobile toggle button.
+	 */
+	private createToggleButton(): HTMLButtonElement {
+		const button = document.createElement('button');
+		button.classList.add('a11y-toolbar__toggle-button');
+		button.setAttribute('aria-expanded', 'false');
+		button.setAttribute('aria-controls', 'a11y-toolbar');
+		button.setAttribute('aria-label', 'Open toegankelijkheid toolbar');
+
+		const icon = document.createElement('i');
+		icon.classList.add('fa-regular', 'fa-universal-access');
+
+		button.appendChild(icon);
+		button.addEventListener('click', () => this.toggleToolbar(button));
+
+		return button;
+	}
+
+	/**
+	 * Toggles the toolbar visibility on mobile devices.
+	 *
+	 * @param button - The toggle button element.
+	 */
+	private toggleToolbar(button: HTMLButtonElement): void {
+		document.body.classList.toggle(IS_OPEN_BODY_CLASS);
+		button.setAttribute(
+			'aria-expanded',
+			document.body.classList.contains(IS_OPEN_BODY_CLASS).toString()
+		);
 	}
 }
