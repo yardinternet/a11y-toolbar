@@ -16,10 +16,12 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	if (!options || !options.showLanguageButton) return;
 
 	const languageIcon = options.iconOptions?.languageIcon || '';
+	const languageTextAfter = options.textAfterOptions?.languageTextAfter || '';
 	const languageButton = createButton(
-		'js-a11y-toolbar-language-button',
+		'language-button',
 		'Toon vertaalopties',
-		languageIcon
+		languageIcon,
+		languageTextAfter
 	);
 
 	toolbar.appendChild(languageButton);
@@ -57,6 +59,8 @@ const closeLanguageModal = (): void => {
  * Handles the outside click event to close the modal.
  *
  * @param {Event} event - The click event.
+ * @param {HTMLElement} modal - The modal element.
+ * @param {HTMLElement} languageButton - The language button element.
  */
 const handleOutsideClick = (event: any, modal: HTMLElement, languageButton: HTMLElement) => {
 	if (
@@ -66,6 +70,7 @@ const handleOutsideClick = (event: any, modal: HTMLElement, languageButton: HTML
 		closeLanguageModal();
 	}
 };
+
 /**
  * Creates the content for the language modal.
  */
@@ -73,9 +78,6 @@ const createLanguageModalContent = (): HTMLElement => {
 	const modalContent = document.createElement('div');
 	modalContent.classList.add('a11y-toolbar__translate-dropdown');
 	modalContent.setAttribute('lang', 'en');
-
-	const modalInnerContent = document.createElement('div');
-	modalInnerContent.classList.add('a11y-toolbar__translate-dropdown-inner');
 
 	const title = document.createElement('h3');
 	title.textContent = 'Translate';
@@ -88,9 +90,8 @@ const createLanguageModalContent = (): HTMLElement => {
 	closeIcon.classList.add('fal', 'fa-times');
 
 	closeButton.appendChild(closeIcon);
-	modalInnerContent.appendChild(title);
-	modalInnerContent.appendChild(closeButton);
-	modalContent.appendChild(modalInnerContent);
+	modalContent.appendChild(title);
+	modalContent.appendChild(closeButton);
 
 	const description = document.createElement('p');
 	description.textContent =

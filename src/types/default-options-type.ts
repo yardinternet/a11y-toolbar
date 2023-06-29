@@ -12,4 +12,11 @@ export interface DefaultOptionsType {
 		printIcon?: string;
 		languageIcon?: string;
 	};
+	textAfterOptions?: {
+		readSpeakerTextAfter?: string;
+		textSizeTextAfter?: string;
+		contrastTextAfter?: string;
+		printTextAfter?: string;
+		languageTextAfter?: string;
+	};
 }
