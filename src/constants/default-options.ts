@@ -5,7 +5,7 @@ export const DEFAULTS = {
 	showPrintButton: true,
 	showLanguageButton: true,
 	readSpeakerCustomerID: '9999',
-	readSpeakerContentID: 'main',
+	readSpeakerContentID: 'readspeakers',
 	iconOptions: {
 		readSpeakerIcon: 'fa-light fa-volume',
 		textSizeIcon: 'fa-light fa-text-height',

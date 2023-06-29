@@ -2,6 +2,7 @@
  * Internal dependencies
  */
 import { DefaultOptionsType } from '../types/default-options-type';
+import { createIcon, createTextAfter } from '../utils/createButton';
 
 declare global {
 	interface Window {
@@ -10,7 +11,7 @@ declare global {
 }
 
 /**
- * Adds a button to the toolbar that activates ReadSpeaker
+ * Adds a button to the toolbar that activates ReadSpeaker. ReadSpeaker is a mess to work with.
  *
  * @param {HTMLElement} toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the ReadSpeaker button.
@@ -39,8 +40,14 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 
 	addReadSpeakerScriptToHead(readSpeakerCustomerID);
 
-	const readSpeakerButton = createReadSpeakerButton(readSpeakerCustomerID, readSpeakerContentID);
-	toolbar.appendChild(readSpeakerButton);
+	const readSpeakerLink = createReadSpeakerButton(
+		readSpeakerCustomerID,
+		readSpeakerContentID,
+		readSpeakerIcon,
+		readSpeakerTextAfter
+	);
+
+	toolbar.appendChild(readSpeakerLink);
 };
 
 /**
@@ -67,19 +74,31 @@ const addReadSpeakerScriptToHead = (readSpeakerCustomerID: string): void => {
  */
 const createReadSpeakerButton = (
 	readSpeakerCustomerID: string,
-	readSpeakerContentID: string
+	readSpeakerContentID: string,
+	icon: string,
+	textAfter: string
 ): HTMLElement => {
 	const div = document.createElement('div');
 	div.id = 'readspeaker_button1';
-	div.classList.add('a11y-toolbar__readspeaker-button', 'rs_skip', 'rsbtn', 'rs_preserve', 'mb-0');
+	div.classList.add('rs_skip', 'rsbtn', 'rs_preserve');
 
 	const button = document.createElement('a');
 	button.setAttribute('role', 'button');
-	button.classList.add('rsbtn_play');
+	button.classList.add('rsbtn_play', 'a11y-toolbar__button', 'a11y-toolbar__button--readspeaker');
 	button.setAttribute('accesskey', 'L');
 	button.setAttribute('aria-label', 'Laat de tekst voorlezen met ReadSpeaker webReader');
 	button.setAttribute('title', 'Laat de tekst voorlezen met ReadSpeaker webReader');
-	button.href = `//app-eu.readspeaker.com/cgi-bin/rsent?customerid=${readSpeakerCustomerID}&amp;lang=nl_nl&amp;readid=${readSpeakerContentID}&amp;url=${window.location.href}`;
+	button.href = `//app-eu.readspeaker.com/cgi-bin/rsent?customerid=${readSpeakerCustomerID}&lang=nl_nl&readid=${readSpeakerContentID}&url=${window.location.href}`;
+
+	if (icon !== undefined && icon !== '') {
+		const iconElement = createIcon(icon);
+		button.appendChild(iconElement);
+	}
+
+	if (textAfter !== undefined && textAfter !== '') {
+		const textAfterElement = createTextAfter(textAfter);
+		button.appendChild(textAfterElement);
+	}
 
 	div.appendChild(button);
 

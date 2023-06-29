@@ -3,7 +3,6 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 
 .#{$a11y-toolbar} {
 	--a11y-toolbar-zindex: 999;
-	--a11y-toolbar-breakpoint: 768px;
 	--a11y-toolbar-button-size: 45px;
 	--a11y-toolbar-button-size-md: 60px;
 	--a11y-toolbar-button-color: #000;
@@ -21,6 +20,10 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 	transform: translateX(-100%);
 	visibility: hidden;
+	flex-direction: column;
+	display: flex;
+	background-color: var(--a11y-toolbar-button-background-color);
+	align-items: flex-end;
 	transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 
 	@media screen and (min-width: $a11y-toolbar-breakpoint) {
@@ -53,7 +56,9 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		}
 	}
 
-	&__button {
+	// Extra specificity to override the ReadSpeaker styles
+	&__button,
+	&__button.#{$a11y-toolbar}__button--readspeaker.rsbtn_play {
 		display: flex;
 		flex-direction: column;
 		$size: 45px;
@@ -170,51 +175,22 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		}
 	}
 
-	// ReadSpeaker is a mess
-	.rsbtn_play {
-		display: flex !important;
-		width: var(--a11y-toolbar-button-size) !important;
-		height: var(--a11y-toolbar-button-size) !important;
-		box-sizing: border-box !important;
-		align-items: center;
-		justify-content: center;
-		border: none !important;
-		background: none !important;
-		border-radius: 0 !important;
-		font-size: var(--a11y-toolbar-icon-size) !important;
-
-		&::after {
-			border: 0;
-			background-color: var(--a11y-toolbar-button-background-color);
-			color: var(--a11y-toolbar-button-color);
-			content: '\f6a8' !important;
-			font-family: 'Font Awesome 6 Pro';
-		}
-
-		&:hover {
-			background-color: var(--a11y-toolbar-button-background-color-hover) !important;
-			color: var(--a11y-toolbar-button-color-hover);
-
-			&::after {
-				background-color: inherit;
-				color: inherit;
-			}
-		}
-
-		@media screen and (min-width: $a11y-toolbar-breakpoint) {
-			width: var(--a11y-toolbar-button-size-md) !important;
-			height: var(--a11y-toolbar-button-size-md) !important;
-			font-size: var(--a11y-toolbar-icon-size-md) !important;
-		}
-
-		@at-root .rsexpanded {
-			.rsbtn_play {
-				width: 100% !important;
-			}
-		}
-	}
-
+	// ReadSpeaker is a mess, we need to override some of their styles
 	.rsbtn {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		margin-bottom: 0;
+
+		.#{$a11y-toolbar}__icon {
+			font-family: 'Font Awesome 6 Pro';
+			font-weight: 300;
+		}
+
+		.rsbtn_play:focus {
+			background: initial;
+		}
+
 		.rsbtn_tooltoggle {
 			display: none !important;
 		}
@@ -224,13 +200,12 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		}
 
 		.rsbtn_exp_inner {
-			bottom: 18px;
 			background-color: var(--a11y-toolbar-button-background-color);
 		}
 	}
 }
 
-// Class added to body class when a11y toolbar is open on small screens
+// Class added to <body> when a11y toolbar is open on small screens
 .a11y-toolbar--is-open {
 	.#{$a11y-toolbar} {
 		opacity: 1;
@@ -239,7 +214,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	}
 }
 
-// Class added to body when the translate module is open
+// Class added to <body> when the translate module is open
 .a11y-toolbar--translate-is-open {
 	.#{$a11y-toolbar}__translate-dropdown {
 		opacity: 1;

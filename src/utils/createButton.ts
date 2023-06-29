@@ -80,7 +80,7 @@ const createSvgIcon = (svg: string): HTMLElement => {
  *
  * @param {string} textAfter - The text to be added after the icon.
  */
-const createTextAfter = (textAfter: string): HTMLElement => {
+export const createTextAfter = (textAfter: string): HTMLElement => {
 	const textElement = document.createElement('span');
 	textElement.textContent = textAfter;
 	textElement.classList.add('a11y-toolbar__button-text-after');
