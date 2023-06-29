@@ -4,7 +4,8 @@ export const DEFAULTS = {
 	showContrastButton: true,
 	showPrintButton: true,
 	showLanguageButton: true,
-	readSpeakerID: '9999',
+	readSpeakerCustomerID: '9999',
+	readSpeakerContentID: 'main',
 	iconOptions: {
 		readSpeakerIcon: 'fa-light fa-volume',
 		textSizeIcon: 'fa-light fa-text-height',

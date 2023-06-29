@@ -4,7 +4,8 @@ export interface DefaultOptionsType {
 	showContrastButton?: boolean;
 	showPrintButton?: boolean;
 	showLanguageButton?: boolean;
-	readSpeakerID?: string;
+	readSpeakerCustomerID?: string;
+	readSpeakerContentID?: string;
 	iconOptions?: {
 		readSpeakerIcon?: string;
 		textSizeIcon?: string;
