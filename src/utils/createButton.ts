@@ -17,6 +17,7 @@ export const createButton = (
 	button.classList.add('a11y-toolbar__button');
 	button.classList.add(`a11y-toolbar__button--${id}`);
 	button.setAttribute('aria-label', label);
+	button.setAttribute('title', label);
 
 	if (icon !== undefined && icon !== '') {
 		const iconElement = createIcon(icon);

@@ -21,4 +21,13 @@ export const DEFAULTS = {
 		printTextAfter: '',
 		languageTextAfter: 'Translate',
 	},
+	labelOptions: {
+		readSpeakerLabel: 'Laat de tekst voorlezen met ReadSpeaker webReader',
+		textSizeIncreaseLabel: 'Vergroot schermtekst',
+		textSizeDecreaseLabel: 'Verklein schermtekst',
+		contrastIncreaseLabel: 'Vergroot schermcontrast',
+		contrastDecreaseLabel: 'Verklein schermcontrast',
+		printLabel: 'Print pagina',
+		languageLabel: 'Toon vertaalopties',
+	},
 };

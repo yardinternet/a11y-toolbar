@@ -11,14 +11,24 @@ import { DefaultOptionsType } from '../types/default-options-type';
  * @param {DefaultOptionsType} options - The options for the print button.
  */
 export const addPrintButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
-	if (!options || !options.showPrintButton) return;
+	let printIcon: string;
+	let printTextAfter: string;
+	let printLabel: string;
 
-	const printIcon = options.iconOptions?.printIcon || '';
-	const printTextAfter = options.textAfterOptions?.printTextAfter || '';
-	const printButton = createButton('print', 'Print pagina', printIcon, printTextAfter);
-	toolbar.appendChild(printButton);
+	const init = (): void => {
+		if (!options || !options.showPrintButton) return;
 
-	printButton.addEventListener('click', () => {
-		window.print();
-	});
+		printIcon = options.iconOptions?.printIcon || '';
+		printTextAfter = options.textAfterOptions?.printTextAfter || '';
+		printLabel = options.labelOptions?.printLabel || '';
+
+		const printButton = createButton('print', printLabel, printIcon, printTextAfter);
+		toolbar.appendChild(printButton);
+
+		printButton.addEventListener('click', () => {
+			window.print();
+		});
+	};
+
+	init();
 };
