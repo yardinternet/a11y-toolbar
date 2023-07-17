@@ -10,10 +10,6 @@ import { COOKIES } from '../constants/cookies';
 import { createButton } from '../utils/createButton';
 import { DefaultOptionsType } from '../types/default-options-type';
 
-const TEXT_SIZE_BUTTON_LABEL_INCREASE = 'Vergroot schermtekst';
-const TEXT_SIZE_BUTTON_LABEL_DECREASE = 'Verklein schermtekst';
-const TEXT_SIZE_BODY_CLASS = 'a11y-toolbar--text-size';
-
 /**
  * Adds a button to the toolbar that toggles the text size.
  *
@@ -21,75 +17,91 @@ const TEXT_SIZE_BODY_CLASS = 'a11y-toolbar--text-size';
  * @param {DefaultOptionsType} options - The options for the text size button.
  */
 export const addTextSizeButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
-	if (!options || !options.showTextSizeButton) return;
+	const TEXT_SIZE_BODY_CLASS = 'a11y-toolbar--text-size';
+	let textSizeIcon: string;
+	let textSizeTextAfter: string;
+	let textSizeIncreaseLabel: string;
+	let textSizeDecreaseLabel: string;
 
-	const textSizeIcon = options.iconOptions?.textSizeIcon || '';
-	const textSizeTextAfter = options.textAfterOptions?.textSizeTextAfter || '';
-	const textSizeButton = createButton(
-		'text-size',
-		TEXT_SIZE_BUTTON_LABEL_INCREASE,
-		textSizeIcon,
-		textSizeTextAfter
-	);
+	const init = (): void => {
+		if (!options || !options.showTextSizeButton) return;
 
-	toolbar.appendChild(textSizeButton);
+		textSizeIcon = options.iconOptions?.textSizeIcon || '';
+		textSizeTextAfter = options.textAfterOptions?.textSizeTextAfter || '';
+		textSizeIncreaseLabel = options.labelOptions?.textSizeIncreaseLabel || '';
+		textSizeDecreaseLabel = options.labelOptions?.textSizeDecreaseLabel || '';
 
-	initTextSizeBodyClass();
-	initPressedStateButton(textSizeButton);
-	addTextSizeButtonEventListener(textSizeButton);
-};
-
-/**
- * Initialize the body class based on the cookie. Checks first if the class is already set server side.
- */
-const initTextSizeBodyClass = (): void => {
-	const hasTextSize = hasTextSizeCookie();
-
-	if (hasTextSize && !document.body.classList.contains(TEXT_SIZE_BODY_CLASS)) {
-		document.body.classList.toggle(TEXT_SIZE_BODY_CLASS);
-	}
-};
-
-/**
- * Initializes the pressed state of the text size button based on the text size cookie.
- *
- * @param {HTMLElement} button - The text size button element.
- */
-const initPressedStateButton = (button: HTMLElement): void => {
-	const hasTextSize = hasTextSizeCookie();
-
-	button.setAttribute('aria-pressed', hasTextSize.toString());
-	button.setAttribute(
-		'aria-label',
-		hasTextSize ? 'Verminder schermtekst' : TEXT_SIZE_BUTTON_LABEL_INCREASE
-	);
-};
-
-/**
- * Adds event listener to the text size button to toggle the text size.
- *
- * @param {HTMLElement} button - The text size button element.
- */
-const addTextSizeButtonEventListener = (button: HTMLElement): void => {
-	button.addEventListener('click', () => {
-		const textSizeCookieValue = !hasTextSizeCookie();
-		Cookies.set(COOKIES.TEXT_SIZE, textSizeCookieValue.toString(), {
-			expires: 90,
-		});
-
-		button.setAttribute('aria-pressed', textSizeCookieValue.toString());
-		button.setAttribute(
-			'aria-label',
-			textSizeCookieValue ? TEXT_SIZE_BUTTON_LABEL_DECREASE : TEXT_SIZE_BUTTON_LABEL_INCREASE
+		const textSizeButton = createButton(
+			'text-size',
+			textSizeIncreaseLabel,
+			textSizeIcon,
+			textSizeTextAfter
 		);
 
-		document.body.classList.toggle(TEXT_SIZE_BODY_CLASS);
-	});
-};
+		toolbar.appendChild(textSizeButton);
 
-/**
- * Checks if a text size cookie has been set.
- */
-const hasTextSizeCookie = (): boolean => {
-	return Cookies.get(COOKIES.TEXT_SIZE) === 'true';
+		initTextSizeBodyClass();
+		initPressedStateButton(textSizeButton);
+		addTextSizeButtonEventListener(textSizeButton);
+	};
+
+	/**
+	 * Initialize the body class based on the cookie. Checks first if the class is already set server side.
+	 */
+	const initTextSizeBodyClass = (): void => {
+		const hasTextSize = hasTextSizeCookie();
+
+		if (hasTextSize && !document.body.classList.contains(TEXT_SIZE_BODY_CLASS)) {
+			document.body.classList.toggle(TEXT_SIZE_BODY_CLASS);
+		}
+	};
+
+	/**
+	 * Initializes the pressed state of the text size button based on the text size cookie.
+	 *
+	 * @param {HTMLElement} button - The text size button element.
+	 */
+	const initPressedStateButton = (button: HTMLElement): void => {
+		const hasTextSize = hasTextSizeCookie();
+		toggleButtonAttributes(button, hasTextSize);
+	};
+
+	/**
+	 * Adds event listener to the text size button to toggle the text size.
+	 *
+	 * @param {HTMLElement} button - The text size button element.
+	 */
+	const addTextSizeButtonEventListener = (button: HTMLElement): void => {
+		button.addEventListener('click', () => {
+			const textSizeCookieValue = !hasTextSizeCookie();
+			Cookies.set(COOKIES.TEXT_SIZE, textSizeCookieValue.toString(), {
+				expires: 90,
+			});
+
+			toggleButtonAttributes(button, textSizeCookieValue);
+
+			document.body.classList.toggle(TEXT_SIZE_BODY_CLASS);
+		});
+	};
+
+	/**
+	 * Checks if a text size cookie has been set.
+	 */
+	const hasTextSizeCookie = (): boolean => {
+		return Cookies.get(COOKIES.TEXT_SIZE) === 'true';
+	};
+
+	/**
+	 * Toggle button attributes based on the state
+	 *
+	 * @param {HTMLElement} button - The text size button element.
+	 * @param {boolean} state - The state of the button element.
+	 */
+	const toggleButtonAttributes = (button: HTMLElement, state: boolean): void => {
+		button.setAttribute('aria-pressed', state.toString());
+		button.setAttribute('aria-label', state ? textSizeDecreaseLabel : textSizeIncreaseLabel);
+		button.setAttribute('title', state ? textSizeDecreaseLabel : textSizeIncreaseLabel);
+	};
+
+	init();
 };

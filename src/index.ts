@@ -9,6 +9,7 @@ import { addTextSizeButton } from './components/TextSizeButton';
 
 import { DEFAULTS } from './constants/default-options';
 import { DefaultOptionsType } from './types/default-options-type';
+import { deepMerge } from './utils/deepMerge';
 
 import './styles.scss';
 
@@ -20,7 +21,7 @@ export default class A11yToolbar {
 
 	constructor(selector: string, options?: {}) {
 		this.selector = selector;
-		this.options = { ...DEFAULTS, ...options };
+		this.options = deepMerge(DEFAULTS, options || {});
 	}
 
 	/**

@@ -20,4 +20,13 @@ export interface DefaultOptionsType {
 		printTextAfter?: string;
 		languageTextAfter?: string;
 	};
+	labelOptions?: {
+		readSpeakerLabel?: string;
+		textSizeIncreaseLabel?: string;
+		textSizeDecreaseLabel?: string;
+		contrastIncreaseLabel?: string;
+		contrastDecreaseLabel?: string;
+		printLabel?: string;
+		languageLabel?: string;
+	};
 }
