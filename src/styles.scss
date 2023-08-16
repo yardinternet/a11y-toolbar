@@ -1,23 +1,32 @@
 $a11y-toolbar: 'a11y-toolbar';
 $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media queries.
 
-.#{$a11y-toolbar} {
+.js-#{$a11y-toolbar} {
 	--a11y-toolbar-zindex: 999;
 	--a11y-toolbar-button-size: 45px;
 	--a11y-toolbar-button-size-md: 60px;
+	--a11y-toolbar-border-radius: 0px;
+	--a11y-toolbar-toggle-button-border-radius: 50px;
 	--a11y-toolbar-button-color: #000;
 	--a11y-toolbar-button-color-hover: #000;
 	--a11y-toolbar-button-background-color: #fff;
 	--a11y-toolbar-button-background-color-hover: #f1f5f9;
+	--a11y-toolbar-toggle-button-color: #000;
+	--a11y-toolbar-toggle-button-color-hover: #000;
+	--a11y-toolbar-toggle-button-background-color: #fff;
+	--a11y-toolbar-toggle-button-background-color-hover: #f1f5f9;
 	--a11y-toolbar-icon-size: 1.1rem;
 	--a11y-toolbar-icon-size-md: 1.5rem;
+}
 
+.#{$a11y-toolbar} {
 	position: fixed;
 	top: 20vh;
 	left: 0;
 	z-index: var(--a11y-toolbar-zindex);
 	opacity: 0;
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+	border-radius: var(--a11y-toolbar-border-radius);
 	transform: translateX(-100%);
 	visibility: hidden;
 	flex-direction: column;
@@ -34,6 +43,18 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		visibility: visible;
 	}
 
+	> *:first-child:not(.rs_skip),
+	> *:first-child > .a11y-toolbar__button--readspeaker {
+		border-top-left-radius: var(--a11y-toolbar-border-radius) !important;
+		border-top-right-radius: var(--a11y-toolbar-border-radius) !important;
+	}
+
+	> *:last-child:not(.rs_skip),
+	> *:last-child > .a11y-toolbar__button--readspeaker {
+		border-bottom-left-radius: var(--a11y-toolbar-border-radius) !important;
+		border-bottom-right-radius: var(--a11y-toolbar-border-radius) !important;
+	}
+
 	&__toggle-button {
 		$size: 45px;
 		position: fixed;
@@ -45,11 +66,16 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		height: $size;
 		padding: 0;
 		border: 0;
-		background-color: #fff;
-		border-radius: 50px;
+		background-color: var(--a11y-toolbar-toggle-button-background-color);
+		border-radius: var(--a11y-toolbar-toggle-button-border-radius);
 		box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-		color: #000;
+		color: var(--a11y-toolbar-toggle-button-color);
 		font-size: 1.6rem;
+
+		&:hover {
+			background-color: var(--a11y-toolbar-toggle-button-background-color-hover);
+			color: var(--a11y-toolbar-toggle-button-color-hover);
+		}
 
 		@media screen and (min-width: $a11y-toolbar-breakpoint) {
 			display: none;
@@ -202,6 +228,17 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		.rsbtn_exp_inner {
 			background-color: var(--a11y-toolbar-button-background-color);
 		}
+	}
+}
+
+// Remove popup by button. Can't be done via ReadSpeaker API.
+.rsbtn.rsexpanded {
+	.rsbtn_exp {
+		display: none !important;
+	}
+
+	.rsbtn_play {
+		padding-right: 0 !important;
 	}
 }
 
