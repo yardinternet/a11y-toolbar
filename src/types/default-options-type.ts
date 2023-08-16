@@ -7,6 +7,7 @@ export interface DefaultOptionsType {
 	readSpeakerCustomerID?: string;
 	readSpeakerContentID?: string;
 	iconOptions?: {
+		toggleIcon?: string;
 		readSpeakerIcon?: string;
 		textSizeIcon?: string;
 		contrastIcon?: string;

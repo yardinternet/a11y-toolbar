@@ -44,6 +44,7 @@ const options = {
  readSpeakerCustomerID: '9999',
  readSpeakerContentID: 'readspeakers',
  iconOptions: {
+  toggleIcon: 'fa-regular fa-universal-access',
   readSpeakerIcon: 'fa-light fa-volume',
   textSizeIcon: 'fa-light fa-text-height',
   contrastIcon: 'fa-light fa-adjust',
@@ -76,14 +77,20 @@ const options = {
 Easily change the A11yToolbar styles using CSS variables. Currently available variables and their defaults:
 
 ```CSS
-.a11y-toolbar {
+.js-a11y-toolbar {
  --a11y-toolbar-zindex: 999;
  --a11y-toolbar-button-size: 45px;
  --a11y-toolbar-button-size-md: 60px;
+ --a11y-toolbar-border-radius: 0px;
+ --a11y-toolbar-toggle-button-border-radius: 0px;
  --a11y-toolbar-button-color: #000;
  --a11y-toolbar-button-color-hover: #000;
  --a11y-toolbar-button-background-color: #fff;
  --a11y-toolbar-button-background-color-hover: #f1f5f9;
+ --a11y-toolbar-toggle-button-color: #000;
+ --a11y-toolbar-toggle-button-color-hover: #000;
+ --a11y-toolbar-toggle-button-background-color: #fff;
+ --a11y-toolbar-toggle-button-background-color-hover: #f1f5f9;
  --a11y-toolbar-icon-size: 1.1rem;
  --a11y-toolbar-icon-size-md: 1.5rem;
 }

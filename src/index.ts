@@ -66,7 +66,8 @@ export default class A11yToolbar {
 		button.setAttribute('aria-label', 'Open toegankelijkheid toolbar');
 
 		const icon = document.createElement('i');
-		icon.classList.add('fa-regular', 'fa-universal-access');
+		const iconClass = this.options.iconOptions?.toggleIcon || '';
+		icon.classList.add(...iconClass.split(' '));
 
 		button.appendChild(icon);
 		button.addEventListener('click', () => this.toggleToolbar(button));

@@ -7,6 +7,7 @@ export const DEFAULTS = {
 	readSpeakerCustomerID: '9999',
 	readSpeakerContentID: 'readspeakers',
 	iconOptions: {
+		toggleIcon: 'fa-regular fa-universal-access',
 		readSpeakerIcon: 'fa-light fa-volume',
 		textSizeIcon: 'fa-light fa-text-height',
 		contrastIcon: 'fa-light fa-adjust',
