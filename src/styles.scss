@@ -49,7 +49,8 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		border-top-right-radius: var(--a11y-toolbar-border-radius) !important;
 	}
 
-	> *:last-child:not(.rs_skip),
+	> .a11y-toolbar__button:last-of-type,
+	> *:last-child:not(.rs_skip):not(.a11y-toolbar__translate-dropdown),
 	> *:last-child > .a11y-toolbar__button--readspeaker {
 		border-bottom-left-radius: var(--a11y-toolbar-border-radius) !important;
 		border-bottom-right-radius: var(--a11y-toolbar-border-radius) !important;
@@ -180,7 +181,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		.goog-te-combo {
 			width: auto;
 			height: 33px;
-			padding: 0.2rem 0.5rem;
+			padding: 0.2rem 2rem 0.2rem 0.5rem;
 		}
 	}
 
