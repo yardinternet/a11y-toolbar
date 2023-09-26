@@ -41,6 +41,7 @@ const options = {
  showContrastButton: true,
  showPrintButton: true,
  showLanguageButton: true,
+ translateIncludedLanguages: 'en',
  readSpeakerCustomerID: '9999',
  readSpeakerContentID: 'readspeakers',
  iconOptions: {

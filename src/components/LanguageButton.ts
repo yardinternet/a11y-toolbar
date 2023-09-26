@@ -9,6 +9,7 @@ import * as focusTrap from 'focus-trap';
 import { createButton } from '../utils/createButton';
 import { DefaultOptionsType } from '../types/default-options-type';
 import { checkCanFocusTrap } from '../utils/checkCanFocusTrap';
+import { isScriptLoaded } from '../utils/isScriptLoaded';
 
 /**
  * Adds a button to the toolbar that toggles the language options dropdown.
@@ -34,6 +35,7 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	let languageIcon: string;
 	let languageTextAfter: string;
 	let languageLabel: string;
+	let includedLanguages: string;
 
 	const init = (): void => {
 		if (!options || !options.showLanguageButton) return;
@@ -41,6 +43,9 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 		languageIcon = options.iconOptions?.languageIcon || '';
 		languageTextAfter = options.textAfterOptions?.languageTextAfter || '';
 		languageLabel = options.labelOptions?.languageLabel || '';
+		includedLanguages = options.translateIncludedLanguages || '';
+
+		addGoogleTranslateScriptToHead(includedLanguages);
 
 		const languageButton = createButton(
 			'language-button',
@@ -59,9 +64,39 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	};
 
 	/**
-	 * Handles the click event on the language button.
+	 * Adds the Google Translate scripts to the head of the document.
 	 *
-	 * @param {HTMLElement} button - The language button element to add the event listener to.
+	 * @param {string} includedLanguages - The languages to included in the translate widget.
+	 */
+	const addGoogleTranslateScriptToHead = (includedLanguages: string): void => {
+		const translateScriptSrc =
+			'//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+
+		if (isScriptLoaded(translateScriptSrc)) {
+			return;
+		}
+
+		const translateScript = document.createElement('script');
+		translateScript.type = 'text/javascript';
+		translateScript.src = translateScriptSrc;
+
+		const translateElementScript = document.createElement('script');
+		translateElementScript.type = 'text/javascript';
+		translateElementScript.innerHTML = `
+			function googleTranslateElementInit() {
+				new google.translate.TranslateElement({
+					pageLanguage: 'nl',
+					includedLanguages: '${includedLanguages}',
+				}, 'google_translate_element');
+			}
+		`;
+
+		document.head.appendChild(translateScript);
+		document.head.appendChild(translateElementScript);
+	};
+
+	/**
+	 * Handles the click event on the language button.
 	 */
 	const handleButtonClick = (): void => {
 		if (!document.body.classList.contains(LANGUAGE_BODY_CLASS)) {
