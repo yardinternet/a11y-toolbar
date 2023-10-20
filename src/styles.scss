@@ -142,12 +142,12 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		background-color: #fff;
 		padding: 1rem;
 		position: absolute;
-		top: calc(100% + #{$triangle});
-		left: 10px;
-		width: 280px;
+		top: 0;
+		left: calc(var(--a11y-toolbar-button-size) + #{$triangle});
+		width: 250px;
 		box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 		opacity: 0;
-		transform: translateY(-7px);
+		transform: translateX(-7px);
 		transition: all 0.3s ease;
 		visibility: hidden;
 
@@ -158,23 +158,33 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 
 		&::before {
 			position: absolute;
-			top: -#{$triangle};
-			left: 5px;
+			top: 68%;
+			left: -#{$triangle};
 			width: 0;
 			height: 0;
-			border-right: $triangle solid transparent;
-			border-bottom: $triangle solid #fff;
-			border-left: $triangle solid transparent;
+			border-top: $triangle solid rgba(0,0,0,0);
+			border-bottom: $triangle solid rgba(0,0,0,0);
+			border-right: $triangle solid #fff;
 			content: '';
 		}
 
 		@media screen and (min-width: $a11y-toolbar-breakpoint) {
 			right: 10px;
 			left: auto;
+			width: 280px;
+			top: calc(100% + #{$triangle});
+			transform: translateY(-7px);
 
 			&::before {
+				position: absolute;
+				top: -#{$triangle};
 				right: 15px;
 				left: auto;
+				height: 0;
+				border-right: $triangle solid transparent;
+				border-bottom: $triangle solid #fff;
+				border-left: $triangle solid transparent;
+				content: '';
 			}
 		}
 
