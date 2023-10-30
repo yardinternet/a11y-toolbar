@@ -162,8 +162,8 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 			left: -#{$triangle};
 			width: 0;
 			height: 0;
-			border-top: $triangle solid rgba(0,0,0,0);
-			border-bottom: $triangle solid rgba(0,0,0,0);
+			border-top: $triangle solid rgba(0, 0, 0, 0);
+			border-bottom: $triangle solid rgba(0, 0, 0, 0);
 			border-right: $triangle solid #fff;
 			content: '';
 		}
@@ -181,6 +181,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 				right: 15px;
 				left: auto;
 				height: 0;
+				border-top: none;
 				border-right: $triangle solid transparent;
 				border-bottom: $triangle solid #fff;
 				border-left: $triangle solid transparent;
@@ -251,11 +252,6 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	.rsbtn_play {
 		padding-right: 0 !important;
 	}
-}
-
-// Remove popup when selecting text. Can't be done via ReadSpeaker API.
-.rspopup {
-	display: none !important;
 }
 
 // Class added to <body> when a11y toolbar is open on small screens
