@@ -19,6 +19,7 @@ declare global {
 export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
 	let readSpeakerCustomerID: string;
 	let readSpeakerContentID: string;
+	let readSpeakerDisable: string;
 	let readSpeakerIcon: string;
 	let readSpeakerTextAfter: string;
 	let readSpeakerLabel: string;
@@ -44,11 +45,12 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 
 		readSpeakerCustomerID = options.readSpeakerCustomerID || '';
 		readSpeakerContentID = options.readSpeakerContentID || '';
+		readSpeakerDisable = options.readSpeakerDisable || '';
 		readSpeakerIcon = options.iconOptions?.readSpeakerIcon || '';
 		readSpeakerTextAfter = options.textAfterOptions?.readSpeakerTextAfter || '';
 		readSpeakerLabel = options.labelOptions?.readSpeakerLabel || '';
 
-		addReadSpeakerScriptToHead(readSpeakerCustomerID);
+		addReadSpeakerScriptToHead(readSpeakerCustomerID, readSpeakerDisable);
 
 		const readSpeakerLink = createReadSpeakerButton(
 			readSpeakerCustomerID,
@@ -66,12 +68,15 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 	 *
 	 * @param {string} readSpeakerCustomerID - The ID of the ReadSpeaker instance.
 	 */
-	const addReadSpeakerScriptToHead = (readSpeakerCustomerID: string): void => {
+	const addReadSpeakerScriptToHead = (
+		readSpeakerCustomerID: string,
+		readSpeakerDisable: string
+	): void => {
 		const script = document.createElement('script');
 		script.type = 'text/javascript';
 		script.crossOrigin = 'anonymous';
 		script.id = 'rs_req_Init';
-		script.src = `https://cdn-eu.readspeaker.com/script/${readSpeakerCustomerID}/webReader/webReader.js?pids=wr&&disable=settings,clicklisten,voicesettings,readhover,enlarge,textmode,pagemask,download,help,dictionary,translation`;
+		script.src = `https://cdn-eu.readspeaker.com/script/${readSpeakerCustomerID}/webReader/webReader.js?pids=wr&&disable=${readSpeakerDisable}`;
 
 		document.head.appendChild(script);
 	};

@@ -7,6 +7,7 @@ export interface DefaultOptionsType {
 	translateIncludedLanguages?: string;
 	readSpeakerCustomerID?: string;
 	readSpeakerContentID?: string;
+	readSpeakerDisable?: string;
 	iconOptions?: {
 		toggleIcon?: string;
 		readSpeakerIcon?: string;

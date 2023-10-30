@@ -44,6 +44,7 @@ const options = {
  translateIncludedLanguages: 'en',
  readSpeakerCustomerID: '9999',
  readSpeakerContentID: 'readspeakers',
+ readSpeakerDisable: 'settings,clicklisten,voicesettings,readhover,enlarge,textmode,pagemask,download,help,dictionary,translation',
  iconOptions: {
   toggleIcon: 'fa-regular fa-universal-access',
   readSpeakerIcon: 'fa-light fa-volume',
