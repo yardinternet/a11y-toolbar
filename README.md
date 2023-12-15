@@ -10,13 +10,21 @@ Easily add an accessibility toolbar to Yard projects.
 npm install --save @yardinternet/a11y-toolbar
 ```
 
-### Step 2: Import CSS files
+### Step 2: Add the HTML element
+
+Usually put right below the navigation.
+
+```html
+	<div class="js-a11y-toolbar"></div>
+```
+
+### Step 3: Import CSS files
 
 ```CSS
 @import '~@yardinternet/a11y-toolbar/dist/a11y-toolbar';
 ```
 
-### Step 3: Initialize A11yToolbar
+### Step 4: Initialize A11yToolbar
 
 ```JS
 import A11yToolbar from '@yardinternet/a11y-toolbar';
