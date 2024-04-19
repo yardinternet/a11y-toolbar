@@ -37,11 +37,9 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 		 * Used to make sure that no dynamic content disappears after clicking on
 		 * the ReadSpeaker button, such as the gemeente-search-block.
 		 */
-		if (window.rsConf) {
-			window.rsConf = {
-				general: { usePost: true },
-			};
-		}
+		window.rsConf = {
+			general: { usePost: true },
+		};
 
 		readSpeakerCustomerID = options.readSpeakerCustomerID || '';
 		readSpeakerContentID = options.readSpeakerContentID || '';
