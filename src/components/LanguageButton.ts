@@ -70,7 +70,7 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	 */
 	const addGoogleTranslateScriptToHead = (includedLanguages: string): void => {
 		const translateScriptSrc =
-			'//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+			'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
 
 		if (isScriptLoaded(translateScriptSrc)) {
 			return;
