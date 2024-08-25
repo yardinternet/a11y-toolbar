@@ -213,6 +213,11 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		}
 	}
 
+	&__translate-label {
+		margin-bottom: 0;
+		font-size: 0.9rem;
+	}
+
 	// ReadSpeaker is a mess, we need to override some of their styles
 	.rsbtn {
 		display: flex;

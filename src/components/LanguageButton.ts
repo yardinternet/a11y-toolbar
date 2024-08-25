@@ -19,6 +19,7 @@ import { isScriptLoaded } from '../utils/isScriptLoaded';
  */
 export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
 	const LANGUAGE_BODY_CLASS = 'a11y-toolbar--translate-is-open';
+	const LABEL_CLASS = 'a11y-toolbar__translate-label';
 	const trapFocusOptions = {
 		allowOutsideClick: true,
 		clickOutsideDeactivates: true,
@@ -99,6 +100,8 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	 * Handles the click event on the language button.
 	 */
 	const handleButtonClick = (): void => {
+		transformTranslateElement();
+
 		if (!document.body.classList.contains(LANGUAGE_BODY_CLASS)) {
 			openLanguageModal();
 		} else {
@@ -150,6 +153,29 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 		modalContent.appendChild(translationContainer);
 
 		return modalContent;
+	};
+
+	/**
+	 * A11y improvements to the Google Translate widget:
+	 * - Add a label to the select element.
+	 * - Remove the aria label to prevent double screen reader announcement.
+	 */
+	const transformTranslateElement = (): void => {
+		const googleSelectElement = document.querySelector('.goog-te-combo') as HTMLElement;
+		const labelExists = document.querySelector(`.${LABEL_CLASS}`) as HTMLElement;
+
+		if (!googleSelectElement || labelExists) return;
+
+		googleSelectElement.setAttribute('id', 'google-translate-select');
+		googleSelectElement.removeAttribute('aria-label');
+
+		const label = document.createElement('label');
+		label.classList.add(LABEL_CLASS);
+		label.htmlFor = 'google-translate-select';
+		label.textContent = 'Selecteer een taal:';
+
+		const wrapper = document.querySelector('#google_translate_element') as HTMLElement;
+		wrapper?.parentElement?.insertBefore(label, wrapper);
 	};
 
 	init();
