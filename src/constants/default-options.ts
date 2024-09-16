@@ -4,6 +4,7 @@ export const DEFAULTS = {
 	showContrastButton: true,
 	showPrintButton: true,
 	showLanguageButton: true,
+	showDeepLButton: false,
 	translateIncludedLanguages: 'en',
 	readSpeakerCustomerID: '9999',
 	readSpeakerContentID: 'readspeakers',
