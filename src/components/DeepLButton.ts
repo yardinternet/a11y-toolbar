@@ -79,14 +79,13 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		toolbar.appendChild(languageButton);
 
 		const modal = createLanguageModalContent();
-
 		toolbar.appendChild(modal);
 
 		languageButton.addEventListener('click', () => handleButtonClick());
 
 		saveOriginalText();
 
-		console.log(originalTextMap);
+		console.log('Original Text Map:', Array.from(originalTextMap.entries()));
 
 		// Set the saved language and translate on page load
 		const savedLanguage = localStorage.getItem('selectedLanguage');
@@ -206,7 +205,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	const handleSelectChange = (select: HTMLSelectElement): void => {
 		const selectedLanguage = select.value;
 
-		console.log(selectedLanguage);
+		console.log('Selected Language:', selectedLanguage);
 
 		// Revert to original text if default or 'NL' is selected
 		if (selectedLanguage === 'DEFAULT' || selectedLanguage === 'NL') {
@@ -221,7 +220,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const translatePage = async (targetLang: string): Promise<void> => {
 		const originalTextArray = Array.from(originalTextMap.values());
-		console.log('using original text array', originalTextArray);
+		console.log('Using original text array:', originalTextArray);
 		await translateText(originalTextArray, targetLang);
 	};
 
@@ -252,7 +251,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			}
 
 			const responseData = await response.json();
-			console.log(responseData);
+			console.log('Translation Response:', responseData);
 			applyTranslations(responseData);
 		} catch (error) {
 			console.error('Error:', error);
@@ -280,44 +279,27 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		});
 	};
 
+	const saveOriginalText = (): void => {
+		const elements = document.querySelectorAll(CONTENT_SELECTOR);
+		const savedElements = new Set<HTMLElement>();
+
+		elements.forEach((el) => {
+			if (isVisible(el) && el instanceof HTMLElement && !savedElements.has(el)) {
+				const textContent = el.textContent?.trim();
+				if (textContent && textContent.length > 2) {
+					originalTextMap.set(el, textContent);
+					savedElements.add(el); // Ensure each element is saved only once
+				}
+			}
+		});
+	};
+
 	const revertToOriginalText = (): void => {
 		originalTextMap.forEach((originalText, el) => {
 			if (isVisible(el)) {
 				el.textContent = originalText;
 			}
 		});
-	};
-
-	// Make sure to remove duplicates here.
-	const saveOriginalText = (): void => {
-		const elements = document.querySelectorAll(CONTENT_SELECTOR);
-		elements.forEach((el) => {
-			if (isVisible(el) && el instanceof HTMLElement) {
-				const textContent = el.textContent?.trim();
-				if (textContent && textContent.length > 2) {
-					originalTextMap.set(el, textContent);
-				}
-			}
-		});
-	};
-
-	// Unused function. We can get rid of this.
-	const getVisibleText = (): string[] => {
-		const elements = document.querySelectorAll(CONTENT_SELECTOR);
-		const visibleTextSet = new Set<string>(); // Use a set to avoid duplicates
-
-		elements.forEach((el) => {
-			if (isVisible(el)) {
-				let textContent = el.textContent?.trim();
-
-				if (textContent && textContent.length > 2) {
-					textContent = textContent.replace(/\s\s+/g, ' ');
-					visibleTextSet.add(textContent);
-				}
-			}
-		});
-
-		return Array.from(visibleTextSet);
 	};
 
 	const isVisible = (element: Element): boolean => {
