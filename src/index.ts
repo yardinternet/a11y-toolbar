@@ -2,6 +2,7 @@
  * Internal dependencies
  */
 import { addContrastButton } from './components/ContrastButton';
+import { addDeepLButton } from './components/DeepLButton';
 import { addLanguageButton } from './components/LanguageButton';
 import { addPrintButton } from './components/PrintButton';
 import { addReadSpeakerButton } from './components/ReadSpeakerButton';
@@ -36,6 +37,7 @@ export default class A11yToolbar {
 		addContrastButton(toolbar, this.options);
 		addPrintButton(toolbar, this.options);
 		addLanguageButton(toolbar, this.options);
+		addDeepLButton(toolbar, this.options);
 
 		const container = document.querySelector(this.selector);
 
