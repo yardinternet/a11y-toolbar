@@ -57,8 +57,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	let languageIcon: string;
 	let languageTextAfter: string;
 	let languageLabel: string;
-	let includedLanguages: string;
-	const originalTextMap: Map<HTMLElement, string> = new Map();
+	const originalTextMap: Map<string, HTMLElement[]> = new Map();
 
 	const init = (): void => {
 		if (!options || !options.showDeepLButton) return;
@@ -66,7 +65,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		languageIcon = options.iconOptions?.languageIcon || '';
 		languageTextAfter = options.textAfterOptions?.languageTextAfter || '';
 		languageLabel = options.labelOptions?.languageLabel || '';
-		includedLanguages = options.translateIncludedLanguages || '';
 
 		const languageButton = createButton(
 			'language-button',
@@ -218,9 +216,8 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	};
 
 	const translatePage = async (targetLang: string): Promise<void> => {
-		const originalTextArray = Array.from(originalTextMap.values());
-		console.log('Using original text array: ', originalTextArray);
-		await translateText(originalTextArray, targetLang);
+		const uniqueTextArray = Array.from(new Set(originalTextMap.keys()));
+		await translateText(uniqueTextArray, targetLang);
 	};
 
 	const translateText = async (textArray: string[], targetLang: string): Promise<void> => {
@@ -258,11 +255,12 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	};
 
 	const applyTranslations = (translations: Array<{ text: string; translation: string }>): void => {
-		originalTextMap.forEach((originalText, el) => {
-			const translation = translations.find((t) => t.text === originalText);
-
-			if (translation) {
-				el.textContent = translation.translation;
+		translations.forEach((translation) => {
+			const elements = originalTextMap.get(translation.text); // Get all elements with the same text
+			if (elements) {
+				elements.forEach((el) => {
+					el.textContent = translation.translation;
+				});
 			}
 		});
 	};
@@ -275,13 +273,19 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			if (isVisible(el) && el instanceof HTMLElement) {
 				const textContent = el.textContent?.trim();
 
-				if (textContent && textContent.length > 2 && !originalTextMap.has(el)) {
+				if (textContent && textContent.length > 2) {
 					const normalizedText = textContent.replace(/\s\s+/g, ' '); // Normalize whitespace
 
-					// Only add if the text content is unique
 					if (!uniqueTextSet.has(normalizedText)) {
-						originalTextMap.set(el, normalizedText);
-						uniqueTextSet.add(normalizedText); // Mark this text as processed
+						// If this text hasn't been processed yet, create a new entry in the map
+						originalTextMap.set(normalizedText, [el]);
+						uniqueTextSet.add(normalizedText);
+					} else {
+						// If this text has already been processed, add the element to the list
+						const elementsWithSameText = originalTextMap.get(normalizedText);
+						if (elementsWithSameText) {
+							elementsWithSameText.push(el);
+						}
 					}
 				}
 			}
@@ -289,10 +293,12 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	};
 
 	const revertToOriginalText = (): void => {
-		originalTextMap.forEach((originalText, el) => {
-			if (isVisible(el)) {
-				el.textContent = originalText;
-			}
+		originalTextMap.forEach((elements, originalText) => {
+			elements.forEach((el) => {
+				if (isVisible(el)) {
+					el.textContent = originalText;
+				}
+			});
 		});
 	};
 
