@@ -37,9 +37,10 @@ declare global {
 export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
 	const LANGUAGE_BODY_CLASS = 'a11y-toolbar--translate-is-open';
 	const LABEL_CLASS = 'a11y-toolbar__translate-label';
+	const DEFAULT_LANGUAGE = 'NL';
 	const CONTENT_SELECTOR =
 		'.nav li a, ' +
-		'.main-content p, .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6, .main-content span, .main-content li, .main-content a, ' +
+		'.main-content p, .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6, .main-content span, .main-content li, .main-content a, .main-content button ' +
 		'.footer p, .footer h2, .footer h3, .footer h4, .footer h5, .footer h6, .footer span, .footer li:not(.wp-block-social-link), .footer a:not(.wp-block-social-link-anchor)';
 	const trapFocusOptions = {
 		allowOutsideClick: true,
@@ -85,15 +86,49 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		console.log('Original Text Map:', Array.from(originalTextMap.entries()));
 
 		// Set the saved language and translate on page load
-		const savedLanguage = localStorage.getItem('selectedLanguage');
-		// if (savedLanguage) {
-		// 	translatePage(savedLanguage);
-		// }
+		const savedLanguage = sessionStorage.getItem('DeepLSelectedLanguage') ?? '';
+
+		if (DEFAULT_LANGUAGE !== savedLanguage && savedLanguage) {
+			translatePage(savedLanguage);
+		}
 	};
 
-	/**
-	 * Handles the click event on the language button.
-	 */
+	const saveOriginalText = (): void => {
+		const uniqueTextSet = new Set<string>(); // Track unique text content
+
+		const elements = document.querySelectorAll(CONTENT_SELECTOR);
+		elements.forEach((el) => {
+			if (isVisible(el) && el instanceof HTMLElement) {
+				const textContent = el.textContent?.trim();
+
+				if (textContent && textContent.length > 2) {
+					const normalizedText = textContent.replace(/\s\s+/g, ' '); // Normalize whitespace
+
+					if (!uniqueTextSet.has(normalizedText)) {
+						// If this text hasn't been processed yet, create a new entry in the map
+						originalTextMap.set(normalizedText, [el]);
+						uniqueTextSet.add(normalizedText);
+					} else {
+						// If this text has already been processed, add the element to the list
+						const elementsWithSameText = originalTextMap.get(normalizedText);
+						if (elementsWithSameText) {
+							elementsWithSameText.push(el);
+						}
+					}
+				}
+			}
+		});
+	};
+
+	const isVisible = (element: Element): boolean => {
+		const style = window.getComputedStyle(element);
+		return (
+			style.display !== 'none' &&
+			style.visibility !== 'hidden' &&
+			element.getClientRects().length > 0
+		);
+	};
+
 	const handleButtonClick = (): void => {
 		if (!document.body.classList.contains(LANGUAGE_BODY_CLASS)) {
 			openLanguageModal();
@@ -141,9 +176,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		modalContent.appendChild(description);
 
 		const select = createSelect();
-		if (select) {
-			modalContent.appendChild(select);
-		}
+		modalContent.appendChild(select);
 
 		return modalContent;
 	};
@@ -162,6 +195,9 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			return error;
 		}
 
+		// Retrieve the selected language from sessionStorage
+		const storedLanguage = sessionStorage.getItem('DeepLSelectedLanguage') || DEFAULT_LANGUAGE;
+
 		// Create and set up the label
 		const label = document.createElement('label');
 		label.classList.add(LABEL_CLASS);
@@ -177,9 +213,8 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 		// Create and add the default option
 		const defaultOption = document.createElement('option');
-		defaultOption.value = 'DEFAULT';
-		defaultOption.textContent = 'Select language';
-		defaultOption.selected = true; // Make default option pre-selected
+		defaultOption.value = DEFAULT_LANGUAGE;
+		defaultOption.textContent = 'Nederlands (standaard)';
 		select.appendChild(defaultOption);
 
 		// Add options from supported languages
@@ -187,6 +222,10 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			const option = document.createElement('option');
 			option.value = language.iso_alpha2;
 			option.textContent = language.name;
+			// Set the selected attribute if this option matches the stored language
+			if (option.value === storedLanguage) {
+				option.selected = true;
+			}
 			select.appendChild(option);
 		});
 
@@ -201,18 +240,24 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const handleSelectChange = (select: HTMLSelectElement): void => {
 		const selectedLanguage = select.value;
-
+		sessionStorage.setItem('DeepLSelectedLanguage', selectedLanguage); // Save selected language and translate
 		console.log('Selected Language:', selectedLanguage);
 
-		// Revert to original text if default or 'NL' is selected
-		if (selectedLanguage === 'DEFAULT' || selectedLanguage === 'NL') {
+		if (selectedLanguage === DEFAULT_LANGUAGE) {
 			revertToOriginalText();
 		} else {
-			localStorage.setItem('selectedLanguage', selectedLanguage); // Save selected language and translate
-
-			console.log('Translating page to: ', selectedLanguage);
 			translatePage(selectedLanguage);
 		}
+	};
+
+	const revertToOriginalText = (): void => {
+		originalTextMap.forEach((elements, originalText) => {
+			elements.forEach((el) => {
+				if (isVisible(el)) {
+					el.textContent = originalText;
+				}
+			});
+		});
 	};
 
 	const translatePage = async (targetLang: string): Promise<void> => {
@@ -232,8 +277,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			target_lang: targetLang,
 			object_id: window.ydpl.ydpl_translate_post_id,
 		};
-
-		console.log('Request body:', requestBody);
 
 		try {
 			const response = await fetch(url, {
@@ -263,52 +306,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 				});
 			}
 		});
-	};
-
-	const saveOriginalText = (): void => {
-		const uniqueTextSet = new Set<string>(); // Track unique text content
-
-		const elements = document.querySelectorAll(CONTENT_SELECTOR);
-		elements.forEach((el) => {
-			if (isVisible(el) && el instanceof HTMLElement) {
-				const textContent = el.textContent?.trim();
-
-				if (textContent && textContent.length > 2) {
-					const normalizedText = textContent.replace(/\s\s+/g, ' '); // Normalize whitespace
-
-					if (!uniqueTextSet.has(normalizedText)) {
-						// If this text hasn't been processed yet, create a new entry in the map
-						originalTextMap.set(normalizedText, [el]);
-						uniqueTextSet.add(normalizedText);
-					} else {
-						// If this text has already been processed, add the element to the list
-						const elementsWithSameText = originalTextMap.get(normalizedText);
-						if (elementsWithSameText) {
-							elementsWithSameText.push(el);
-						}
-					}
-				}
-			}
-		});
-	};
-
-	const revertToOriginalText = (): void => {
-		originalTextMap.forEach((elements, originalText) => {
-			elements.forEach((el) => {
-				if (isVisible(el)) {
-					el.textContent = originalText;
-				}
-			});
-		});
-	};
-
-	const isVisible = (element: Element): boolean => {
-		const style = window.getComputedStyle(element);
-		return (
-			style.display !== 'none' &&
-			style.visibility !== 'hidden' &&
-			element.getClientRects().length > 0
-		);
 	};
 
 	init();
