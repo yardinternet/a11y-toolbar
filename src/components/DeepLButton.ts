@@ -59,6 +59,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	let languageTextAfter: string;
 	let languageLabel: string;
 	let includedLanguages: string;
+	const originalTextMap: Map<HTMLElement, string> = new Map();
 
 	const init = (): void => {
 		if (!options || !options.showDeepLButton) return;
@@ -82,6 +83,16 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		toolbar.appendChild(modal);
 
 		languageButton.addEventListener('click', () => handleButtonClick());
+
+		saveOriginalText();
+
+		console.log(originalTextMap);
+
+		// Set the saved language and translate on page load
+		const savedLanguage = localStorage.getItem('selectedLanguage');
+		// if (savedLanguage) {
+		// 	translatePage(savedLanguage);
+		// }
 	};
 
 	/**
@@ -193,38 +204,25 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	};
 
 	const handleSelectChange = (select: HTMLSelectElement): void => {
-		const visibleTextArray = getVisibleText();
-		console.log(visibleTextArray);
 		const selectedLanguage = select.value;
 
-		translateText(visibleTextArray, selectedLanguage);
+		console.log(selectedLanguage);
+
+		// Revert to original text if default or 'NL' is selected
+		if (selectedLanguage === 'DEFAULT' || selectedLanguage === 'NL') {
+			revertToOriginalText();
+		} else {
+			localStorage.setItem('selectedLanguage', selectedLanguage); // Save selected language and translate
+
+			console.log('Translating page to: ', selectedLanguage);
+			translatePage(selectedLanguage);
+		}
 	};
 
-	const getVisibleText = (): string[] => {
-		const elements = document.querySelectorAll(CONTENT_SELECTOR);
-		const visibleTextSet = new Set<string>(); // Use a set to avoid duplicates
-
-		elements.forEach((el) => {
-			if (isVisible(el)) {
-				let textContent = el.textContent?.trim();
-
-				if (textContent && textContent.length > 2) {
-					textContent = textContent.replace(/\s\s+/g, ' ');
-					visibleTextSet.add(textContent);
-				}
-			}
-		});
-
-		return Array.from(visibleTextSet);
-	};
-
-	const isVisible = (element: Element): boolean => {
-		const style = window.getComputedStyle(element);
-		return (
-			style.display !== 'none' &&
-			style.visibility !== 'hidden' &&
-			element.getClientRects().length > 0
-		);
+	const translatePage = async (targetLang: string): Promise<void> => {
+		const originalTextArray = Array.from(originalTextMap.values());
+		console.log('using original text array', originalTextArray);
+		await translateText(originalTextArray, targetLang);
 	};
 
 	const translateText = async (textArray: string[], targetLang: string): Promise<void> => {
@@ -240,6 +238,8 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			object_id: window.ydpl.ydpl_translate_post_id,
 		};
 
+		console.log('Request body:', requestBody);
+
 		try {
 			const response = await fetch(url, {
 				method: 'POST',
@@ -252,6 +252,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			}
 
 			const responseData = await response.json();
+			console.log(responseData);
 			applyTranslations(responseData);
 		} catch (error) {
 			console.error('Error:', error);
@@ -277,6 +278,55 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 				}
 			}
 		});
+	};
+
+	const revertToOriginalText = (): void => {
+		originalTextMap.forEach((originalText, el) => {
+			if (isVisible(el)) {
+				el.textContent = originalText;
+			}
+		});
+	};
+
+	// Make sure to remove duplicates here.
+	const saveOriginalText = (): void => {
+		const elements = document.querySelectorAll(CONTENT_SELECTOR);
+		elements.forEach((el) => {
+			if (isVisible(el) && el instanceof HTMLElement) {
+				const textContent = el.textContent?.trim();
+				if (textContent && textContent.length > 2) {
+					originalTextMap.set(el, textContent);
+				}
+			}
+		});
+	};
+
+	// Unused function. We can get rid of this.
+	const getVisibleText = (): string[] => {
+		const elements = document.querySelectorAll(CONTENT_SELECTOR);
+		const visibleTextSet = new Set<string>(); // Use a set to avoid duplicates
+
+		elements.forEach((el) => {
+			if (isVisible(el)) {
+				let textContent = el.textContent?.trim();
+
+				if (textContent && textContent.length > 2) {
+					textContent = textContent.replace(/\s\s+/g, ' ');
+					visibleTextSet.add(textContent);
+				}
+			}
+		});
+
+		return Array.from(visibleTextSet);
+	};
+
+	const isVisible = (element: Element): boolean => {
+		const style = window.getComputedStyle(element);
+		return (
+			style.display !== 'none' &&
+			style.visibility !== 'hidden' &&
+			element.getClientRects().length > 0
+		);
 	};
 
 	init();
