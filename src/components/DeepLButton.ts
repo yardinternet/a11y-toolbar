@@ -41,7 +41,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		'.nav li a, ' +
 		'.main-content p, .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6, .main-content span, .main-content li, .main-content a, ' +
 		'.footer p, .footer h2, .footer h3, .footer h4, .footer h5, .footer h6, .footer span, .footer li:not(.wp-block-social-link), .footer a:not(.wp-block-social-link-anchor)';
-
 	const trapFocusOptions = {
 		allowOutsideClick: true,
 		clickOutsideDeactivates: true,
@@ -220,7 +219,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const translatePage = async (targetLang: string): Promise<void> => {
 		const originalTextArray = Array.from(originalTextMap.values());
-		console.log('Using original text array:', originalTextArray);
+		console.log('Using original text array: ', originalTextArray);
 		await translateText(originalTextArray, targetLang);
 	};
 
@@ -259,36 +258,25 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	};
 
 	const applyTranslations = (translations: Array<{ text: string; translation: string }>): void => {
-		const elements = document.querySelectorAll(CONTENT_SELECTOR);
+		originalTextMap.forEach((originalText, el) => {
+			const translation = translations.find((t) => t.text === originalText);
 
-		elements.forEach((el) => {
-			if (isVisible(el)) {
-				let textContent = el.textContent?.trim();
-				if (textContent && textContent.length > 2) {
-					textContent = textContent.replace(/\s\s+/g, ' '); // Normalize whitespace in the original text
-
-					const translation = translations.find(
-						(t) => t.text === textContent // Find the corresponding translation for the text content
-					);
-
-					if (translation) {
-						el.textContent = translation.translation;
-					}
-				}
+			if (translation) {
+				el.textContent = translation.translation;
 			}
 		});
 	};
 
 	const saveOriginalText = (): void => {
 		const elements = document.querySelectorAll(CONTENT_SELECTOR);
-		const savedElements = new Set<HTMLElement>();
 
 		elements.forEach((el) => {
-			if (isVisible(el) && el instanceof HTMLElement && !savedElements.has(el)) {
+			if (isVisible(el) && el instanceof HTMLElement) {
 				const textContent = el.textContent?.trim();
-				if (textContent && textContent.length > 2) {
-					originalTextMap.set(el, textContent);
-					savedElements.add(el); // Ensure each element is saved only once
+				if (textContent && textContent.length > 2 && !originalTextMap.has(el)) {
+					// Normalize whitespace once during saving
+					const normalizedText = textContent.replace(/\s\s+/g, ' ');
+					originalTextMap.set(el, normalizedText); // Store in the map
 				}
 			}
 		});
