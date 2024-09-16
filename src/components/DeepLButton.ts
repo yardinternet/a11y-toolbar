@@ -217,8 +217,13 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		defaultOption.textContent = 'Nederlands (standaard)';
 		select.appendChild(defaultOption);
 
+		// Sort the supported languages by name
+		const sortedLanguages = [...window.ydpl.ydpl_supported_languages].sort((a, b) =>
+			a.name.localeCompare(b.name)
+		);
+
 		// Add options from supported languages
-		window.ydpl.ydpl_supported_languages.forEach((language) => {
+		sortedLanguages.forEach((language) => {
 			const option = document.createElement('option');
 			option.value = language.iso_alpha2;
 			option.textContent = language.name;
