@@ -268,15 +268,21 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	};
 
 	const saveOriginalText = (): void => {
-		const elements = document.querySelectorAll(CONTENT_SELECTOR);
+		const uniqueTextSet = new Set<string>(); // Track unique text content
 
+		const elements = document.querySelectorAll(CONTENT_SELECTOR);
 		elements.forEach((el) => {
 			if (isVisible(el) && el instanceof HTMLElement) {
 				const textContent = el.textContent?.trim();
+
 				if (textContent && textContent.length > 2 && !originalTextMap.has(el)) {
-					// Normalize whitespace once during saving
-					const normalizedText = textContent.replace(/\s\s+/g, ' ');
-					originalTextMap.set(el, normalizedText); // Store in the map
+					const normalizedText = textContent.replace(/\s\s+/g, ' '); // Normalize whitespace
+
+					// Only add if the text content is unique
+					if (!uniqueTextSet.has(normalizedText)) {
+						originalTextMap.set(el, normalizedText);
+						uniqueTextSet.add(normalizedText); // Mark this text as processed
+					}
 				}
 			}
 		});
