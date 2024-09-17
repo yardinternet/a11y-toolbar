@@ -83,8 +83,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 		saveOriginalText();
 
-		console.log('Original Text Map:', Array.from(originalTextMap.entries()));
-
 		// Set the saved language and translate on page load
 		const savedLanguage = sessionStorage.getItem('DeepLSelectedLanguage') ?? '';
 
@@ -93,6 +91,16 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		}
 	};
 
+	/**
+	 * Saves text content of the page and its corresponding elements in a Map.
+	 * - Key: String text content
+	 * - Value: Array of all the elements sharing the same textContent
+	 * For example:
+	 * {
+	 *   "Home": [<h1>, <span>, <a>],
+	 *   "Contact": [<a>],
+	 * }
+	 */
 	const saveOriginalText = (): void => {
 		const uniqueTextSet = new Set<string>(); // Track unique text content
 
@@ -147,9 +155,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		trapFocus.activate();
 	};
 
-	/**
-	 * Creates the content for the language modal.
-	 */
 	const createLanguageModalContent = (): HTMLElement => {
 		const modalContent = document.createElement('div');
 		modalContent.classList.add('a11y-toolbar__translate-dropdown');
@@ -195,23 +200,17 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			return error;
 		}
 
-		// Retrieve the selected language from sessionStorage
-		const storedLanguage = sessionStorage.getItem('DeepLSelectedLanguage') || DEFAULT_LANGUAGE;
-
-		// Create and set up the label
 		const label = document.createElement('label');
 		label.classList.add(LABEL_CLASS);
 		label.textContent = 'Select language:';
 		label.setAttribute('for', 'a11y-toolbar__translate-select');
 
-		// Create and set up the select element
 		const select = document.createElement('select');
 		select.id = 'a11y-toolbar__translate-select';
 		select.classList.add('a11y-toolbar__translate-select');
 
 		select.addEventListener('change', () => handleSelectChange(select));
 
-		// Create and add the default option
 		const defaultOption = document.createElement('option');
 		defaultOption.value = DEFAULT_LANGUAGE;
 		defaultOption.textContent = 'Nederlands (standaard)';
@@ -221,20 +220,19 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		const sortedLanguages = [...window.ydpl.ydpl_supported_languages].sort((a, b) =>
 			a.name.localeCompare(b.name)
 		);
+		const storedLanguage = sessionStorage.getItem('DeepLSelectedLanguage') || DEFAULT_LANGUAGE;
 
 		// Add options from supported languages
 		sortedLanguages.forEach((language) => {
 			const option = document.createElement('option');
 			option.value = language.iso_alpha2;
 			option.textContent = language.name;
-			// Set the selected attribute if this option matches the stored language
 			if (option.value === storedLanguage) {
 				option.selected = true;
 			}
 			select.appendChild(option);
 		});
 
-		// Wrap label and select in a container
 		const container = document.createElement('div');
 		container.classList.add('a11y-toolbar__translate-select-container');
 		container.appendChild(label);
@@ -245,8 +243,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const handleSelectChange = (select: HTMLSelectElement): void => {
 		const selectedLanguage = select.value;
-		sessionStorage.setItem('DeepLSelectedLanguage', selectedLanguage); // Save selected language and translate
-		console.log('Selected Language:', selectedLanguage);
+		sessionStorage.setItem('DeepLSelectedLanguage', selectedLanguage);
 
 		if (selectedLanguage === DEFAULT_LANGUAGE) {
 			revertToOriginalText();
@@ -295,7 +292,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			}
 
 			const responseData = await response.json();
-			console.log('Translation Response:', responseData);
 			applyTranslations(responseData);
 		} catch (error) {
 			console.error('Error:', error);
@@ -304,7 +300,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const applyTranslations = (translations: Array<{ text: string; translation: string }>): void => {
 		translations.forEach((translation) => {
-			const elements = originalTextMap.get(translation.text); // Get all elements with the same text
+			const elements = originalTextMap.get(translation.text);
 			if (elements) {
 				elements.forEach((el) => {
 					el.textContent = translation.translation;
