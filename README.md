@@ -15,7 +15,7 @@ npm install --save @yardinternet/a11y-toolbar
 Usually put right below the navigation.
 
 ```html
-	<div class="js-a11y-toolbar"></div>
+ <div class="js-a11y-toolbar"></div>
 ```
 
 ### Step 3: Import CSS files
@@ -49,6 +49,7 @@ const options = {
  showContrastButton: true,
  showPrintButton: true,
  showLanguageButton: true,
+ showDeepLButton: false,
  translateIncludedLanguages: 'en',
  readSpeakerCustomerID: '9999',
  readSpeakerContentID: 'readspeakers',
