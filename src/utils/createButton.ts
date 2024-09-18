@@ -66,7 +66,7 @@ const createFontAwesomeIcon = (iconClass: string): HTMLElement => {
  *
  * @param {string} svg - The SVG string for the icon.
  */
-const createSvgIcon = (svg: string): HTMLElement => {
+export const createSvgIcon = (svg: string): HTMLElement => {
 	const icon = document.createElement('span');
 	icon.classList.add('a11y-toolbar__icon');
 	icon.classList.add('a11y-toolbar__icon--svg');

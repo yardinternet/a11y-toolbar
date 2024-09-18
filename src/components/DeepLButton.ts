@@ -6,7 +6,7 @@ import * as focusTrap from 'focus-trap';
 /**
  * Internal dependencies
  */
-import { createButton } from '../utils/createButton';
+import { createButton, createSvgIcon } from '../utils/createButton';
 import { DefaultOptionsType } from '../types/default-options-type';
 import { checkCanFocusTrap } from '../utils/checkCanFocusTrap';
 
@@ -84,7 +84,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		saveOriginalText();
 
 		// Set the saved language and translate on page load
-		const savedLanguage = sessionStorage.getItem('DeepLSelectedLanguage') ?? '';
+		const savedLanguage = window.sessionStorage.getItem('DeepLSelectedLanguage') ?? '';
 
 		if (DEFAULT_LANGUAGE !== savedLanguage && savedLanguage) {
 			translatePage(savedLanguage);
@@ -216,11 +216,16 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		defaultOption.textContent = 'Nederlands (standaard)';
 		select.appendChild(defaultOption);
 
-		// Sort the supported languages by name
-		const sortedLanguages = [...window.ydpl.ydpl_supported_languages].sort((a, b) =>
-			a.name.localeCompare(b.name)
+		// Remove the language with iso_alpha2 'NL'
+		const filteredLanguages = window.ydpl.ydpl_supported_languages.filter(
+			(language) => language.iso_alpha2 !== 'NL'
 		);
-		const storedLanguage = sessionStorage.getItem('DeepLSelectedLanguage') || DEFAULT_LANGUAGE;
+
+		// Sort the remaining supported languages by name
+		const sortedLanguages = [...filteredLanguages].sort((a, b) => a.name.localeCompare(b.name));
+
+		const storedLanguage =
+			window.sessionStorage.getItem('DeepLSelectedLanguage') || DEFAULT_LANGUAGE;
 
 		// Add options from supported languages
 		sortedLanguages.forEach((language) => {
@@ -243,7 +248,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const handleSelectChange = (select: HTMLSelectElement): void => {
 		const selectedLanguage = select.value;
-		sessionStorage.setItem('DeepLSelectedLanguage', selectedLanguage);
+		window.sessionStorage.setItem('DeepLSelectedLanguage', selectedLanguage);
 
 		if (selectedLanguage === DEFAULT_LANGUAGE) {
 			revertToOriginalText();
@@ -260,6 +265,8 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 				}
 			});
 		});
+
+		toggleCheckMark(false);
 	};
 
 	const translatePage = async (targetLang: string): Promise<void> => {
@@ -288,10 +295,12 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			});
 
 			if (!response.ok) {
-				throw new Error(`Request failed with status: ${response.statusText}`);
+				throw new Error(`Request failed with status: ${response}`);
 			}
 
 			const responseData = await response.json();
+			console.log(originalTextMap);
+			console.log(responseData);
 			applyTranslations(responseData);
 		} catch (error) {
 			console.error('Error:', error);
@@ -307,6 +316,25 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 				});
 			}
 		});
+
+		toggleCheckMark(true);
+	};
+
+	const toggleCheckMark = (show: boolean): void => {
+		const currentIcon = document.querySelector(
+			'.a11y-toolbar__button--language-button .a11y-toolbar__icon'
+		);
+		const flag = createSvgIcon(languageIcon);
+		const checkMark = createSvgIcon(
+			'<svg xmlns="http://www.w3.org/2000/svg" width="25.17" height="17.975" viewBox="0 0 25.17 17.975"><path id="check-sharp-light" d="M25.17,97.247l-.623.646L9.751,113.3l-.646.674-.646-.674L.623,105.145,0,104.493l1.3-1.247.623.646,7.184,7.488L23.255,96.646,23.873,96Z" transform="translate(0 -96)"/></svg>'
+		);
+		checkMark.style.width = '25px';
+
+		if (show) {
+			currentIcon?.replaceWith(checkMark);
+		} else {
+			currentIcon?.replaceWith(flag);
+		}
 	};
 
 	init();
