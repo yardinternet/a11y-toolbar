@@ -295,7 +295,8 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			});
 
 			if (!response.ok) {
-				throw new Error(`Request failed with status: ${response}`);
+				addErrorMessageToModal();
+				throw new Error(`Request failed with status: ${response.status}, ${response.status}`);
 			}
 
 			const responseData = await response.json();
@@ -305,6 +306,17 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		} catch (error) {
 			console.error('Error:', error);
 		}
+	};
+
+	const addErrorMessageToModal = (): void => {
+		const error = document.createElement('p');
+		error.classList.add('a11y-toolbar__translate-error');
+		error.style.color = 'red';
+		error.style.lineHeight = '1.4';
+		error.textContent = `Something went wrong. Please try again later.`;
+
+		const modal = document.querySelector('.a11y-toolbar__translate-dropdown');
+		modal?.appendChild(error);
 	};
 
 	const applyTranslations = (translations: Array<{ text: string; translation: string }>): void => {
