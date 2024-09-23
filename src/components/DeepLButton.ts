@@ -38,11 +38,8 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	const LANGUAGE_BODY_CLASS = 'a11y-toolbar--translate-is-open';
 	const LABEL_CLASS = 'a11y-toolbar__translate-label';
 	const DEFAULT_LANGUAGE = 'NL';
-	// Todo: make this selector cleaner and configurable
 	const CONTENT_SELECTOR =
-		'.nav li a, ' +
-		'.main-content p, .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6, .main-content span, .main-content li:not(.yard-blocks-iconlist-item:has(a)), .main-content a, .main-content label, .main-content button ' +
-		'.footer p, .footer h2, .footer h3, .footer h4, .footer h5, .footer h6, .footer span, .footer li:not(.wp-block-social-link), .footer a:not(.wp-block-social-link-anchor)';
+		'div, p, span, h1, h2, h3, h4, h5, h6, li, button, blockquote, a, label, details, summary, figcaption, code, pre, th, td, textarea, input[type="button"], input[type="submit"], input[type="reset"]';
 	const trapFocusOptions = {
 		allowOutsideClick: true,
 		clickOutsideDeactivates: true,
@@ -108,10 +105,18 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		const elements = document.querySelectorAll(CONTENT_SELECTOR);
 		elements.forEach((el) => {
 			if (el instanceof HTMLElement) {
-				const textContent = el.textContent?.trim();
+				const directText = Array.from(el.childNodes)
+					.filter(
+						(node) =>
+							node.nodeType === Node.TEXT_NODE ||
+							(node.nodeType === Node.ELEMENT_NODE && node.nodeName === 'BR')
+					)
+					.map((node) => node.textContent?.trim())
+					.join(' ')
+					.trim();
 
-				if (textContent && textContent.length > 2) {
-					const normalizedText = textContent.replace(/\s\s+/g, ' '); // Normalize whitespace
+				if (directText && directText.length > 2) {
+					const normalizedText = directText.replace(/\s\s+/g, ' '); // Normalize whitespace
 
 					if (!uniqueTextSet.has(normalizedText)) {
 						// If this text hasn't been processed yet, create a new entry in the map
@@ -127,6 +132,8 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 				}
 			}
 		});
+
+		console.log(originalTextMap);
 	};
 
 	const handleButtonClick = (): void => {
@@ -261,6 +268,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const translatePage = async (targetLang: string): Promise<void> => {
 		const uniqueTextArray = Array.from(new Set(originalTextMap.keys()));
+		saveOriginalText();
 		await translateText(uniqueTextArray, targetLang);
 	};
 
