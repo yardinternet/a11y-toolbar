@@ -19,6 +19,7 @@ const IS_OPEN_BODY_CLASS = 'a11y-toolbar--is-open';
 export default class A11yToolbar {
 	private readonly options: DefaultOptionsType;
 	private readonly selector: string;
+	private toolbar: HTMLElement | null = null;
 
 	constructor(selector: string, options?: {}) {
 		this.selector = selector;
@@ -29,20 +30,20 @@ export default class A11yToolbar {
 	 * Initializes the A11yToolbar.
 	 */
 	init(): this {
-		const toolbar = this.createToolbar();
+		this.toolbar = this.createToolbar();
 		const toggleButton = this.createToggleButton();
 
-		addReadSpeakerButton(toolbar, this.options);
-		addTextSizeButton(toolbar, this.options);
-		addContrastButton(toolbar, this.options);
-		addPrintButton(toolbar, this.options);
-		addLanguageButton(toolbar, this.options);
-		addDeepLButton(toolbar, this.options);
+		addReadSpeakerButton(this.toolbar, this.options);
+		addTextSizeButton(this.toolbar, this.options);
+		addContrastButton(this.toolbar, this.options);
+		addPrintButton(this.toolbar, this.options);
+		addLanguageButton(this.toolbar, this.options);
+		addDeepLButton(this.toolbar, this.options);
 
 		const container = document.querySelector(this.selector);
 
-		container?.appendChild(toolbar);
-		container?.insertBefore(toggleButton, toolbar);
+		container?.appendChild(this.toolbar);
+		container?.insertBefore(toggleButton, this.toolbar);
 
 		return this;
 	}
@@ -83,10 +84,41 @@ export default class A11yToolbar {
 	 * @param button - The toggle button element.
 	 */
 	private toggleToolbar(button: HTMLButtonElement): void {
-		document.body.classList.toggle(IS_OPEN_BODY_CLASS);
-		button.setAttribute(
-			'aria-expanded',
-			document.body.classList.contains(IS_OPEN_BODY_CLASS).toString()
-		);
+		const isOpen = document.body.classList.toggle(IS_OPEN_BODY_CLASS);
+		button.setAttribute('aria-expanded', isOpen.toString());
+
+		if (isOpen) {
+			document.addEventListener('click', this.handleOutsideClick);
+		} else {
+			document.removeEventListener('click', this.handleOutsideClick);
+		}
+	}
+
+	/**
+	 * Handles clicks outside the toolbar to close it.
+	 */
+	private handleOutsideClick = (event: MouseEvent): void => {
+		const target = event.target as HTMLElement;
+
+		if (
+			this.toolbar &&
+			!this.toolbar.contains(target) &&
+			!target.closest('.a11y-toolbar__toggle-button')
+		) {
+			this.closeToolbar();
+		}
+	};
+
+	/**
+	 * Closes the toolbar.
+	 */
+	private closeToolbar(): void {
+		document.body.classList.remove(IS_OPEN_BODY_CLASS);
+		document.removeEventListener('click', this.handleOutsideClick);
+		const toggleButton = document.querySelector('.a11y-toolbar__toggle-button');
+
+		if (toggleButton) {
+			toggleButton.setAttribute('aria-expanded', 'false');
+		}
 	}
 }
