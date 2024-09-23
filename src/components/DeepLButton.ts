@@ -38,9 +38,10 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	const LANGUAGE_BODY_CLASS = 'a11y-toolbar--translate-is-open';
 	const LABEL_CLASS = 'a11y-toolbar__translate-label';
 	const DEFAULT_LANGUAGE = 'NL';
+	// Todo: make this selector cleaner and configurable
 	const CONTENT_SELECTOR =
 		'.nav li a, ' +
-		'.main-content p, .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6, .main-content span, .main-content li, .main-content a, .main-content button ' +
+		'.main-content p, .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6, .main-content span, .main-content li:not(.yard-blocks-iconlist-item:has(a)), .main-content a, .main-content label, .main-content button ' +
 		'.footer p, .footer h2, .footer h3, .footer h4, .footer h5, .footer h6, .footer span, .footer li:not(.wp-block-social-link), .footer a:not(.wp-block-social-link-anchor)';
 	const trapFocusOptions = {
 		allowOutsideClick: true,
@@ -106,7 +107,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 		const elements = document.querySelectorAll(CONTENT_SELECTOR);
 		elements.forEach((el) => {
-			if (isVisible(el) && el instanceof HTMLElement) {
+			if (el instanceof HTMLElement) {
 				const textContent = el.textContent?.trim();
 
 				if (textContent && textContent.length > 2) {
@@ -126,15 +127,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 				}
 			}
 		});
-	};
-
-	const isVisible = (element: Element): boolean => {
-		const style = window.getComputedStyle(element);
-		return (
-			style.display !== 'none' &&
-			style.visibility !== 'hidden' &&
-			element.getClientRects().length > 0
-		);
 	};
 
 	const handleButtonClick = (): void => {
@@ -260,9 +252,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	const revertToOriginalText = (): void => {
 		originalTextMap.forEach((elements, originalText) => {
 			elements.forEach((el) => {
-				if (isVisible(el)) {
-					el.textContent = originalText;
-				}
+				el.textContent = originalText;
 			});
 		});
 
@@ -291,6 +281,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			const response = await fetch(url, {
 				method: 'POST',
 				headers,
+				credentials: 'include',
 				body: JSON.stringify(requestBody),
 			});
 
