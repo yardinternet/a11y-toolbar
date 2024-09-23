@@ -286,15 +286,14 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			});
 
 			if (!response.ok) {
-				addErrorMessageToModal();
 				throw new Error(`Request failed with status: ${response.status}, ${response.status}`);
 			}
 
 			const responseData = await response.json();
 			console.log(originalTextMap);
-			console.log(responseData);
 			applyTranslations(responseData);
 		} catch (error) {
+			addErrorMessageToModal();
 			console.error('Error:', error);
 		}
 	};
