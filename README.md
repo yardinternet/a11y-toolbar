@@ -21,7 +21,7 @@ Usually put right below the navigation.
 ### Step 3: Import CSS files
 
 ```CSS
-@import '~@yardinternet/a11y-toolbar/dist/a11y-toolbar';
+@import '@yardinternet/a11y-toolbar/dist/a11y-toolbar';
 ```
 
 ### Step 4: Initialize A11yToolbar
