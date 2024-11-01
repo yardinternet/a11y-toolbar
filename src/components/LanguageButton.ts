@@ -152,6 +152,12 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 		translationContainer.setAttribute('lang', 'nl');
 		modalContent.appendChild(translationContainer);
 
+		const errorText = document.createElement('div');
+		errorText.classList.add('a11y-toolbar__translate-error');
+		errorText.textContent =
+			'Unable to load Google Translate. Accept cookies and refresh the page, or try again later.';
+		modalContent.appendChild(errorText);
+
 		return modalContent;
 	};
 
