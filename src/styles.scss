@@ -218,6 +218,12 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		font-size: 0.9rem;
 	}
 
+	&__translate-error {
+		font-size: 0.9rem;
+		color: #bc0000;
+		display: none;
+	}
+
 	// ReadSpeaker is a mess, we need to override some of their styles
 	.rsbtn {
 		display: flex;
@@ -245,6 +251,18 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		.rsbtn_exp_inner {
 			background-color: var(--a11y-toolbar-button-background-color);
 		}
+	}
+}
+
+// If the a11y toolbar does not contain the goog-te-gadget class, it means the <script> is not loaded
+// because of cookies, strict CSP's, or something else. Done with CSS in stead of JS to avoid order of execution issues.
+.#{$a11y-toolbar}:not(:has(.goog-te-gadget)) {
+	p {
+		display: none;
+	}
+
+	.#{$a11y-toolbar}__translate-error {
+		display: block;
 	}
 }
 
