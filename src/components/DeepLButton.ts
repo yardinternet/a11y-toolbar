@@ -39,7 +39,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	const LABEL_CLASS = 'a11y-toolbar__translate-label';
 	const DEFAULT_LANGUAGE = 'NL';
 	const CONTENT_SELECTOR =
-		'div, p, span, h1, h2, h3, h4, h5, h6, li, button, blockquote, a, label, details, summary, figcaption, code, pre, th, td, textarea, input[type="button"], input[type="submit"], input[type="reset"]';
+		'div, p, span, h1, h2, h3, h4, h5, h6, li, button, blockquote, a, label, details, summary, figcaption, code, pre, th, td, textarea, time, input[type="button"], input[type="submit"], input[type="reset"]';
 	const trapFocusOptions = {
 		allowOutsideClick: true,
 		clickOutsideDeactivates: true,
@@ -132,8 +132,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 				}
 			}
 		});
-
-		console.log(originalTextMap);
 	};
 
 	const handleButtonClick = (): void => {
@@ -298,7 +296,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			}
 
 			const responseData = await response.json();
-			console.log(originalTextMap);
 			applyTranslations(responseData);
 		} catch (error) {
 			addErrorMessageToModal();
