@@ -143,6 +143,7 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 		modalContent.appendChild(closeButton);
 
 		const description = document.createElement('p');
+		description.classList.add('a11y-toolbar__translate-description');
 		description.textContent =
 			'Use Google to translate this website. We take no responsibility for the accuracy of the translation.';
 		modalContent.appendChild(description);

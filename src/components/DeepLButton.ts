@@ -173,6 +173,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		modalContent.appendChild(closeButton);
 
 		const description = document.createElement('p');
+		description.classList.add('a11y-toolbar__translate-description-deepl');
 		description.textContent =
 			'Use DeepL to translate this website. We take no responsibility for the accuracy of the translation.';
 		modalContent.appendChild(description);
