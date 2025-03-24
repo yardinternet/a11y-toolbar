@@ -33,6 +33,6 @@ export const DEFAULTS = {
 		contrastIncreaseLabel: 'Vergroot schermcontrast',
 		contrastDecreaseLabel: 'Verklein schermcontrast',
 		printLabel: 'Print pagina',
-		languageLabel: 'Toon vertaalopties',
+		languageLabel: 'Translate',
 	},
 };
