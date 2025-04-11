@@ -2,6 +2,7 @@
  * Internal dependencies
  */
 import { addContrastButton } from './components/ContrastButton';
+import { addCustomButton } from './components/CustomButton';
 import { addDeepLButton } from './components/DeepLButton';
 import { addLanguageButton } from './components/LanguageButton';
 import { addPrintButton } from './components/PrintButton';
@@ -15,6 +16,8 @@ import { deepMerge } from './utils/deepMerge';
 import './styles.scss';
 
 const IS_OPEN_BODY_CLASS = 'a11y-toolbar--is-open';
+
+export { createButton } from './utils/createButton';
 
 export default class A11yToolbar {
 	private readonly options: DefaultOptionsType;
@@ -39,6 +42,7 @@ export default class A11yToolbar {
 		addPrintButton(this.toolbar, this.options);
 		addLanguageButton(this.toolbar, this.options);
 		addDeepLButton(this.toolbar, this.options);
+		addCustomButton(this.toolbar, this.options);
 
 		const container = document.querySelector(this.selector);
 

@@ -5,6 +5,7 @@ export interface DefaultOptionsType {
 	showPrintButton?: boolean;
 	showLanguageButton?: boolean;
 	showDeepLButton?: boolean;
+	customButton?: Function;
 	translateIncludedLanguages?: string;
 	readSpeakerCustomerID?: string;
 	readSpeakerContentID?: string;
