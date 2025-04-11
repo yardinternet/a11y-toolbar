@@ -5,6 +5,7 @@ export const DEFAULTS = {
 	showPrintButton: true,
 	showLanguageButton: true,
 	showDeepLButton: false,
+	customButton: null,
 	translateIncludedLanguages: 'en',
 	readSpeakerCustomerID: '9999',
 	readSpeakerContentID: 'readspeakers',
