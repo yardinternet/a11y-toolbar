@@ -73,7 +73,7 @@ export default class A11yToolbar {
 		button.setAttribute('aria-label', 'Open toegankelijkheid toolbar');
 
 		const icon = document.createElement('i');
-		const iconClass = this.options.iconOptions?.toggleIcon || '';
+		const iconClass = this.options.toggleIcon || '';
 		icon.classList.add(...iconClass.split(' '));
 
 		button.appendChild(icon);

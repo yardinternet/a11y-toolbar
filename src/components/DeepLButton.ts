@@ -56,17 +56,19 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	let languageIcon: string;
 	let languageTextAfter: string;
 	let languageLabel: string;
+	let languageDisclaimer: string;
 	const originalTextMap: Map<string, HTMLElement[]> = new Map();
 
 	const init = (): void => {
 		if (!options || !options.showDeepLButton) return;
 
-		languageIcon = options.iconOptions?.languageIcon || '';
-		languageTextAfter = options.textAfterOptions?.languageTextAfter || '';
-		languageLabel = options.labelOptions?.languageLabel || '';
+		languageIcon = options.translateButton?.icon || '';
+		languageTextAfter = options.translateButton?.textAfter || '';
+		languageLabel = options.translateButton?.label || '';
+		languageDisclaimer = options.translateButton?.disclaimer || 'Use DeepL to translate this website. We take no responsibility for the accuracy of the translation.';
 
 		const languageButton = createButton(
-			'language-button',
+			'deepl-button',
 			languageLabel,
 			languageIcon,
 			languageTextAfter
@@ -174,8 +176,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 		const description = document.createElement('p');
 		description.classList.add('a11y-toolbar__translate-description-deepl');
-		description.textContent =
-			'Use DeepL to translate this website. We take no responsibility for the accuracy of the translation.';
+		description.innerHTML = languageDisclaimer;
 		modalContent.appendChild(description);
 
 		const select = createSelect();

@@ -18,9 +18,9 @@ export const addPrintButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	const init = (): void => {
 		if (!options || !options.showPrintButton) return;
 
-		printIcon = options.iconOptions?.printIcon || '';
-		printTextAfter = options.textAfterOptions?.printTextAfter || '';
-		printLabel = options.labelOptions?.printLabel || '';
+		printIcon = options.printButton?.icon || '';
+		printTextAfter = options.printButton?.textAfter || '';
+		printLabel = options.printButton?.label || '';
 
 		const printButton = createButton('print', printLabel, printIcon, printTextAfter);
 		toolbar.appendChild(printButton);

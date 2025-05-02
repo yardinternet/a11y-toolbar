@@ -28,8 +28,8 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 		if (
 			!options ||
 			!options.showReadSpeakerButton ||
-			!options.readSpeakerCustomerID ||
-			!options.readSpeakerContentID
+			!options.readSpeakerButton?.customerID ||
+			!options.readSpeakerButton?.contentID
 		)
 			return;
 
@@ -41,12 +41,12 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 			general: { usePost: true },
 		};
 
-		readSpeakerCustomerID = options.readSpeakerCustomerID || '';
-		readSpeakerContentID = options.readSpeakerContentID || '';
-		readSpeakerDisable = options.readSpeakerDisable || '';
-		readSpeakerIcon = options.iconOptions?.readSpeakerIcon || '';
-		readSpeakerTextAfter = options.textAfterOptions?.readSpeakerTextAfter || '';
-		readSpeakerLabel = options.labelOptions?.readSpeakerLabel || '';
+		readSpeakerCustomerID = options.readSpeakerButton?.customerID || '';
+		readSpeakerContentID = options.readSpeakerButton?.contentID || '';
+		readSpeakerDisable = options.readSpeakerButton?.disable || '';
+		readSpeakerIcon = options.readSpeakerButton?.icon || '';
+		readSpeakerTextAfter = options.readSpeakerButton?.textAfter || '';
+		readSpeakerLabel = options.readSpeakerButton?.label || '';
 
 		addReadSpeakerScriptToHead(readSpeakerCustomerID, readSpeakerDisable);
 
@@ -65,6 +65,7 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 	 * Adds the ReadSpeaker script to the head of the document.
 	 *
 	 * @param {string} readSpeakerCustomerID - The ID of the ReadSpeaker instance.
+	 * @param {string} readSpeakerDisable - The features to disable in ReadSpeaker.
 	 */
 	const addReadSpeakerScriptToHead = (
 		readSpeakerCustomerID: string,

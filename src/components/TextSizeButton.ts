@@ -26,10 +26,10 @@ export const addTextSizeButton = (toolbar: HTMLElement, options?: DefaultOptions
 	const init = (): void => {
 		if (!options || !options.showTextSizeButton) return;
 
-		textSizeIcon = options.iconOptions?.textSizeIcon || '';
-		textSizeTextAfter = options.textAfterOptions?.textSizeTextAfter || '';
-		textSizeIncreaseLabel = options.labelOptions?.textSizeIncreaseLabel || '';
-		textSizeDecreaseLabel = options.labelOptions?.textSizeDecreaseLabel || '';
+		textSizeIcon = options.textSizeButton?.icon || '';
+		textSizeTextAfter = options.textSizeButton?.textAfter || '';
+		textSizeIncreaseLabel = options.textSizeButton?.increaseLabel || '';
+		textSizeDecreaseLabel = options.textSizeButton?.decreaseLabel || '';
 
 		const textSizeButton = createButton(
 			'text-size',

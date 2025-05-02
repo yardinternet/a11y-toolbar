@@ -41,10 +41,10 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	const init = (): void => {
 		if (!options || !options.showLanguageButton) return;
 
-		languageIcon = options.iconOptions?.languageIcon || '';
-		languageTextAfter = options.textAfterOptions?.languageTextAfter || '';
-		languageLabel = options.labelOptions?.languageLabel || '';
-		includedLanguages = options.translateIncludedLanguages || '';
+		languageIcon = options.translateButton?.icon || '';
+		languageTextAfter = options.translateButton?.textAfter || '';
+		languageLabel = options.translateButton?.label || '';
+		includedLanguages = options.translateButton?.includedLanguages || '';
 
 		addGoogleTranslateScriptToHead(includedLanguages);
 

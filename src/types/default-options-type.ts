@@ -1,4 +1,5 @@
 export interface DefaultOptionsType {
+
 	showReadSpeakerButton?: boolean;
 	showTextSizeButton?: boolean;
 	showContrastButton?: boolean;
@@ -6,32 +7,37 @@ export interface DefaultOptionsType {
 	showLanguageButton?: boolean;
 	showDeepLButton?: boolean;
 	customButton?: Function;
-	translateIncludedLanguages?: string;
-	readSpeakerCustomerID?: string;
-	readSpeakerContentID?: string;
-	readSpeakerDisable?: string;
-	iconOptions?: {
-		toggleIcon?: string;
-		readSpeakerIcon?: string;
-		textSizeIcon?: string;
-		contrastIcon?: string;
-		printIcon?: string;
-		languageIcon?: string;
-	};
-	textAfterOptions?: {
-		readSpeakerTextAfter?: string;
-		textSizeTextAfter?: string;
-		contrastTextAfter?: string;
-		printTextAfter?: string;
-		languageTextAfter?: string;
-	};
-	labelOptions?: {
-		readSpeakerLabel?: string;
-		textSizeIncreaseLabel?: string;
-		textSizeDecreaseLabel?: string;
-		contrastIncreaseLabel?: string;
-		contrastDecreaseLabel?: string;
-		printLabel?: string;
-		languageLabel?: string;
-	};
+	toggleIcon?: string;
+	readSpeakerButton?: {
+		customerID?: string;
+		contentID?: string;
+		disable?: string;
+		icon?: string;
+		textAfter?: string;
+		label?: string;
+	}
+	textSizeButton?: {
+		icon?: string;
+		textAfter?: string;
+		increaseLabel?: string;
+		decreaseLabel?: string;
+	},
+	contrastButton?: {
+		icon?: string;
+		textAfter?: string;
+		increaseLabel?: string;
+		decreaseLabel?: string;
+	},
+	printButton?: {
+		icon?: string;
+		textAfter?: string;
+		label?: string;
+	},
+	translateButton?: {
+		icon?: string;
+		textAfter?: string;
+		label?: string;
+		disclaimer?: string;
+		includedLanguages?: string;
+	},
 }

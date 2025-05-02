@@ -26,10 +26,10 @@ export const addContrastButton = (toolbar: HTMLElement, options: DefaultOptionsT
 	const init = (): void => {
 		if (!options || !options.showContrastButton) return;
 
-		contrastIcon = options.iconOptions?.contrastIcon || '';
-		contrastTextAfter = options.textAfterOptions?.contrastTextAfter || '';
-		contrastIncreaseLabel = options.labelOptions?.contrastIncreaseLabel || '';
-		contrastDecreaseLabel = options.labelOptions?.contrastDecreaseLabel || '';
+		contrastIcon = options.contrastButton?.icon || '';
+		contrastTextAfter = options.contrastButton?.textAfter || '';
+		contrastIncreaseLabel = options.contrastButton?.increaseLabel || '';
+		contrastDecreaseLabel = options.contrastButton?.decreaseLabel || '';
 
 		const contrastButton = createButton(
 			'contrast',
