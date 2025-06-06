@@ -55,6 +55,9 @@ const options = {
  readSpeakerCustomerID: '9999',
  readSpeakerContentID: 'readspeakers',
  readSpeakerDisable: 'settings,clicklisten,voicesettings,readhover,enlarge,textmode,pagemask,download,help,dictionary,translation',
+ disclaimerOptions: {
+     languageDisclaimer: '',
+ },
  iconOptions: {
   toggleIcon: 'fa-regular fa-universal-access',
   readSpeakerIcon: 'fa-light fa-volume',

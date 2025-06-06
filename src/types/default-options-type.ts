@@ -10,6 +10,9 @@ export interface DefaultOptionsType {
 	readSpeakerCustomerID?: string;
 	readSpeakerContentID?: string;
 	readSpeakerDisable?: string;
+	disclaimerOptions?: {
+		languageDisclaimer?: string;
+	};
 	iconOptions?: {
 		toggleIcon?: string;
 		readSpeakerIcon?: string;
