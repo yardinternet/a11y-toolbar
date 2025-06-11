@@ -6,6 +6,7 @@ export interface DefaultOptionsType {
 	showLanguageButton?: boolean;
 	showDeepLButton?: boolean;
 	customButton?: Function;
+	showOpenDyslexicButton?: boolean;
 	translateIncludedLanguages?: string;
 	readSpeakerCustomerID?: string;
 	readSpeakerContentID?: string;
@@ -20,6 +21,7 @@ export interface DefaultOptionsType {
 		contrastIcon?: string;
 		printIcon?: string;
 		languageIcon?: string;
+		openDyslexicIcon?: string;
 	};
 	textAfterOptions?: {
 		readSpeakerTextAfter?: string;
@@ -27,6 +29,7 @@ export interface DefaultOptionsType {
 		contrastTextAfter?: string;
 		printTextAfter?: string;
 		languageTextAfter?: string;
+		openDyslexicTextAfter?: string;
 	};
 	labelOptions?: {
 		readSpeakerLabel?: string;
@@ -36,5 +39,7 @@ export interface DefaultOptionsType {
 		contrastDecreaseLabel?: string;
 		printLabel?: string;
 		languageLabel?: string;
+		openDyslexicActivateLabel?: string;
+		openDyslexicDeactivateLabel?: string;
 	};
 }
