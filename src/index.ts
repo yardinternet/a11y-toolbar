@@ -5,6 +5,7 @@ import { addContrastButton } from './components/ContrastButton';
 import { addCustomButton } from './components/CustomButton';
 import { addDeepLButton } from './components/DeepLButton';
 import { addLanguageButton } from './components/LanguageButton';
+import { addOpenDyslexicButton } from './components/OpenDyslexicButton';
 import { addPrintButton } from './components/PrintButton';
 import { addReadSpeakerButton } from './components/ReadSpeakerButton';
 import { addTextSizeButton } from './components/TextSizeButton';
@@ -40,6 +41,7 @@ export default class A11yToolbar {
 		addTextSizeButton(this.toolbar, this.options);
 		addContrastButton(this.toolbar, this.options);
 		addPrintButton(this.toolbar, this.options);
+		addOpenDyslexicButton(this.toolbar, this.options);
 		addLanguageButton(this.toolbar, this.options);
 		addDeepLButton(this.toolbar, this.options);
 		addCustomButton(this.toolbar, this.options);
