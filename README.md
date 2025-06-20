@@ -2,6 +2,8 @@
 
 Easily add an accessibility toolbar to Yard projects.
 
+![A11yToolbar Example](./docs/example-a11y-toolbar.png)
+
 ## ✅ Getting started
 
 ### Step 1: Install @yardinternet/a11y-toolbar
