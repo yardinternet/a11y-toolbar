@@ -95,8 +95,12 @@ export default class A11yToolbar {
 
 		if (isOpen) {
 			document.addEventListener('click', this.handleOutsideClick);
+			document.addEventListener('keydown', this.handleEscapeKey);
+			this.toolbar?.addEventListener('focusout', this.handleFocusOut.bind(this));
 		} else {
 			document.removeEventListener('click', this.handleOutsideClick);
+			document.removeEventListener('keydown', this.handleEscapeKey);
+			this.toolbar?.removeEventListener('focusout', this.handleFocusOut.bind(this));
 		}
 	}
 
@@ -116,15 +120,56 @@ export default class A11yToolbar {
 	};
 
 	/**
+	 * Handles the escape key to close the toolbar.
+	 */
+	private handleEscapeKey = (event: KeyboardEvent): void => {
+		if (event.key !== 'Escape') return;
+
+		const target = event.target as HTMLElement;
+
+		if (
+			this.toolbar &&
+			this.toolbar.contains(target) &&
+			!target.closest('.a11y-toolbar__translate-dropdown')
+		) {
+			this.closeToolbar(true);
+		}
+	};
+
+	/**
+	 * Handles focus out events to close the toolbar.
+	 */
+	private handleFocusOut(event: FocusEvent): void {
+		const relatedTarget = event.relatedTarget as HTMLElement;
+
+		if (
+			!this.toolbar?.contains(relatedTarget) &&
+			!relatedTarget.closest('.a11y-toolbar__toggle-button')
+		) {
+			this.closeToolbar();
+		}
+	}
+
+	/**
 	 * Closes the toolbar.
 	 */
-	private closeToolbar(): void {
+	private closeToolbar(focusToggleButton: boolean = false): void {
 		document.body.classList.remove(IS_OPEN_BODY_CLASS);
+
 		document.removeEventListener('click', this.handleOutsideClick);
-		const toggleButton = document.querySelector('.a11y-toolbar__toggle-button');
+		document.removeEventListener('keydown', this.handleEscapeKey);
+		this.toolbar?.removeEventListener('focusout', this.handleFocusOut.bind(this));
+
+		const toggleButton = document.querySelector(
+			'.a11y-toolbar__toggle-button'
+		) as HTMLButtonElement | null;
 
 		if (toggleButton) {
 			toggleButton.setAttribute('aria-expanded', 'false');
+		}
+
+		if (toggleButton && focusToggleButton) {
+			toggleButton.focus();
 		}
 	}
 }
