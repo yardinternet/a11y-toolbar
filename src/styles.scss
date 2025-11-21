@@ -235,6 +235,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		flex-direction: column;
 		align-items: flex-end;
 		margin-bottom: 0;
+		height: auto;
 
 		.#{$a11y-toolbar}__icon {
 			font-family: 'Font Awesome 6 Pro';
