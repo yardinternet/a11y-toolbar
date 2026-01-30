@@ -121,6 +121,9 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 
 		div.appendChild(button);
 
+		// Prevent opening a new page/tab when clicking the button
+		button.addEventListener('click', (event) => event.preventDefault());
+
 		return div;
 	};
 
