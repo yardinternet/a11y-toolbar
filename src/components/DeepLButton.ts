@@ -254,6 +254,8 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		} else {
 			translatePage(selectedLanguage);
 		}
+
+		document.documentElement.lang = selectedLanguage;
 	};
 
 	const revertToOriginalText = (): void => {
