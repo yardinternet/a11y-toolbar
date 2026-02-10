@@ -119,6 +119,17 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 			button.appendChild(textAfterElement);
 		}
 
+		// Move focus to ReadSpeaker play/pause button when corresponding a11y toolbar button is clicked
+		button.addEventListener('click', () => {
+			setTimeout(() => {
+				const readSpeakerPlayPauseButton = document.querySelector(
+					'.rs-controlpanel-playpause'
+				) as HTMLElement | null;
+
+				readSpeakerPlayPauseButton?.focus();
+			}, 200);
+		});
+
 		div.appendChild(button);
 
 		return div;
