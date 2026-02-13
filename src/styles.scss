@@ -102,6 +102,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		transition: 0.1s ease all;
 
 		&[aria-pressed='true'],
+		&:active,
 		&:hover {
 			background-color: var(--a11y-toolbar-button-background-color-hover);
 			color: var(--a11y-toolbar-button-color-hover);
@@ -243,7 +244,13 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		}
 
 		.rsbtn_play:focus {
-			background: initial;
+			background-color: var(--a11y-toolbar-button-background-color);
+			color: var(--a11y-toolbar-button-color);
+		}
+
+		.rsbtn_play:active {
+			background-color: var(--a11y-toolbar-button-background-color-hover);
+			color: var(--a11y-toolbar-button-color-hover);
 		}
 
 		.rsbtn_tooltoggle {
