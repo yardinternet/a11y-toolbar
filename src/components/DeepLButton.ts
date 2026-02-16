@@ -254,8 +254,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		} else {
 			translatePage(selectedLanguage);
 		}
-
-		document.documentElement.lang = selectedLanguage;
 	};
 
 	const revertToOriginalText = (): void => {
@@ -266,13 +264,19 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		});
 
 		toggleCheckMark(false);
+		updateLangAttribute(DEFAULT_LANGUAGE);
 	};
 
 	const translatePage = async (targetLang: string): Promise<void> => {
 		const uniqueTextArray = Array.from(new Set(originalTextMap.keys()));
 		saveOriginalText();
 		await translateText(uniqueTextArray, targetLang);
+		updateLangAttribute(targetLang);
 	};
+
+	const updateLangAttribute = (language: string): void => {
+		document.documentElement.lang = language;
+	}
 
 	const translateText = async (textArray: string[], targetLang: string): Promise<void> => {
 		const url = window.ydpl.ydpl_rest_translate_url;
