@@ -264,6 +264,17 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		.rsbtn_exp_inner {
 			background-color: var(--a11y-toolbar-button-background-color);
 		}
+
+		// Remove popup by button. Can't be done via ReadSpeaker API.
+		&.rsexpanded {
+			.rsbtn_exp {
+				display: none !important;
+			}
+
+			.rsbtn_play {
+				padding-right: 0 !important;
+			}
+		}
 	}
 }
 
@@ -276,17 +287,6 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 
 	.#{$a11y-toolbar}__translate-error {
 		display: block;
-	}
-}
-
-// Remove popup by button. Can't be done via ReadSpeaker API.
-.rsbtn.rsexpanded {
-	.rsbtn_exp {
-		display: none !important;
-	}
-
-	.rsbtn_play {
-		padding-right: 0 !important;
 	}
 }
 
