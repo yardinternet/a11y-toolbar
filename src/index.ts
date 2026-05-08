@@ -9,6 +9,7 @@ import { addOpenDyslexicButton } from './components/OpenDyslexicButton';
 import { addPrintButton } from './components/PrintButton';
 import { addReadSpeakerButton } from './components/ReadSpeakerButton';
 import { addTextSizeButton } from './components/TextSizeButton';
+import { addTolkieTranslateButton } from './components/TolkieTranslate';
 
 import { DEFAULTS } from './constants/default-options';
 import { DefaultOptionsType } from './types/default-options-type';
@@ -44,6 +45,7 @@ export default class A11yToolbar {
 		addOpenDyslexicButton(this.toolbar, this.options);
 		addLanguageButton(this.toolbar, this.options);
 		addDeepLButton(this.toolbar, this.options);
+		addTolkieTranslateButton(this.toolbar, this.options);
 		addCustomButton(this.toolbar, this.options);
 
 		const container = document.querySelector(this.selector);

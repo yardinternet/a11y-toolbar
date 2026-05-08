@@ -5,6 +5,7 @@ export interface DefaultOptionsType {
 	showPrintButton?: boolean;
 	showLanguageButton?: boolean;
 	showDeepLButton?: boolean;
+	showTolkieTranslateButton?: boolean;
 	customButton?: Function;
 	showOpenDyslexicButton?: boolean;
 	translateIncludedLanguages?: string;
@@ -22,6 +23,7 @@ export interface DefaultOptionsType {
 		printIcon?: string;
 		languageIcon?: string;
 		openDyslexicIcon?: string;
+		tolkieTranslateIcon?: string;
 	};
 	textAfterOptions?: {
 		readSpeakerTextAfter?: string;
@@ -30,6 +32,7 @@ export interface DefaultOptionsType {
 		printTextAfter?: string;
 		languageTextAfter?: string;
 		openDyslexicTextAfter?: string;
+		tolkieTranslateTextAfter?: string;
 	};
 	labelOptions?: {
 		readSpeakerLabel?: string;
