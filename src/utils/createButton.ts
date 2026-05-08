@@ -52,7 +52,7 @@ export const createIcon = (icon: string): HTMLElement => {
  *
  * @param {string} iconClass - The CSS class for the icon.
  */
-const createFontAwesomeIcon = (iconClass: string): HTMLElement => {
+export const createFontAwesomeIcon = (iconClass: string): HTMLElement => {
 	const icon = document.createElement('i');
 	icon.classList.add('a11y-toolbar__icon');
 	icon.classList.add(...iconClass.split(' '));

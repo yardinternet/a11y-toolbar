@@ -88,7 +88,6 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	&__button.#{$a11y-toolbar}__button--readspeaker.rsbtn_play {
 		display: flex;
 		flex-direction: column;
-		$size: 45px;
 		width: var(--a11y-toolbar-button-size);
 		height: var(--a11y-toolbar-button-size);
 		align-items: center;
@@ -274,6 +273,15 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 			.rsbtn_play {
 				padding-right: 0 !important;
 			}
+		}
+	}
+
+	// Tolkie Translate
+	.a11y-toolbar__button--tolkie-translate {
+		.tolkie-svg-container-flag {
+			--size: 21px;
+			width: var(--size);
+			height: var(--size);
 		}
 	}
 }
