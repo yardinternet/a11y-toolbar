@@ -279,7 +279,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		const url = window.ydpl.ydpl_rest_translate_url;
 		const headers = {
 			'Content-Type': 'application/json',
-			nonce: window.ydpl.ydpl_api_request_nonce,
+			'X-WP-Nonce': window.ydpl.ydpl_api_request_nonce,
 		};
 
 		const requestBody = {
