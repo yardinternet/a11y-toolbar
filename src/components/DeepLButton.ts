@@ -65,7 +65,9 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		languageIcon = options.iconOptions?.languageIcon || '';
 		languageTextAfter = options.textAfterOptions?.languageTextAfter || '';
 		languageLabel = options.labelOptions?.languageLabel || '';
-		languageDisclaimer = options.disclaimerOptions?.languageDisclaimer || 'Use DeepL to translate this website. We take no responsibility for the accuracy of the translation.';
+		languageDisclaimer =
+			options.disclaimerOptions?.languageDisclaimer ||
+			'Use DeepL to translate this website. We take no responsibility for the accuracy of the translation.';
 
 		const languageButton = createButton(
 			'language-button',
@@ -259,7 +261,20 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	const revertToOriginalText = (): void => {
 		originalTextMap.forEach((elements, originalText) => {
 			elements.forEach((el) => {
-				el.textContent = originalText;
+				// Only replace the text content of the element, not its children, to preserve any nested HTML structure.
+				// Example: <i> or <strong> tags inside the element should not be removed when reverting to the original text.
+				Array.from(el.childNodes).forEach((node) => {
+					if (node.nodeType !== Node.TEXT_NODE) return;
+
+					const normalizedNodeText = node.textContent?.trim().replace(/\s\s+/g, ' ');
+					if (normalizedNodeText === originalText) {
+						node.textContent = replaceTextPreservingEdgeWhitespace(
+							node,
+							node.textContent || '',
+							originalText
+						);
+					}
+				});
 			});
 		});
 
@@ -276,7 +291,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const updateLangAttribute = (language: string): void => {
 		document.documentElement.lang = language;
-	}
+	};
 
 	const translateText = async (textArray: string[], targetLang: string): Promise<void> => {
 		const url = window.ydpl.ydpl_rest_translate_url;
@@ -327,7 +342,20 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 			const elements = originalTextMap.get(translation.text);
 			if (elements) {
 				elements.forEach((el) => {
-					el.textContent = translation.translation;
+					// Only replace the text content of the element, not its children, to preserve any nested HTML structure.
+					// Example: <i> or <strong> tags inside the element should not be removed when applying the translation.
+					Array.from(el.childNodes).forEach((node) => {
+						if (node.nodeType !== Node.TEXT_NODE) return;
+
+						const normalizedNodeText = node.textContent?.trim().replace(/\s\s+/g, ' ');
+						if (normalizedNodeText === translation.text) {
+							node.textContent = replaceTextPreservingEdgeWhitespace(
+								node,
+								node.textContent || '',
+								translation.translation
+							);
+						}
+					});
 				});
 			}
 		});
@@ -350,6 +378,25 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 		} else {
 			currentIcon?.replaceWith(flag);
 		}
+	};
+
+	// This function replaces the text content of a node while preserving any leading or trailing whitespace.
+	// Example: If the original text content of a node is "  Hello World  " and the new text is "Hallo wereld", the resulting text content will be "  Hallo wereld  ", preserving the leading and trailing spaces.
+	const replaceTextPreservingEdgeWhitespace = (
+		node: ChildNode,
+		currentText: string,
+		newText: string
+	): string => {
+		const leadingWhitespace = currentText.match(/^\s*/)?.[0] || '';
+		const trailingWhitespace = currentText.match(/\s*$/)?.[0] || '';
+		let replacedText = `${leadingWhitespace}${newText}${trailingWhitespace}`;
+
+		const nextElement = node.nextSibling instanceof HTMLElement ? node.nextSibling : null;
+		if (!trailingWhitespace && nextElement?.tagName === 'A' && !/\s$/.test(replacedText)) {
+			replacedText = `${replacedText} `;
+		}
+
+		return replacedText;
 	};
 
 	init();
