@@ -15,10 +15,9 @@ interface SupportedLanguage {
 	name: string;
 }
 
-interface ElementTextData {
-	el: HTMLElement;
-	textNodes: Text[];
-	originalTexts: string[];
+interface TextNodeData {
+	node: Text;
+	originalText: string;
 }
 
 interface YDPL {
@@ -63,7 +62,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	let languageTextAfter: string;
 	let languageLabel: string;
 	let languageDisclaimer: string;
-	const originalTextMap: Map<string, ElementTextData[]> = new Map();
+	const originalTextMap: Map<string, TextNodeData[]> = new Map();
 
 	const init = (): void => {
 		if (!options || !options.showDeepLButton) return;
@@ -100,47 +99,38 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	};
 
 	/**
-	 * Saves text content of the page and its corresponding elements in a Map.
-	 * - Key: String text content
-	 * - Value: Array of all the elements sharing the same textContent
-	 * For example:
+	 * Captures original text nodes once and groups them by normalized text content.
+	 *
+	 * Example map entry:
 	 * {
-	 *   "Home": [<h1>, <span>, <a>],
-	 *   "Contact": [<a>],
+	 *   "Hello World": [
+	 *     { node: TextNode1, originalText: "Hello World" },
+	 *     { node: TextNode2, originalText: "Hello World" }
+	 *   ]
 	 * }
 	 */
 	const saveOriginalText = (): void => {
-		const uniqueTextSet = new Set<string>();
+		if (originalTextMap.size > 0) return;
 
-		const elements = document.querySelectorAll(CONTENT_SELECTOR);
-		elements.forEach((el) => {
+		document.querySelectorAll(CONTENT_SELECTOR).forEach((el) => {
 			if (!(el instanceof HTMLElement)) return;
 
-			const textNodes = Array.from(el.childNodes).filter(
-				(node): node is Text => node.nodeType === Node.TEXT_NODE
-			);
+			Array.from(el.childNodes).forEach((child) => {
+				if (child.nodeType !== Node.TEXT_NODE) return;
+				const node = child as Text;
+				const normalizedText = (node.textContent ?? '').trim().replace(/\s\s+/g, ' ');
+				if (!normalizedText || normalizedText.length <= 2) return;
 
-			const combinedText = textNodes
-				.map((node) => node.textContent?.trim() ?? '')
-				.filter(Boolean)
-				.join(' ')
-				.replace(/\s\s+/g, ' ')
-				.trim();
-
-			if (!combinedText || combinedText.length <= 2) return;
-
-			const elementData: ElementTextData = {
-				el,
-				textNodes,
-				originalTexts: textNodes.map((node) => node.textContent ?? ''),
-			};
-
-			if (!uniqueTextSet.has(combinedText)) {
-				originalTextMap.set(combinedText, [elementData]);
-				uniqueTextSet.add(combinedText);
-			} else {
-				originalTextMap.get(combinedText)?.push(elementData);
-			}
+				const data: TextNodeData = { node, originalText: node.textContent ?? '' };
+				const existing = originalTextMap.get(normalizedText);
+				if (existing) {
+					// If the same normalized text appears multiple times, we store all corresponding nodes in an array.
+					existing.push(data);
+				} else {
+					// If it's the first time we encounter this normalized text, we create a new entry in the map with an array containing the current node data.
+					originalTextMap.set(normalizedText, [data]);
+				}
+			});
 		});
 	};
 
@@ -265,11 +255,9 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	};
 
 	const revertToOriginalText = (): void => {
-		originalTextMap.forEach((elementsData) => {
-			elementsData.forEach(({ textNodes, originalTexts }) => {
-				textNodes.forEach((node, i) => {
-					node.textContent = originalTexts[i] ?? '';
-				});
+		originalTextMap.forEach((textNodeDataList) => {
+			textNodeDataList.forEach(({ node, originalText }) => {
+				node.textContent = originalText;
 			});
 		});
 
@@ -279,7 +267,6 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const translatePage = async (targetLang: string): Promise<void> => {
 		const uniqueTextArray = Array.from(new Set(originalTextMap.keys()));
-		saveOriginalText();
 		await translateText(uniqueTextArray, targetLang);
 		updateLangAttribute(targetLang);
 	};
@@ -334,27 +321,15 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const applyTranslations = (translations: Array<{ text: string; translation: string }>): void => {
 		translations.forEach((translation) => {
-			const elementsData = originalTextMap.get(translation.text);
-			if (!elementsData) return;
+			const textNodeDataList = originalTextMap.get(translation.text);
+			if (!textNodeDataList) return;
 
-			elementsData.forEach(({ textNodes }) => {
-				// Only operate on text nodes with meaningful (non-whitespace) content so that
-				// structural whitespace nodes (e.g. the indent before a leading <i> icon) are
-				// left untouched and inline elements keep their original position in the DOM.
-				const meaningful = textNodes.filter(
-					(node) => (node.textContent?.trim() ?? '').length > 0
-				);
-				if (meaningful.length === 0) return;
-
-				const [first, ...rest] = meaningful;
-				first.textContent = replaceTextPreservingEdgeWhitespace(
-					first,
-					first.textContent ?? '',
+			textNodeDataList.forEach(({ node }) => {
+				node.textContent = replaceTextPreservingEdgeWhitespace(
+					node,
+					node.textContent ?? '',
 					translation.translation
 				);
-				rest.forEach((node) => {
-					node.textContent = '';
-				});
 			});
 		});
 
