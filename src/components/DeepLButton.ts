@@ -15,6 +15,12 @@ interface SupportedLanguage {
 	name: string;
 }
 
+interface ElementTextData {
+	el: HTMLElement;
+	textNodes: Text[];
+	originalTexts: string[];
+}
+
 interface YDPL {
 	ydpl_rest_translate_url: string;
 	ydpl_api_request_nonce: string;
@@ -57,7 +63,7 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	let languageTextAfter: string;
 	let languageLabel: string;
 	let languageDisclaimer: string;
-	const originalTextMap: Map<string, HTMLElement[]> = new Map();
+	const originalTextMap: Map<string, ElementTextData[]> = new Map();
 
 	const init = (): void => {
 		if (!options || !options.showDeepLButton) return;
@@ -104,36 +110,36 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	 * }
 	 */
 	const saveOriginalText = (): void => {
-		const uniqueTextSet = new Set<string>(); // Track unique text content
+		const uniqueTextSet = new Set<string>();
 
 		const elements = document.querySelectorAll(CONTENT_SELECTOR);
 		elements.forEach((el) => {
-			if (el instanceof HTMLElement) {
-				const directText = Array.from(el.childNodes)
-					.filter(
-						(node) =>
-							node.nodeType === Node.TEXT_NODE ||
-							(node.nodeType === Node.ELEMENT_NODE && node.nodeName === 'BR')
-					)
-					.map((node) => node.textContent?.trim())
-					.join(' ')
-					.trim();
+			if (!(el instanceof HTMLElement)) return;
 
-				if (directText && directText.length > 2) {
-					const normalizedText = directText.replace(/\s\s+/g, ' '); // Normalize whitespace
+			const textNodes = Array.from(el.childNodes).filter(
+				(node): node is Text => node.nodeType === Node.TEXT_NODE
+			);
 
-					if (!uniqueTextSet.has(normalizedText)) {
-						// If this text hasn't been processed yet, create a new entry in the map
-						originalTextMap.set(normalizedText, [el]);
-						uniqueTextSet.add(normalizedText);
-					} else {
-						// If this text has already been processed, add the element to the list
-						const elementsWithSameText = originalTextMap.get(normalizedText);
-						if (elementsWithSameText) {
-							elementsWithSameText.push(el);
-						}
-					}
-				}
+			const combinedText = textNodes
+				.map((node) => node.textContent?.trim() ?? '')
+				.filter(Boolean)
+				.join(' ')
+				.replace(/\s\s+/g, ' ')
+				.trim();
+
+			if (!combinedText || combinedText.length <= 2) return;
+
+			const elementData: ElementTextData = {
+				el,
+				textNodes,
+				originalTexts: textNodes.map((node) => node.textContent ?? ''),
+			};
+
+			if (!uniqueTextSet.has(combinedText)) {
+				originalTextMap.set(combinedText, [elementData]);
+				uniqueTextSet.add(combinedText);
+			} else {
+				originalTextMap.get(combinedText)?.push(elementData);
 			}
 		});
 	};
@@ -259,21 +265,10 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 	};
 
 	const revertToOriginalText = (): void => {
-		originalTextMap.forEach((elements, originalText) => {
-			elements.forEach((el) => {
-				// Only replace the text content of the element, not its children, to preserve any nested HTML structure.
-				// Example: <i> or <strong> tags inside the element should not be removed when reverting to the original text.
-				Array.from(el.childNodes).forEach((node) => {
-					if (node.nodeType !== Node.TEXT_NODE) return;
-
-					const normalizedNodeText = node.textContent?.trim().replace(/\s\s+/g, ' ');
-					if (normalizedNodeText === originalText) {
-						node.textContent = replaceTextPreservingEdgeWhitespace(
-							node,
-							node.textContent || '',
-							originalText
-						);
-					}
+		originalTextMap.forEach((elementsData) => {
+			elementsData.forEach(({ textNodes, originalTexts }) => {
+				textNodes.forEach((node, i) => {
+					node.textContent = originalTexts[i] ?? '';
 				});
 			});
 		});
@@ -339,25 +334,28 @@ export const addDeepLButton = (toolbar: HTMLElement, options?: DefaultOptionsTyp
 
 	const applyTranslations = (translations: Array<{ text: string; translation: string }>): void => {
 		translations.forEach((translation) => {
-			const elements = originalTextMap.get(translation.text);
-			if (elements) {
-				elements.forEach((el) => {
-					// Only replace the text content of the element, not its children, to preserve any nested HTML structure.
-					// Example: <i> or <strong> tags inside the element should not be removed when applying the translation.
-					Array.from(el.childNodes).forEach((node) => {
-						if (node.nodeType !== Node.TEXT_NODE) return;
+			const elementsData = originalTextMap.get(translation.text);
+			if (!elementsData) return;
 
-						const normalizedNodeText = node.textContent?.trim().replace(/\s\s+/g, ' ');
-						if (normalizedNodeText === translation.text) {
-							node.textContent = replaceTextPreservingEdgeWhitespace(
-								node,
-								node.textContent || '',
-								translation.translation
-							);
-						}
-					});
+			elementsData.forEach(({ textNodes }) => {
+				// Only operate on text nodes with meaningful (non-whitespace) content so that
+				// structural whitespace nodes (e.g. the indent before a leading <i> icon) are
+				// left untouched and inline elements keep their original position in the DOM.
+				const meaningful = textNodes.filter(
+					(node) => (node.textContent?.trim() ?? '').length > 0
+				);
+				if (meaningful.length === 0) return;
+
+				const [first, ...rest] = meaningful;
+				first.textContent = replaceTextPreservingEdgeWhitespace(
+					first,
+					first.textContent ?? '',
+					translation.translation
+				);
+				rest.forEach((node) => {
+					node.textContent = '';
 				});
-			}
+			});
 		});
 
 		toggleCheckMark(true);
