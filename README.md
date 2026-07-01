@@ -130,9 +130,8 @@ Easily change the A11yToolbar styles using CSS variables. Currently available va
 
 ## 🚀 How to publish
 
-1. Change the version of `package.json` to the desired version and commit this change.
-2. Go to [releases of the package](https://github.com/yardinternet/a11y-toolbar/releases) and click on "Draft a new release"
-3. Click "Choose a tag", type the corresponding version and press Enter. Add a title and description for the release.
-4. Click "Publish release"
+1. Go to [releases of the package](https://github.com/yardinternet/a11y-toolbar/releases) and click on "Draft a new release"
+2. Click "Choose a tag", type the corresponding version and press Enter. Add a title and description for the release.
+3. Click "Publish release"
 
 The Github Workflow `release-package.yml` will run whenever a release is created in this repository. If the tests pass, then the package will be published to Github packages.
