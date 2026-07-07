@@ -16,7 +16,10 @@ import { DefaultOptionsType } from '../types/default-options-type';
  * @param {HTMLElement} toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the text size button.
  */
-export const addTextSizeButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
+export const addTextSizeButton = (
+	toolbar: HTMLElement,
+	options?: DefaultOptionsType
+): void => {
 	const TEXT_SIZE_BODY_CLASS = 'a11y-toolbar--text-size';
 	let textSizeIcon: string;
 	let textSizeTextAfter: string;
@@ -24,12 +27,14 @@ export const addTextSizeButton = (toolbar: HTMLElement, options?: DefaultOptions
 	let textSizeDecreaseLabel: string;
 
 	const init = (): void => {
-		if (!options || !options.showTextSizeButton) return;
+		if ( ! options || ! options.showTextSizeButton ) return;
 
 		textSizeIcon = options.iconOptions?.textSizeIcon || '';
 		textSizeTextAfter = options.textAfterOptions?.textSizeTextAfter || '';
-		textSizeIncreaseLabel = options.labelOptions?.textSizeIncreaseLabel || '';
-		textSizeDecreaseLabel = options.labelOptions?.textSizeDecreaseLabel || '';
+		textSizeIncreaseLabel =
+			options.labelOptions?.textSizeIncreaseLabel || '';
+		textSizeDecreaseLabel =
+			options.labelOptions?.textSizeDecreaseLabel || '';
 
 		const textSizeButton = createButton(
 			'text-size',
@@ -38,11 +43,11 @@ export const addTextSizeButton = (toolbar: HTMLElement, options?: DefaultOptions
 			textSizeTextAfter
 		);
 
-		toolbar.appendChild(textSizeButton);
+		toolbar.appendChild( textSizeButton );
 
 		initTextSizeBodyClass();
-		initPressedStateButton(textSizeButton);
-		addTextSizeButtonEventListener(textSizeButton);
+		initPressedStateButton( textSizeButton );
+		addTextSizeButtonEventListener( textSizeButton );
 	};
 
 	/**
@@ -51,8 +56,11 @@ export const addTextSizeButton = (toolbar: HTMLElement, options?: DefaultOptions
 	const initTextSizeBodyClass = (): void => {
 		const hasTextSize = hasTextSizeCookie();
 
-		if (hasTextSize && !document.body.classList.contains(TEXT_SIZE_BODY_CLASS)) {
-			document.body.classList.toggle(TEXT_SIZE_BODY_CLASS);
+		if (
+			hasTextSize &&
+			! document.body.classList.contains( TEXT_SIZE_BODY_CLASS )
+		) {
+			document.body.classList.toggle( TEXT_SIZE_BODY_CLASS );
 		}
 	};
 
@@ -61,9 +69,9 @@ export const addTextSizeButton = (toolbar: HTMLElement, options?: DefaultOptions
 	 *
 	 * @param {HTMLElement} button - The text size button element.
 	 */
-	const initPressedStateButton = (button: HTMLElement): void => {
+	const initPressedStateButton = ( button: HTMLElement ): void => {
 		const hasTextSize = hasTextSizeCookie();
-		toggleButtonAttributes(button, hasTextSize);
+		toggleButtonAttributes( button, hasTextSize );
 	};
 
 	/**
@@ -71,24 +79,24 @@ export const addTextSizeButton = (toolbar: HTMLElement, options?: DefaultOptions
 	 *
 	 * @param {HTMLElement} button - The text size button element.
 	 */
-	const addTextSizeButtonEventListener = (button: HTMLElement): void => {
-		button.addEventListener('click', () => {
-			const textSizeCookieValue = !hasTextSizeCookie();
-			Cookies.set(COOKIES.TEXT_SIZE, textSizeCookieValue.toString(), {
+	const addTextSizeButtonEventListener = ( button: HTMLElement ): void => {
+		button.addEventListener( 'click', () => {
+			const textSizeCookieValue = ! hasTextSizeCookie();
+			Cookies.set( COOKIES.TEXT_SIZE, textSizeCookieValue.toString(), {
 				expires: 90,
-			});
+			} );
 
-			toggleButtonAttributes(button, textSizeCookieValue);
+			toggleButtonAttributes( button, textSizeCookieValue );
 
-			document.body.classList.toggle(TEXT_SIZE_BODY_CLASS);
-		});
+			document.body.classList.toggle( TEXT_SIZE_BODY_CLASS );
+		} );
 	};
 
 	/**
 	 * Checks if a text size cookie has been set.
 	 */
 	const hasTextSizeCookie = (): boolean => {
-		return Cookies.get(COOKIES.TEXT_SIZE) === 'true';
+		return Cookies.get( COOKIES.TEXT_SIZE ) === 'true';
 	};
 
 	/**
@@ -97,10 +105,19 @@ export const addTextSizeButton = (toolbar: HTMLElement, options?: DefaultOptions
 	 * @param {HTMLElement} button - The text size button element.
 	 * @param {boolean} state - The state of the button element.
 	 */
-	const toggleButtonAttributes = (button: HTMLElement, state: boolean): void => {
-		button.setAttribute('aria-pressed', state.toString());
-		button.setAttribute('aria-label', state ? textSizeDecreaseLabel : textSizeIncreaseLabel);
-		button.setAttribute('title', state ? textSizeDecreaseLabel : textSizeIncreaseLabel);
+	const toggleButtonAttributes = (
+		button: HTMLElement,
+		state: boolean
+	): void => {
+		button.setAttribute( 'aria-pressed', state.toString() );
+		button.setAttribute(
+			'aria-label',
+			state ? textSizeDecreaseLabel : textSizeIncreaseLabel
+		);
+		button.setAttribute(
+			'title',
+			state ? textSizeDecreaseLabel : textSizeIncreaseLabel
+		);
 	};
 
 	init();

@@ -16,7 +16,10 @@ import { DefaultOptionsType } from '../types/default-options-type';
  * @param {HTMLElement} toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the contrast button.
  */
-export const addContrastButton = (toolbar: HTMLElement, options: DefaultOptionsType): void => {
+export const addContrastButton = (
+	toolbar: HTMLElement,
+	options: DefaultOptionsType
+): void => {
 	const CONTRAST_BODY_CLASS = 'a11y-toolbar--contrast';
 	let contrastIcon: string;
 	let contrastTextAfter: string;
@@ -24,12 +27,14 @@ export const addContrastButton = (toolbar: HTMLElement, options: DefaultOptionsT
 	let contrastDecreaseLabel: string;
 
 	const init = (): void => {
-		if (!options || !options.showContrastButton) return;
+		if ( ! options || ! options.showContrastButton ) return;
 
 		contrastIcon = options.iconOptions?.contrastIcon || '';
 		contrastTextAfter = options.textAfterOptions?.contrastTextAfter || '';
-		contrastIncreaseLabel = options.labelOptions?.contrastIncreaseLabel || '';
-		contrastDecreaseLabel = options.labelOptions?.contrastDecreaseLabel || '';
+		contrastIncreaseLabel =
+			options.labelOptions?.contrastIncreaseLabel || '';
+		contrastDecreaseLabel =
+			options.labelOptions?.contrastDecreaseLabel || '';
 
 		const contrastButton = createButton(
 			'contrast',
@@ -38,11 +43,11 @@ export const addContrastButton = (toolbar: HTMLElement, options: DefaultOptionsT
 			contrastTextAfter
 		);
 
-		toolbar.appendChild(contrastButton);
+		toolbar.appendChild( contrastButton );
 
 		initContrastBodyClass();
-		initPressedStateButton(contrastButton);
-		addContrastButtonEventListener(contrastButton);
+		initPressedStateButton( contrastButton );
+		addContrastButtonEventListener( contrastButton );
 	};
 
 	/**
@@ -51,8 +56,11 @@ export const addContrastButton = (toolbar: HTMLElement, options: DefaultOptionsT
 	const initContrastBodyClass = (): void => {
 		const hasContrast = hasContrastCookie();
 
-		if (hasContrast && !document.body.classList.contains(CONTRAST_BODY_CLASS)) {
-			document.body.classList.toggle(CONTRAST_BODY_CLASS);
+		if (
+			hasContrast &&
+			! document.body.classList.contains( CONTRAST_BODY_CLASS )
+		) {
+			document.body.classList.toggle( CONTRAST_BODY_CLASS );
 		}
 	};
 
@@ -61,9 +69,9 @@ export const addContrastButton = (toolbar: HTMLElement, options: DefaultOptionsT
 	 *
 	 * @param {HTMLElement} button - The contrast button element.
 	 */
-	const initPressedStateButton = (button: HTMLElement): void => {
+	const initPressedStateButton = ( button: HTMLElement ): void => {
 		const hasContrast = hasContrastCookie();
-		toggleButtonAttributes(button, hasContrast);
+		toggleButtonAttributes( button, hasContrast );
 	};
 
 	/**
@@ -71,24 +79,24 @@ export const addContrastButton = (toolbar: HTMLElement, options: DefaultOptionsT
 	 *
 	 * @param {HTMLElement} button - The contrast button element.
 	 */
-	const addContrastButtonEventListener = (button: HTMLElement): void => {
-		button.addEventListener('click', () => {
-			const contrastCookieValue = !hasContrastCookie();
-			Cookies.set(COOKIES.CONTRAST, contrastCookieValue.toString(), {
+	const addContrastButtonEventListener = ( button: HTMLElement ): void => {
+		button.addEventListener( 'click', () => {
+			const contrastCookieValue = ! hasContrastCookie();
+			Cookies.set( COOKIES.CONTRAST, contrastCookieValue.toString(), {
 				expires: 90,
-			});
+			} );
 
-			toggleButtonAttributes(button, contrastCookieValue);
+			toggleButtonAttributes( button, contrastCookieValue );
 
-			document.body.classList.toggle(CONTRAST_BODY_CLASS);
-		});
+			document.body.classList.toggle( CONTRAST_BODY_CLASS );
+		} );
 	};
 
 	/**
 	 * Checks if a contrast cookie ahs been set.
 	 */
 	const hasContrastCookie = (): boolean => {
-		return Cookies.get(COOKIES.CONTRAST) === 'true';
+		return Cookies.get( COOKIES.CONTRAST ) === 'true';
 	};
 
 	/**
@@ -97,10 +105,19 @@ export const addContrastButton = (toolbar: HTMLElement, options: DefaultOptionsT
 	 * @param {HTMLElement} button - The contrast size button element.
 	 * @param {boolean} state - The state of the button element.
 	 */
-	const toggleButtonAttributes = (button: HTMLElement, state: boolean): void => {
-		button.setAttribute('aria-pressed', state.toString());
-		button.setAttribute('aria-label', state ? contrastDecreaseLabel : contrastIncreaseLabel);
-		button.setAttribute('title', state ? contrastDecreaseLabel : contrastIncreaseLabel);
+	const toggleButtonAttributes = (
+		button: HTMLElement,
+		state: boolean
+	): void => {
+		button.setAttribute( 'aria-pressed', state.toString() );
+		button.setAttribute(
+			'aria-label',
+			state ? contrastDecreaseLabel : contrastIncreaseLabel
+		);
+		button.setAttribute(
+			'title',
+			state ? contrastDecreaseLabel : contrastIncreaseLabel
+		);
 	};
 
 	init();

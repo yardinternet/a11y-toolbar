@@ -17,7 +17,10 @@ import { isScriptLoaded } from '../utils/isScriptLoaded';
  * @param {HTMLElement} toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the language button.
  */
-export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
+export const addLanguageButton = (
+	toolbar: HTMLElement,
+	options?: DefaultOptionsType
+): void => {
 	const LANGUAGE_BODY_CLASS = 'a11y-toolbar--translate-is-open';
 	const LABEL_CLASS = 'a11y-toolbar__translate-label';
 	const trapFocusOptions = {
@@ -25,10 +28,10 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 		clickOutsideDeactivates: true,
 		checkCanFocusTrap,
 		onActivate: () => {
-			document.body.classList.add(LANGUAGE_BODY_CLASS);
+			document.body.classList.add( LANGUAGE_BODY_CLASS );
 		},
 		onDeactivate: () => {
-			document.body.classList.remove(LANGUAGE_BODY_CLASS);
+			document.body.classList.remove( LANGUAGE_BODY_CLASS );
 		},
 	};
 	let trapFocus = false as any; // Couldn't get the type from the focus-trap package.
@@ -39,14 +42,14 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	let includedLanguages: string;
 
 	const init = (): void => {
-		if (!options || !options.showLanguageButton) return;
+		if ( ! options || ! options.showLanguageButton ) return;
 
 		languageIcon = options.iconOptions?.languageIcon || '';
 		languageTextAfter = options.textAfterOptions?.languageTextAfter || '';
 		languageLabel = options.labelOptions?.languageLabel || '';
 		includedLanguages = options.translateIncludedLanguages || '';
 
-		addGoogleTranslateScriptToHead(includedLanguages);
+		addGoogleTranslateScriptToHead( includedLanguages );
 
 		const languageButton = createButton(
 			'language-button',
@@ -55,13 +58,13 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 			languageTextAfter
 		);
 
-		toolbar.appendChild(languageButton);
+		toolbar.appendChild( languageButton );
 
 		const modal = createLanguageModalContent();
 
-		toolbar.appendChild(modal);
+		toolbar.appendChild( modal );
 
-		languageButton.addEventListener('click', () => handleButtonClick());
+		languageButton.addEventListener( 'click', () => handleButtonClick() );
 	};
 
 	/**
@@ -69,31 +72,33 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	 *
 	 * @param {string} includedLanguages - The languages to included in the translate widget.
 	 */
-	const addGoogleTranslateScriptToHead = (includedLanguages: string): void => {
+	const addGoogleTranslateScriptToHead = (
+		includedLanguages: string
+	): void => {
 		const translateScriptSrc =
 			'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
 
-		if (isScriptLoaded(translateScriptSrc)) {
+		if ( isScriptLoaded( translateScriptSrc ) ) {
 			return;
 		}
 
-		const translateScript = document.createElement('script');
+		const translateScript = document.createElement( 'script' );
 		translateScript.type = 'text/javascript';
 		translateScript.src = translateScriptSrc;
 
-		const translateElementScript = document.createElement('script');
+		const translateElementScript = document.createElement( 'script' );
 		translateElementScript.type = 'text/javascript';
 		translateElementScript.innerHTML = `
 			function googleTranslateElementInit() {
 				new google.translate.TranslateElement({
 					pageLanguage: 'nl',
-					includedLanguages: '${includedLanguages}',
+					includedLanguages: '${ includedLanguages }',
 				}, 'google_translate_element');
 			}
 		`;
 
-		document.head.appendChild(translateScript);
-		document.head.appendChild(translateElementScript);
+		document.head.appendChild( translateScript );
+		document.head.appendChild( translateElementScript );
 	};
 
 	/**
@@ -102,7 +107,7 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	const handleButtonClick = (): void => {
 		transformTranslateElement();
 
-		if (!document.body.classList.contains(LANGUAGE_BODY_CLASS)) {
+		if ( ! document.body.classList.contains( LANGUAGE_BODY_CLASS ) ) {
 			openLanguageModal();
 		} else {
 			closeLanguageModal();
@@ -110,12 +115,15 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	};
 
 	const closeLanguageModal = (): void => {
-		if (!document.body.classList.contains(LANGUAGE_BODY_CLASS)) return;
+		if ( ! document.body.classList.contains( LANGUAGE_BODY_CLASS ) ) return;
 		trapFocus.deactivate();
 	};
 
 	const openLanguageModal = (): void => {
-		trapFocus = focusTrap.createFocusTrap('.a11y-toolbar__translate-dropdown', trapFocusOptions);
+		trapFocus = focusTrap.createFocusTrap(
+			'.a11y-toolbar__translate-dropdown',
+			trapFocusOptions
+		);
 		trapFocus.activate();
 	};
 
@@ -123,41 +131,41 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	 * Creates the content for the language modal.
 	 */
 	const createLanguageModalContent = (): HTMLElement => {
-		const modalContent = document.createElement('div');
-		modalContent.classList.add('a11y-toolbar__translate-dropdown');
-		modalContent.setAttribute('lang', 'en');
+		const modalContent = document.createElement( 'div' );
+		modalContent.classList.add( 'a11y-toolbar__translate-dropdown' );
+		modalContent.setAttribute( 'lang', 'en' );
 
-		const title = document.createElement('h3');
+		const title = document.createElement( 'h3' );
 		title.textContent = 'Translate';
 
-		const closeButton = document.createElement('button');
-		closeButton.classList.add('a11y-toolbar__translate-close-button');
-		closeButton.setAttribute('aria-label', 'Close translate modal');
-		closeButton.addEventListener('click', () => closeLanguageModal());
+		const closeButton = document.createElement( 'button' );
+		closeButton.classList.add( 'a11y-toolbar__translate-close-button' );
+		closeButton.setAttribute( 'aria-label', 'Close translate modal' );
+		closeButton.addEventListener( 'click', () => closeLanguageModal() );
 
-		const closeIcon = document.createElement('i');
-		closeIcon.classList.add('fal', 'fa-times');
+		const closeIcon = document.createElement( 'i' );
+		closeIcon.classList.add( 'fal', 'fa-times' );
 
-		closeButton.appendChild(closeIcon);
-		modalContent.appendChild(title);
-		modalContent.appendChild(closeButton);
+		closeButton.appendChild( closeIcon );
+		modalContent.appendChild( title );
+		modalContent.appendChild( closeButton );
 
-		const description = document.createElement('p');
-		description.classList.add('a11y-toolbar__translate-description');
+		const description = document.createElement( 'p' );
+		description.classList.add( 'a11y-toolbar__translate-description' );
 		description.textContent =
 			'Use Google to translate this website. We take no responsibility for the accuracy of the translation.';
-		modalContent.appendChild(description);
+		modalContent.appendChild( description );
 
-		const translationContainer = document.createElement('div');
+		const translationContainer = document.createElement( 'div' );
 		translationContainer.id = 'google_translate_element';
-		translationContainer.setAttribute('lang', 'nl');
-		modalContent.appendChild(translationContainer);
+		translationContainer.setAttribute( 'lang', 'nl' );
+		modalContent.appendChild( translationContainer );
 
-		const errorText = document.createElement('div');
-		errorText.classList.add('a11y-toolbar__translate-error');
+		const errorText = document.createElement( 'div' );
+		errorText.classList.add( 'a11y-toolbar__translate-error' );
 		errorText.textContent =
 			'Unable to load Google Translate. Accept cookies and refresh the page, or try again later.';
-		modalContent.appendChild(errorText);
+		modalContent.appendChild( errorText );
 
 		return modalContent;
 	};
@@ -168,21 +176,27 @@ export const addLanguageButton = (toolbar: HTMLElement, options?: DefaultOptions
 	 * - Remove the aria label to prevent double screen reader announcement.
 	 */
 	const transformTranslateElement = (): void => {
-		const googleSelectElement = document.querySelector('.goog-te-combo') as HTMLElement;
-		const labelExists = document.querySelector(`.${LABEL_CLASS}`) as HTMLElement;
+		const googleSelectElement = document.querySelector(
+			'.goog-te-combo'
+		) as HTMLElement;
+		const labelExists = document.querySelector(
+			`.${ LABEL_CLASS }`
+		) as HTMLElement;
 
-		if (!googleSelectElement || labelExists) return;
+		if ( ! googleSelectElement || labelExists ) return;
 
-		googleSelectElement.setAttribute('id', 'google-translate-select');
-		googleSelectElement.removeAttribute('aria-label');
+		googleSelectElement.setAttribute( 'id', 'google-translate-select' );
+		googleSelectElement.removeAttribute( 'aria-label' );
 
-		const label = document.createElement('label');
-		label.classList.add(LABEL_CLASS);
+		const label = document.createElement( 'label' );
+		label.classList.add( LABEL_CLASS );
 		label.htmlFor = 'google-translate-select';
 		label.textContent = 'Selecteer een taal:';
 
-		const wrapper = document.querySelector('#google_translate_element') as HTMLElement;
-		wrapper?.parentElement?.insertBefore(label, wrapper);
+		const wrapper = document.querySelector(
+			'#google_translate_element'
+		) as HTMLElement;
+		wrapper?.parentElement?.insertBefore( label, wrapper );
 	};
 
 	init();

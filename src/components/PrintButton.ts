@@ -10,24 +10,32 @@ import { DefaultOptionsType } from '../types/default-options-type';
  * @param {HTMLElement} toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the print button.
  */
-export const addPrintButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
+export const addPrintButton = (
+	toolbar: HTMLElement,
+	options?: DefaultOptionsType
+): void => {
 	let printIcon: string;
 	let printTextAfter: string;
 	let printLabel: string;
 
 	const init = (): void => {
-		if (!options || !options.showPrintButton) return;
+		if ( ! options || ! options.showPrintButton ) return;
 
 		printIcon = options.iconOptions?.printIcon || '';
 		printTextAfter = options.textAfterOptions?.printTextAfter || '';
 		printLabel = options.labelOptions?.printLabel || '';
 
-		const printButton = createButton('print', printLabel, printIcon, printTextAfter);
-		toolbar.appendChild(printButton);
+		const printButton = createButton(
+			'print',
+			printLabel,
+			printIcon,
+			printTextAfter
+		);
+		toolbar.appendChild( printButton );
 
-		printButton.addEventListener('click', () => {
+		printButton.addEventListener( 'click', () => {
 			window.print();
-		});
+		} );
 	};
 
 	init();
