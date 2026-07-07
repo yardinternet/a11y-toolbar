@@ -3,52 +3,50 @@
 	"version": "0.11.2",
 	"author": "Yard | Digital Agency",
 	"license": "EPL-1.0",
+	"type": "module",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/yardinternet/a11y-toolbar.git"
 	},
-	"main": "dist/index.js",
-	"module": "dist/a11y-toolbar.esm.js",
+	"main": "dist/a11y-toolbar.js",
+	"module": "dist/a11y-toolbar.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/a11y-cookie-yes.js"
+		},
+		"./dist/*": "./dist/*"
+	},
 	"publishConfig": {
 		"registry": "https://npm.pkg.github.com/@yardinternet"
 	},
-	"typings": "dist/index.d.ts",
 	"files": [
 		"dist",
 		"src"
 	],
 	"scripts": {
-		"analyze": "size-limit --why",
-		"build": "dts build --format esm",
-		"lint": "dts lint",
-		"prepare": "dts build",
-		"size": "size-limit",
-		"start": "dts watch --format esm",
-		"start-multi": "dts watch --format cjs,esm",
-		"test": "dts test"
-	},
-	"jest": {
-		"testEnvironment": "node"
-	},
-	"peerDependencies": {},
-	"engines": {
-		"node": ">=18"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "dts lint"
-		}
+		"start": "vite build --watch",
+		"build": "vite build",
+		"typecheck": "tsc --noEmit",
+		"lint:js": "yard-toolkit lint js -m custom './src/**/*.ts' && pnpm run typecheck",
+		"lint:css": "yard-toolkit lint scss -m custom './src/**/*.scss'",
+		"format:js": "yard-toolkit format js -m custom './src/**/*.ts'",
+		"format:css": "yard-toolkit format scss -m custom './src/**/*.scss'",
+		"prepare": "husky"
 	},
 	"devDependencies": {
-		"@size-limit/preset-small-lib": "^8.2.6",
-		"@tsconfig/recommended": "^1.0.2",
-		"dts-cli": "^2.0.3",
-		"husky": "^8.0.3",
-		"rollup-plugin-scss": "^4.0.0",
-		"sass": "^1.63.6",
-		"size-limit": "^8.2.6",
-		"tslib": "^2.6.0",
-		"typescript": "^5.1.6"
+		"@yardinternet/eslint-config": "^1.2.12",
+		"@yardinternet/prettier-config": "^2.0.11",
+		"@yardinternet/stylelint-config": "^1.1.8",
+		"@yardinternet/toolkit": "^2.1.12",
+		"@yardinternet/ts-config": "^1.1.2",
+		"@yardinternet/vite-config": "^1.3.5",
+		"husky": "^9.1.7",
+		"postcss-scss": "^4.0.9",
+		"sass": "^1.101.0",
+		"typescript": "^5.9.3",
+		"vite": "^7.3.5"
 	},
 	"dependencies": {
 		"focus-trap": "^7.4.3",
