@@ -21,21 +21,21 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 
 .#{$a11y-toolbar} {
 	position: fixed;
+	z-index: var( --a11y-toolbar-zindex );
 	top: 20vh;
 	left: 0;
-	z-index: var( --a11y-toolbar-zindex );
-	opacity: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	border-radius: var( --a11y-toolbar-border-radius );
+	background-color: var( --a11y-toolbar-button-background-color );
 	box-shadow:
 		rgba( 0, 0, 0, 0.1 ) 0px 4px 6px -1px,
 		rgba( 0, 0, 0, 0.06 ) 0px 2px 4px -1px;
-	border-radius: var( --a11y-toolbar-border-radius );
+	opacity: 0;
 	transform: translateX( -100% );
-	visibility: hidden;
-	flex-direction: column;
-	display: flex;
-	background-color: var( --a11y-toolbar-button-background-color );
-	align-items: flex-end;
 	transition: all 0.5s cubic-bezier( 0.22, 1, 0.36, 1 );
+	visibility: hidden;
 
 	@media screen and ( min-width: $a11y-toolbar-breakpoint ) {
 		right: 0;
@@ -73,8 +73,8 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		height: $size;
 		padding: 0;
 		border: 0;
-		background-color: var( --a11y-toolbar-toggle-button-background-color );
 		border-radius: var( --a11y-toolbar-toggle-button-border-radius );
+		background-color: var( --a11y-toolbar-toggle-button-background-color );
 		box-shadow:
 			rgba( 0, 0, 0, 0.1 ) 0px 4px 6px -1px,
 			rgba( 0, 0, 0, 0.06 ) 0px 2px 4px -1px;
@@ -97,9 +97,9 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	&__button,
 	&__button.#{$a11y-toolbar}__button--readspeaker.rsbtn_play {
 		display: flex;
-		flex-direction: column;
 		width: var( --a11y-toolbar-button-size );
 		height: var( --a11y-toolbar-button-size );
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		padding: 0;
@@ -151,12 +151,12 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 
 	&__translate-dropdown {
 		$triangle: 10px;
-		background-color: #fff;
-		padding: 1rem;
 		position: absolute;
 		top: 0;
 		left: calc( var( --a11y-toolbar-button-size ) + #{$triangle} );
 		width: 250px;
+		padding: 1rem;
+		background-color: #fff;
 		box-shadow:
 			rgba( 0, 0, 0, 0.1 ) 0px 4px 6px -1px,
 			rgba( 0, 0, 0, 0.06 ) 0px 2px 4px -1px;
@@ -172,16 +172,16 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 			width: 0;
 			height: 0;
 			border-top: $triangle solid rgba( 0, 0, 0, 0 );
-			border-bottom: $triangle solid rgba( 0, 0, 0, 0 );
 			border-right: $triangle solid #fff;
+			border-bottom: $triangle solid rgba( 0, 0, 0, 0 );
 			content: '';
 		}
 
 		@media screen and ( min-width: $a11y-toolbar-breakpoint ) {
+			top: calc( 100% + #{$triangle} );
 			right: 10px;
 			left: auto;
 			width: 280px;
-			top: calc( 100% + #{$triangle} );
 			transform: translateY( -7px );
 
 			&::before {
@@ -206,13 +206,13 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	}
 
 	&__translate-description {
-		font-size: 0.9rem;
 		margin-bottom: 0.5rem;
+		font-size: 0.9rem;
 	}
 
 	&__translate-description-deepl {
-		font-size: 0.9rem;
 		margin-bottom: 0.5rem;
+		font-size: 0.9rem;
 	}
 
 	&__translate-close-button {
@@ -238,18 +238,18 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	}
 
 	&__translate-error {
-		font-size: 0.9rem;
-		color: #bc0000;
 		display: none;
+		color: #bc0000;
+		font-size: 0.9rem;
 	}
 
 	// ReadSpeaker is a mess, we need to override some of their styles
 	.rsbtn {
 		display: flex;
+		height: auto;
 		flex-direction: column;
 		align-items: flex-end;
 		margin-bottom: 0;
-		height: auto;
 
 		.#{$a11y-toolbar}__icon {
 			font-family: 'Font Awesome 6 Pro';
