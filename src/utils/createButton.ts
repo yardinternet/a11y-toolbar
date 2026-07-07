@@ -12,23 +12,23 @@ export const createButton = (
 	icon?: string | undefined,
 	textAfter?: string | undefined
 ): HTMLElement => {
-	const button = document.createElement('button');
+	const button = document.createElement( 'button' );
 	button.id = 'js-a11y-toolbar-' + id;
-	button.classList.add('a11y-toolbar__button');
-	button.classList.add(`a11y-toolbar__button--${id}`);
-	button.setAttribute('aria-label', label);
-	button.setAttribute('title', label);
+	button.classList.add( 'a11y-toolbar__button' );
+	button.classList.add( `a11y-toolbar__button--${ id }` );
+	button.setAttribute( 'aria-label', label );
+	button.setAttribute( 'title', label );
 
-	if (icon !== undefined && icon !== '') {
-		const iconElement = createIcon(icon);
-		button.appendChild(iconElement);
+	if ( icon !== undefined && icon !== '' ) {
+		const iconElement = createIcon( icon );
+		button.appendChild( iconElement );
 	}
 
-	if (textAfter !== undefined && textAfter !== '') {
-		const textAfterElement = createTextAfter(textAfter);
-		button.appendChild(textAfterElement);
+	if ( textAfter !== undefined && textAfter !== '' ) {
+		const textAfterElement = createTextAfter( textAfter );
+		button.appendChild( textAfterElement );
 	} else {
-		button.setAttribute('aria-label', label);
+		button.setAttribute( 'aria-label', label );
 	}
 
 	return button;
@@ -39,11 +39,11 @@ export const createButton = (
  *
  * @param {string} icon - The icon parameter. Can be a CSS class or an SVG string.
  */
-export const createIcon = (icon: string): HTMLElement => {
-	if (icon.startsWith('<svg')) {
-		return createSvgIcon(icon);
+export const createIcon = ( icon: string ): HTMLElement => {
+	if ( icon.startsWith( '<svg' ) ) {
+		return createSvgIcon( icon );
 	} else {
-		return createFontAwesomeIcon(icon);
+		return createFontAwesomeIcon( icon );
 	}
 };
 
@@ -52,11 +52,11 @@ export const createIcon = (icon: string): HTMLElement => {
  *
  * @param {string} iconClass - The CSS class for the icon.
  */
-export const createFontAwesomeIcon = (iconClass: string): HTMLElement => {
-	const icon = document.createElement('i');
-	icon.classList.add('a11y-toolbar__icon');
-	icon.classList.add(...iconClass.split(' '));
-	icon.setAttribute('aria-hidden', 'true');
+export const createFontAwesomeIcon = ( iconClass: string ): HTMLElement => {
+	const icon = document.createElement( 'i' );
+	icon.classList.add( 'a11y-toolbar__icon' );
+	icon.classList.add( ...iconClass.split( ' ' ) );
+	icon.setAttribute( 'aria-hidden', 'true' );
 
 	return icon;
 };
@@ -66,12 +66,12 @@ export const createFontAwesomeIcon = (iconClass: string): HTMLElement => {
  *
  * @param {string} svg - The SVG string for the icon.
  */
-export const createSvgIcon = (svg: string): HTMLElement => {
-	const icon = document.createElement('span');
-	icon.classList.add('a11y-toolbar__icon');
-	icon.classList.add('a11y-toolbar__icon--svg');
+export const createSvgIcon = ( svg: string ): HTMLElement => {
+	const icon = document.createElement( 'span' );
+	icon.classList.add( 'a11y-toolbar__icon' );
+	icon.classList.add( 'a11y-toolbar__icon--svg' );
 	icon.innerHTML = svg;
-	icon.setAttribute('aria-hidden', 'true');
+	icon.setAttribute( 'aria-hidden', 'true' );
 
 	return icon;
 };
@@ -81,10 +81,10 @@ export const createSvgIcon = (svg: string): HTMLElement => {
  *
  * @param {string} textAfter - The text to be added after the icon.
  */
-export const createTextAfter = (textAfter: string): HTMLElement => {
-	const textElement = document.createElement('span');
+export const createTextAfter = ( textAfter: string ): HTMLElement => {
+	const textElement = document.createElement( 'span' );
 	textElement.textContent = textAfter;
-	textElement.classList.add('a11y-toolbar__button-text-after');
+	textElement.classList.add( 'a11y-toolbar__button-text-after' );
 
 	return textElement;
 };

@@ -16,7 +16,10 @@ import { DefaultOptionsType } from '../types/default-options-type';
  * @param {HTMLElement} toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the OpenDyslexic button.
  */
-export const addOpenDyslexicButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
+export const addOpenDyslexicButton = (
+	toolbar: HTMLElement,
+	options?: DefaultOptionsType
+): void => {
 	const OPEN_DYSLEXIC_BODY_CLASS = 'a11y-toolbar--open-dyslexic';
 	let openDyslexicIcon: string;
 	let openDyslexicTextAfter: string;
@@ -24,12 +27,15 @@ export const addOpenDyslexicButton = (toolbar: HTMLElement, options?: DefaultOpt
 	let openDyslexicDeactivateLabel: string;
 
 	const init = (): void => {
-		if (!options || !options.showOpenDyslexicButton) return;
+		if ( ! options || ! options.showOpenDyslexicButton ) return;
 
 		openDyslexicIcon = options.iconOptions?.openDyslexicIcon || '';
-		openDyslexicTextAfter = options.textAfterOptions?.openDyslexicTextAfter || '';
-		openDyslexicActivateLabel = options.labelOptions?.openDyslexicActivateLabel || '';
-		openDyslexicDeactivateLabel = options.labelOptions?.openDyslexicDeactivateLabel || '';
+		openDyslexicTextAfter =
+			options.textAfterOptions?.openDyslexicTextAfter || '';
+		openDyslexicActivateLabel =
+			options.labelOptions?.openDyslexicActivateLabel || '';
+		openDyslexicDeactivateLabel =
+			options.labelOptions?.openDyslexicDeactivateLabel || '';
 
 		const openDyslexicButton = createButton(
 			'openDyslexic',
@@ -38,15 +44,15 @@ export const addOpenDyslexicButton = (toolbar: HTMLElement, options?: DefaultOpt
 			openDyslexicTextAfter
 		);
 
-		toolbar.appendChild(openDyslexicButton);
+		toolbar.appendChild( openDyslexicButton );
 
 		initOpenDyslexicBodyClass();
-		initPressedStateButton(openDyslexicButton);
-		addOpenDyslexicButtonEventListener(openDyslexicButton);
+		initPressedStateButton( openDyslexicButton );
+		addOpenDyslexicButtonEventListener( openDyslexicButton );
 
 		const isActive = hasOpenDyslexicCookie();
 
-		if (isActive) {
+		if ( isActive ) {
 			injectFontStyles();
 		}
 	};
@@ -57,8 +63,11 @@ export const addOpenDyslexicButton = (toolbar: HTMLElement, options?: DefaultOpt
 	const initOpenDyslexicBodyClass = (): void => {
 		const hasOpenDyslexic = hasOpenDyslexicCookie();
 
-		if (hasOpenDyslexic && !document.body.classList.contains(OPEN_DYSLEXIC_BODY_CLASS)) {
-			document.body.classList.add(OPEN_DYSLEXIC_BODY_CLASS);
+		if (
+			hasOpenDyslexic &&
+			! document.body.classList.contains( OPEN_DYSLEXIC_BODY_CLASS )
+		) {
+			document.body.classList.add( OPEN_DYSLEXIC_BODY_CLASS );
 		}
 	};
 
@@ -67,9 +76,9 @@ export const addOpenDyslexicButton = (toolbar: HTMLElement, options?: DefaultOpt
 	 *
 	 * @param {HTMLElement} button - The OpenDyslexic button element.
 	 */
-	const initPressedStateButton = (button: HTMLElement): void => {
+	const initPressedStateButton = ( button: HTMLElement ): void => {
 		const isActive = hasOpenDyslexicCookie();
-		toggleButtonAttributes(button, isActive);
+		toggleButtonAttributes( button, isActive );
 	};
 
 	/**
@@ -77,32 +86,38 @@ export const addOpenDyslexicButton = (toolbar: HTMLElement, options?: DefaultOpt
 	 *
 	 * @param {HTMLElement} button - The OpenDyslexic button element.
 	 */
-	const addOpenDyslexicButtonEventListener = (button: HTMLElement): void => {
-		button.addEventListener('click', () => {
-			const openDyslexicCookieValue = !hasOpenDyslexicCookie();
-			Cookies.set(COOKIES.OPEN_DYSLEXIC, openDyslexicCookieValue.toString(), {
-				expires: 90,
-			});
+	const addOpenDyslexicButtonEventListener = (
+		button: HTMLElement
+	): void => {
+		button.addEventListener( 'click', () => {
+			const openDyslexicCookieValue = ! hasOpenDyslexicCookie();
+			Cookies.set(
+				COOKIES.OPEN_DYSLEXIC,
+				openDyslexicCookieValue.toString(),
+				{
+					expires: 90,
+				}
+			);
 
-			toggleButtonAttributes(button, openDyslexicCookieValue);
+			toggleButtonAttributes( button, openDyslexicCookieValue );
 
-			if (openDyslexicCookieValue) {
+			if ( openDyslexicCookieValue ) {
 				injectFontStyles();
-				document.body.classList.add(OPEN_DYSLEXIC_BODY_CLASS);
+				document.body.classList.add( OPEN_DYSLEXIC_BODY_CLASS );
 			} else {
-				document.body.classList.remove(OPEN_DYSLEXIC_BODY_CLASS);
+				document.body.classList.remove( OPEN_DYSLEXIC_BODY_CLASS );
 			}
-		});
+		} );
 	};
 
 	/**
 	 * Injects Font Stylesheet and custom CSS to apply the OpenDyslexic font when active.
 	 */
 	const injectFontStyles = (): void => {
-		const existing = document.getElementById('open-dyslexic-font');
-		if (existing) return;
+		const existing = document.getElementById( 'open-dyslexic-font' );
+		if ( existing ) return;
 
-		const fontFace = document.createElement('style');
+		const fontFace = document.createElement( 'style' );
 
 		fontFace.textContent = `
 		@font-face {
@@ -136,27 +151,27 @@ export const addOpenDyslexicButton = (toolbar: HTMLElement, options?: DefaultOpt
 			font-style: normal;
 		}`;
 
-		document.head.appendChild(fontFace);
+		document.head.appendChild( fontFace );
 
-		const styles = document.createElement('style');
+		const styles = document.createElement( 'style' );
 		styles.id = 'open-dyslexic-font';
 		styles.textContent = `
-		body.${OPEN_DYSLEXIC_BODY_CLASS} {
+		body.${ OPEN_DYSLEXIC_BODY_CLASS } {
 			font-family: 'OpenDyslexic', sans-serif !important;
 			font-size: 1rem;
 		}
-		body.${OPEN_DYSLEXIC_BODY_CLASS} *:not(i) {
+		body.${ OPEN_DYSLEXIC_BODY_CLASS } *:not(i) {
 			font-family: 'OpenDyslexic', sans-serif !important;
 		}
 	`;
-		document.head.appendChild(styles);
+		document.head.appendChild( styles );
 	};
 
 	/**
 	 * Checks if a OpenDyslexic cookie has been set.
 	 */
 	const hasOpenDyslexicCookie = (): boolean => {
-		return Cookies.get(COOKIES.OPEN_DYSLEXIC) === 'true';
+		return Cookies.get( COOKIES.OPEN_DYSLEXIC ) === 'true';
 	};
 
 	/**
@@ -165,13 +180,19 @@ export const addOpenDyslexicButton = (toolbar: HTMLElement, options?: DefaultOpt
 	 * @param {HTMLElement} button - The OpenDyslexic button element.
 	 * @param {boolean} state - The state of the button element.
 	 */
-	const toggleButtonAttributes = (button: HTMLElement, state: boolean): void => {
-		button.setAttribute('aria-pressed', state.toString());
+	const toggleButtonAttributes = (
+		button: HTMLElement,
+		state: boolean
+	): void => {
+		button.setAttribute( 'aria-pressed', state.toString() );
 		button.setAttribute(
 			'aria-label',
 			state ? openDyslexicDeactivateLabel : openDyslexicActivateLabel
 		);
-		button.setAttribute('title', state ? openDyslexicDeactivateLabel : openDyslexicActivateLabel);
+		button.setAttribute(
+			'title',
+			state ? openDyslexicDeactivateLabel : openDyslexicActivateLabel
+		);
 	};
 
 	init();

@@ -8,15 +8,21 @@ import { DefaultOptionsType } from '../types/default-options-type';
  * @param {HTMLElement} toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the custom button.
  */
-export const addCustomButton = (toolbar: HTMLElement, options: DefaultOptionsType): void => {
+export const addCustomButton = (
+	toolbar: HTMLElement,
+	options: DefaultOptionsType
+): void => {
 	const init = (): void => {
-		if (!options) return;
+		if ( ! options ) return;
 
-		const customButton = typeof options.customButton === 'function' ? options.customButton() : null;
+		const customButton =
+			typeof options.customButton === 'function'
+				? options.customButton()
+				: null;
 
-		if (!customButton) return;
+		if ( ! customButton ) return;
 
-		toolbar.appendChild(customButton);
+		toolbar.appendChild( customButton );
 	};
 
 	init();

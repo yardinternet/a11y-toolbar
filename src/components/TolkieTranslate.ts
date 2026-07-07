@@ -23,39 +23,41 @@ export const addTolkieTranslateButton = (
 	let tolkieTranslateTextAfter: string;
 
 	const init = (): void => {
-		if (!options || !options.showTolkieTranslateButton) return;
-		tolkieTranslateIcon = options.iconOptions?.tolkieTranslateIcon || 'flag';
-		tolkieTranslateTextAfter = options.textAfterOptions?.tolkieTranslateTextAfter || 'Vertalen';
+		if ( ! options || ! options.showTolkieTranslateButton ) return;
+		tolkieTranslateIcon =
+			options.iconOptions?.tolkieTranslateIcon || 'flag';
+		tolkieTranslateTextAfter =
+			options.textAfterOptions?.tolkieTranslateTextAfter || 'Vertalen';
 
 		const tolkieTranslateButton = createTolkieTranslateButton();
 
-		toolbar.appendChild(tolkieTranslateButton);
+		toolbar.appendChild( tolkieTranslateButton );
 	};
 
 	const createTolkieTranslateButton = (): HTMLButtonElement => {
-		const button = document.createElement('button');
+		const button = document.createElement( 'button' );
 		button.classList.add(
 			'tolkie-translate-button',
 			'a11y-toolbar__button',
 			'a11y-toolbar__button--tolkie-translate'
 		);
-		button.setAttribute('type', 'button');
-		button.setAttribute('aria-label', tolkieTranslateTextAfter);
-		button.setAttribute('title', tolkieTranslateTextAfter);
+		button.setAttribute( 'type', 'button' );
+		button.setAttribute( 'aria-label', tolkieTranslateTextAfter );
+		button.setAttribute( 'title', tolkieTranslateTextAfter );
 
-		if (tolkieTranslateIcon === 'flag') {
-			const icon = document.createElement('div');
-			icon.classList.add('tolkie-translate-button-flag');
-			button.appendChild(icon);
+		if ( tolkieTranslateIcon === 'flag' ) {
+			const icon = document.createElement( 'div' );
+			icon.classList.add( 'tolkie-translate-button-flag' );
+			button.appendChild( icon );
 		} else {
-			const icon = createFontAwesomeIcon(tolkieTranslateIcon);
-			button.appendChild(icon);
+			const icon = createFontAwesomeIcon( tolkieTranslateIcon );
+			button.appendChild( icon );
 		}
 
-		if (tolkieTranslateTextAfter) {
-			const text = createTextAfter(tolkieTranslateTextAfter);
-			text.classList.add('tolkie-translate-button-text');
-			button.appendChild(text);
+		if ( tolkieTranslateTextAfter ) {
+			const text = createTextAfter( tolkieTranslateTextAfter );
+			text.classList.add( 'tolkie-translate-button-text' );
+			button.appendChild( text );
 		}
 
 		return button;

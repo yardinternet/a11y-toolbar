@@ -1,13 +1,13 @@
 interface IIsObject {
-	(item: any): boolean;
+	( item: any ): boolean;
 }
 
 interface IObject {
-	[key: string]: any;
+	[ key: string ]: any;
 }
 
 interface IDeepMerge {
-	(target: IObject, ...sources: Array<IObject>): IObject;
+	( target: IObject, ...sources: Array< IObject > ): IObject;
 }
 
 /**
@@ -16,8 +16,12 @@ interface IDeepMerge {
  * @param item - The item that needs to be checked
  * @return {Boolean} Whether or not @item is an object
  */
-export const isObject: IIsObject = (item: any): boolean => {
-	return item === Object(item) && !Array.isArray(item) && typeof item !== 'function';
+export const isObject: IIsObject = ( item: any ): boolean => {
+	return (
+		item === Object( item ) &&
+		! Array.isArray( item ) &&
+		typeof item !== 'function'
+	);
 };
 
 /**
@@ -26,34 +30,47 @@ export const isObject: IIsObject = (item: any): boolean => {
  * @param {Array<Object>} sources - The source(s) that will be used to update the @target object
  * @return {Object} The final merged object
  */
-export const deepMerge: IDeepMerge = (target: IObject, ...sources: Array<IObject>): IObject => {
+export const deepMerge: IDeepMerge = (
+	target: IObject,
+	...sources: Array< IObject >
+): IObject => {
 	// return the target if no sources passed
-	if (!sources.length) {
+	if ( ! sources.length ) {
 		return target;
 	}
 
 	const result: IObject = target;
 
-	if (isObject(result)) {
+	if ( isObject( result ) ) {
 		const len: number = sources.length;
 
-		for (let i = 0; i < len; i += 1) {
-			const elm: any = sources[i];
+		for ( let i = 0; i < len; i += 1 ) {
+			const elm: any = sources[ i ];
 
-			if (isObject(elm)) {
-				for (const key in elm) {
-					if (elm.hasOwnProperty(key)) {
-						if (isObject(elm[key])) {
-							if (!result[key] || !isObject(result[key])) {
-								result[key] = {};
+			if ( isObject( elm ) ) {
+				for ( const key in elm ) {
+					if ( elm.hasOwnProperty( key ) ) {
+						if ( isObject( elm[ key ] ) ) {
+							if (
+								! result[ key ] ||
+								! isObject( result[ key ] )
+							) {
+								result[ key ] = {};
 							}
-							deepMerge(result[key], elm[key]);
+							deepMerge( result[ key ], elm[ key ] );
 						} else {
-							if (Array.isArray(result[key]) && Array.isArray(elm[key])) {
+							if (
+								Array.isArray( result[ key ] ) &&
+								Array.isArray( elm[ key ] )
+							) {
 								// concatenate the two arrays and remove any duplicate primitive values
-								result[key] = Array.from(new Set(result[key].concat(elm[key])));
+								result[ key ] = Array.from(
+									new Set(
+										result[ key ].concat( elm[ key ] )
+									)
+								);
 							} else {
-								result[key] = elm[key];
+								result[ key ] = elm[ key ];
 							}
 						}
 					}
