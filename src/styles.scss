@@ -23,37 +23,43 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	position: fixed;
 	top: 20vh;
 	left: 0;
-	z-index: var(--a11y-toolbar-zindex);
+	z-index: var( --a11y-toolbar-zindex );
 	opacity: 0;
-	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-	border-radius: var(--a11y-toolbar-border-radius);
-	transform: translateX(-100%);
+	box-shadow:
+		rgba( 0, 0, 0, 0.1 ) 0px 4px 6px -1px,
+		rgba( 0, 0, 0, 0.06 ) 0px 2px 4px -1px;
+	border-radius: var( --a11y-toolbar-border-radius );
+	transform: translateX( -100% );
 	visibility: hidden;
 	flex-direction: column;
 	display: flex;
-	background-color: var(--a11y-toolbar-button-background-color);
+	background-color: var( --a11y-toolbar-button-background-color );
 	align-items: flex-end;
-	transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+	transition: all 0.5s cubic-bezier( 0.22, 1, 0.36, 1 );
 
-	@media screen and (min-width: $a11y-toolbar-breakpoint) {
+	@media screen and ( min-width: $a11y-toolbar-breakpoint ) {
 		right: 0;
 		left: auto;
 		opacity: 1;
-		transform: translateX(0%);
+		transform: translateX( 0% );
 		visibility: visible;
 	}
 
-	> *:first-child:not(.rs_skip),
+	> *:first-child:not( .rs_skip ),
 	> *:first-child > .a11y-toolbar__button--readspeaker {
-		border-top-left-radius: var(--a11y-toolbar-border-radius) !important;
-		border-top-right-radius: var(--a11y-toolbar-border-radius) !important;
+		border-top-left-radius: var( --a11y-toolbar-border-radius ) !important;
+		border-top-right-radius: var( --a11y-toolbar-border-radius ) !important;
 	}
 
 	> .a11y-toolbar__button:last-of-type,
-	> *:last-child:not(.rs_skip):not(.a11y-toolbar__translate-dropdown),
+	> *:last-child:not( .rs_skip ):not( .a11y-toolbar__translate-dropdown ),
 	> *:last-child > .a11y-toolbar__button--readspeaker {
-		border-bottom-left-radius: var(--a11y-toolbar-border-radius) !important;
-		border-bottom-right-radius: var(--a11y-toolbar-border-radius) !important;
+		border-bottom-left-radius: var(
+			--a11y-toolbar-border-radius
+		) !important;
+		border-bottom-right-radius: var(
+			--a11y-toolbar-border-radius
+		) !important;
 	}
 
 	&__toggle-button {
@@ -67,18 +73,22 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		height: $size;
 		padding: 0;
 		border: 0;
-		background-color: var(--a11y-toolbar-toggle-button-background-color);
-		border-radius: var(--a11y-toolbar-toggle-button-border-radius);
-		box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-		color: var(--a11y-toolbar-toggle-button-color);
+		background-color: var( --a11y-toolbar-toggle-button-background-color );
+		border-radius: var( --a11y-toolbar-toggle-button-border-radius );
+		box-shadow:
+			rgba( 0, 0, 0, 0.1 ) 0px 4px 6px -1px,
+			rgba( 0, 0, 0, 0.06 ) 0px 2px 4px -1px;
+		color: var( --a11y-toolbar-toggle-button-color );
 		font-size: 1.6rem;
 
 		&:hover {
-			background-color: var(--a11y-toolbar-toggle-button-background-color-hover);
-			color: var(--a11y-toolbar-toggle-button-color-hover);
+			background-color: var(
+				--a11y-toolbar-toggle-button-background-color-hover
+			);
+			color: var( --a11y-toolbar-toggle-button-color-hover );
 		}
 
-		@media screen and (min-width: $a11y-toolbar-breakpoint) {
+		@media screen and ( min-width: $a11y-toolbar-breakpoint ) {
 			display: none;
 		}
 	}
@@ -88,33 +98,35 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	&__button.#{$a11y-toolbar}__button--readspeaker.rsbtn_play {
 		display: flex;
 		flex-direction: column;
-		width: var(--a11y-toolbar-button-size);
-		height: var(--a11y-toolbar-button-size);
+		width: var( --a11y-toolbar-button-size );
+		height: var( --a11y-toolbar-button-size );
 		align-items: center;
 		justify-content: center;
 		padding: 0;
 		border: 0;
-		background-color: var(--a11y-toolbar-button-background-color);
-		color: var(--a11y-toolbar-button-color);
-		font-size: var(--a11y-toolbar-icon-size);
+		background-color: var( --a11y-toolbar-button-background-color );
+		color: var( --a11y-toolbar-button-color );
+		font-size: var( --a11y-toolbar-icon-size );
 		text-align: center;
 		transition: 0.1s ease all;
 
 		&[aria-pressed='true'],
 		&:active,
 		&:hover {
-			background-color: var(--a11y-toolbar-button-background-color-hover);
-			color: var(--a11y-toolbar-button-color-hover);
+			background-color: var(
+				--a11y-toolbar-button-background-color-hover
+			);
+			color: var( --a11y-toolbar-button-color-hover );
 
 			.#{$a11y-toolbar}__button-text {
-				color: var(--a11y-toolbar-button-color-hover);
+				color: var( --a11y-toolbar-button-color-hover );
 			}
 		}
 
-		@media screen and (min-width: $a11y-toolbar-breakpoint) {
-			width: var(--a11y-toolbar-button-size-md);
-			height: var(--a11y-toolbar-button-size-md);
-			font-size: var(--a11y-toolbar-icon-size-md);
+		@media screen and ( min-width: $a11y-toolbar-breakpoint ) {
+			width: var( --a11y-toolbar-button-size-md );
+			height: var( --a11y-toolbar-button-size-md );
+			font-size: var( --a11y-toolbar-icon-size-md );
 		}
 
 		&--language-button {
@@ -127,7 +139,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	&__button-text-after {
 		font-size: 8px;
 
-		@media screen and (min-width: $a11y-toolbar-breakpoint) {
+		@media screen and ( min-width: $a11y-toolbar-breakpoint ) {
 			font-size: 11px;
 		}
 	}
@@ -143,11 +155,13 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		padding: 1rem;
 		position: absolute;
 		top: 0;
-		left: calc(var(--a11y-toolbar-button-size) + #{$triangle});
+		left: calc( var( --a11y-toolbar-button-size ) + #{$triangle} );
 		width: 250px;
-		box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+		box-shadow:
+			rgba( 0, 0, 0, 0.1 ) 0px 4px 6px -1px,
+			rgba( 0, 0, 0, 0.06 ) 0px 2px 4px -1px;
 		opacity: 0;
-		transform: translateX(-7px);
+		transform: translateX( -7px );
 		transition: all 0.3s ease;
 		visibility: hidden;
 
@@ -157,18 +171,18 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 			left: -#{$triangle};
 			width: 0;
 			height: 0;
-			border-top: $triangle solid rgba(0, 0, 0, 0);
-			border-bottom: $triangle solid rgba(0, 0, 0, 0);
+			border-top: $triangle solid rgba( 0, 0, 0, 0 );
+			border-bottom: $triangle solid rgba( 0, 0, 0, 0 );
 			border-right: $triangle solid #fff;
 			content: '';
 		}
 
-		@media screen and (min-width: $a11y-toolbar-breakpoint) {
+		@media screen and ( min-width: $a11y-toolbar-breakpoint ) {
 			right: 10px;
 			left: auto;
 			width: 280px;
-			top: calc(100% + #{$triangle});
-			transform: translateY(-7px);
+			top: calc( 100% + #{$triangle} );
+			transform: translateY( -7px );
 
 			&::before {
 				position: absolute;
@@ -243,13 +257,15 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		}
 
 		.rsbtn_play:focus {
-			background-color: var(--a11y-toolbar-button-background-color);
-			color: var(--a11y-toolbar-button-color);
+			background-color: var( --a11y-toolbar-button-background-color );
+			color: var( --a11y-toolbar-button-color );
 		}
 
 		.rsbtn_play:active {
-			background-color: var(--a11y-toolbar-button-background-color-hover);
-			color: var(--a11y-toolbar-button-color-hover);
+			background-color: var(
+				--a11y-toolbar-button-background-color-hover
+			);
+			color: var( --a11y-toolbar-button-color-hover );
 		}
 
 		.rsbtn_tooltoggle {
@@ -261,7 +277,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 		}
 
 		.rsbtn_exp_inner {
-			background-color: var(--a11y-toolbar-button-background-color);
+			background-color: var( --a11y-toolbar-button-background-color );
 		}
 
 		// Remove popup by button. Can't be done via ReadSpeaker API.
@@ -280,15 +296,15 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 	.a11y-toolbar__button--tolkie-translate {
 		.tolkie-svg-container-flag {
 			--size: 21px;
-			width: var(--size);
-			height: var(--size);
+			width: var( --size );
+			height: var( --size );
 		}
 	}
 }
 
 // If the a11y toolbar does not contain the goog-te-gadget class, it means the <script> is not loaded
 // because of cookies, strict CSP's, or something else. Done with CSS in stead of JS to avoid order of execution issues.
-.#{$a11y-toolbar}:not(:has(.goog-te-gadget)) {
+.#{$a11y-toolbar}:not( :has( .goog-te-gadget ) ) {
 	.a11y-toolbar__translate-description {
 		display: none;
 	}
@@ -302,7 +318,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 .a11y-toolbar--is-open {
 	.#{$a11y-toolbar} {
 		opacity: 1;
-		transform: translateX(0%);
+		transform: translateX( 0% );
 		visibility: visible;
 	}
 }
@@ -311,7 +327,7 @@ $a11y-toolbar-breakpoint: 768px; // CSS var() cannot currently be used in media 
 .a11y-toolbar--translate-is-open {
 	.#{$a11y-toolbar}__translate-dropdown {
 		opacity: 1;
-		transform: translateY(0);
+		transform: translateY( 0 );
 		visibility: visible;
 	}
 }
