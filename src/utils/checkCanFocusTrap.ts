@@ -3,7 +3,7 @@
  * This ensures an wait until it can activate the trap.
  *
  * @param {HTMLElement[]} trapContainers - The elements to check.
- * @returns {Promise<void[]>} - A promise that resolves when the elements are focusable.
+ * @return {Promise<void[]>} - A promise that resolves when the elements are focusable.
  */
 export const checkCanFocusTrap = (
 	trapContainers: HTMLElement[]

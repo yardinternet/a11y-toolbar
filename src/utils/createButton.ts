@@ -1,9 +1,9 @@
 /**
  * Creates a button element with the given ID, label, and icon class.
  *
- * @param {string} id - The ID of the button.
- * @param {string} label - The label for the button.
- * @param {string} icon - The icon for the button. Can be a CSS class or an SVG string.
+ * @param {string} id        - The ID of the button.
+ * @param {string} label     - The label for the button.
+ * @param {string} icon      - The icon for the button. Can be a CSS class or an SVG string.
  * @param {string} textAfter - The text to be added after the icon.
  */
 export const createButton = (
@@ -42,9 +42,8 @@ export const createButton = (
 export const createIcon = ( icon: string ): HTMLElement => {
 	if ( icon.startsWith( '<svg' ) ) {
 		return createSvgIcon( icon );
-	} else {
-		return createFontAwesomeIcon( icon );
 	}
+	return createFontAwesomeIcon( icon );
 };
 
 /**

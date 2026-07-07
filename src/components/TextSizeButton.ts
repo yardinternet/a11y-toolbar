@@ -8,12 +8,12 @@ import Cookies from 'js-cookie';
  */
 import { COOKIES } from '../constants/cookies';
 import { createButton } from '../utils/createButton';
-import { DefaultOptionsType } from '../types/default-options-type';
+import type { DefaultOptionsType } from '../types/default-options-type';
 
 /**
  * Adds a button to the toolbar that toggles the text size.
  *
- * @param {HTMLElement} toolbar - The toolbar element to add the button to.
+ * @param {HTMLElement}        toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the text size button.
  */
 export const addTextSizeButton = (
@@ -103,7 +103,7 @@ export const addTextSizeButton = (
 	 * Toggle button attributes based on the state
 	 *
 	 * @param {HTMLElement} button - The text size button element.
-	 * @param {boolean} state - The state of the button element.
+	 * @param {boolean}     state  - The state of the button element.
 	 */
 	const toggleButtonAttributes = (
 		button: HTMLElement,

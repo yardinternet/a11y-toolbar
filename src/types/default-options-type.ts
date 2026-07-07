@@ -6,7 +6,7 @@ export interface DefaultOptionsType {
 	showLanguageButton?: boolean;
 	showDeepLButton?: boolean;
 	showTolkieTranslateButton?: boolean;
-	customButton?: Function;
+	customButton?: () => HTMLElement;
 	showOpenDyslexicButton?: boolean;
 	translateIncludedLanguages?: string;
 	readSpeakerCustomerID?: string;
