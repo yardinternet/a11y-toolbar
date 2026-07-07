@@ -3,13 +3,13 @@
  *
  * @param {string} scriptSrc - The script source to check.
  */
-export const isScriptLoaded = (scriptSrc: string): boolean => {
+export const isScriptLoaded = ( scriptSrc: string ): boolean => {
 	const scriptEntries = performance
-		.getEntriesByType('resource')
-		.filter((e: any) => e.initiatorType === 'script');
+		.getEntriesByType( 'resource' )
+		.filter( ( e: any ) => e.initiatorType === 'script' );
 
-	for (const entry of scriptEntries) {
-		if (entry.name.includes(scriptSrc) && entry.duration > 0) {
+	for ( const entry of scriptEntries ) {
+		if ( entry.name.includes( scriptSrc ) && entry.duration > 0 ) {
 			return true;
 		}
 	}

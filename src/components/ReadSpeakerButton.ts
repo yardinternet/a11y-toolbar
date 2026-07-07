@@ -16,7 +16,10 @@ declare global {
  * @param {HTMLElement} toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the ReadSpeaker button.
  */
-export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOptionsType): void => {
+export const addReadSpeakerButton = (
+	toolbar: HTMLElement,
+	options?: DefaultOptionsType
+): void => {
 	let readSpeakerCustomerID: string;
 	let readSpeakerContentID: string;
 	let readSpeakerDisable: string;
@@ -26,10 +29,10 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 
 	const init = (): void => {
 		if (
-			!options ||
-			!options.showReadSpeakerButton ||
-			!options.readSpeakerCustomerID ||
-			!options.readSpeakerContentID
+			! options ||
+			! options.showReadSpeakerButton ||
+			! options.readSpeakerCustomerID ||
+			! options.readSpeakerContentID
 		)
 			return;
 
@@ -45,10 +48,11 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 		readSpeakerContentID = options.readSpeakerContentID || '';
 		readSpeakerDisable = options.readSpeakerDisable || '';
 		readSpeakerIcon = options.iconOptions?.readSpeakerIcon || '';
-		readSpeakerTextAfter = options.textAfterOptions?.readSpeakerTextAfter || '';
+		readSpeakerTextAfter =
+			options.textAfterOptions?.readSpeakerTextAfter || '';
 		readSpeakerLabel = options.labelOptions?.readSpeakerLabel || '';
 
-		addReadSpeakerScriptToHead(readSpeakerCustomerID, readSpeakerDisable);
+		addReadSpeakerScriptToHead( readSpeakerCustomerID, readSpeakerDisable );
 
 		const readSpeakerLink = createReadSpeakerButton(
 			readSpeakerCustomerID,
@@ -58,7 +62,7 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 			readSpeakerLabel
 		);
 
-		toolbar.appendChild(readSpeakerLink);
+		toolbar.appendChild( readSpeakerLink );
 	};
 
 	/**
@@ -70,13 +74,13 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 		readSpeakerCustomerID: string,
 		readSpeakerDisable: string
 	): void => {
-		const script = document.createElement('script');
+		const script = document.createElement( 'script' );
 		script.type = 'text/javascript';
 		script.crossOrigin = 'anonymous';
 		script.id = 'rs_req_Init';
-		script.src = `https://cdn-eu.readspeaker.com/script/${readSpeakerCustomerID}/webReader/webReader.js?pids=wr&&disable=${readSpeakerDisable}`;
+		script.src = `https://cdn-eu.readspeaker.com/script/${ readSpeakerCustomerID }/webReader/webReader.js?pids=wr&&disable=${ readSpeakerDisable }`;
 
-		document.head.appendChild(script);
+		document.head.appendChild( script );
 	};
 
 	/**
@@ -97,40 +101,44 @@ export const addReadSpeakerButton = (toolbar: HTMLElement, options?: DefaultOpti
 		textAfter: string,
 		label: string
 	): HTMLElement => {
-		const div = document.createElement('div');
+		const div = document.createElement( 'div' );
 		div.id = 'readspeaker_button1';
-		div.classList.add('rs_skip', 'rsbtn', 'rs_preserve');
+		div.classList.add( 'rs_skip', 'rsbtn', 'rs_preserve' );
 
-		const button = document.createElement('a');
-		button.setAttribute('role', 'button');
-		button.classList.add('rsbtn_play', 'a11y-toolbar__button', 'a11y-toolbar__button--readspeaker');
-		button.setAttribute('accesskey', 'L');
-		button.setAttribute('aria-label', label);
-		button.setAttribute('title', label);
-		button.href = `//app-eu.readspeaker.com/cgi-bin/rsent?customerid=${readSpeakerCustomerID}&lang=nl_nl&readid=${readSpeakerContentID}&url=${window.location.href}`;
+		const button = document.createElement( 'a' );
+		button.setAttribute( 'role', 'button' );
+		button.classList.add(
+			'rsbtn_play',
+			'a11y-toolbar__button',
+			'a11y-toolbar__button--readspeaker'
+		);
+		button.setAttribute( 'accesskey', 'L' );
+		button.setAttribute( 'aria-label', label );
+		button.setAttribute( 'title', label );
+		button.href = `//app-eu.readspeaker.com/cgi-bin/rsent?customerid=${ readSpeakerCustomerID }&lang=nl_nl&readid=${ readSpeakerContentID }&url=${ window.location.href }`;
 
-		if (icon !== undefined && icon !== '') {
-			const iconElement = createIcon(icon);
-			button.appendChild(iconElement);
+		if ( icon !== undefined && icon !== '' ) {
+			const iconElement = createIcon( icon );
+			button.appendChild( iconElement );
 		}
 
-		if (textAfter !== undefined && textAfter !== '') {
-			const textAfterElement = createTextAfter(textAfter);
-			button.appendChild(textAfterElement);
+		if ( textAfter !== undefined && textAfter !== '' ) {
+			const textAfterElement = createTextAfter( textAfter );
+			button.appendChild( textAfterElement );
 		}
 
 		// Move focus to ReadSpeaker play/pause button when corresponding a11y toolbar button is clicked
-		button.addEventListener('click', () => {
-			setTimeout(() => {
+		button.addEventListener( 'click', () => {
+			setTimeout( () => {
 				const readSpeakerPlayPauseButton = document.querySelector(
 					'.rs-controlpanel-playpause'
 				) as HTMLElement | null;
 
 				readSpeakerPlayPauseButton?.focus();
-			}, 200);
-		});
+			}, 200 );
+		} );
 
-		div.appendChild(button);
+		div.appendChild( button );
 
 		return div;
 	};
