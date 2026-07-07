@@ -124,9 +124,9 @@ Easily change the A11yToolbar styles using CSS variables. Currently available va
 
 ## 👷‍♀️ Package development
 
-1. Run `npm link` inside this project.
-2. Run `npm link @yardinternet/a11y-toolbar` inside the project or theme. This will create a symbolic link to the project folder.
-3. Run `npm run start` inside this project AND the equivalent script inside the project or theme.
+1. Run `pnpm link` inside this project.
+2. Run `pnpm link @yardinternet/a11y-toolbar` inside the project or theme. This will create a symbolic link to the project folder.
+3. Run `pnpm run start` inside this project AND the equivalent script inside the project or theme.
 
 ## 🚀 How to publish
 
@@ -135,3 +135,7 @@ Easily change the A11yToolbar styles using CSS variables. Currently available va
 3. Click "Publish release"
 
 The Github Workflow `release-package.yml` will run whenever a release is created in this repository. If the tests pass, then the package will be published to Github packages.
+
+## About us
+
+[![banner](https://raw.githubusercontent.com/yardinternet/.github/refs/heads/main/profile/assets/small-banner-github.svg)](https://www.yard.nl/werken-bij/)
