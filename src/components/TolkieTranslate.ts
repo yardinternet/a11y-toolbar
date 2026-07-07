@@ -1,17 +1,20 @@
 /**
  * Internal dependencies
  */
-import { DefaultOptionsType } from '../types/default-options-type';
+/**
+ * Internal dependencies
+ */
+import type { DefaultOptionsType } from '../types/default-options-type';
 import { createFontAwesomeIcon, createTextAfter } from '../utils/createButton';
 
 /**
  * Adds a button to the toolbar for the Tolkie Translate feature.
  *
- * @param {HTMLElement} toolbar - The toolbar element to add the button to.
+ * @param {HTMLElement}        toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the Tolkie Translate button.
  *
- * Note: The Tolkie script must be included on the page for this button to work.
- * Note: The tolkieTranslateIcon option can be set to 'flag' to use the default flag icon, or it can be set to a FontAwesome icon class.
+ *                                     Note: The Tolkie script must be included on the page for this button to work.
+ *                                     Note: The tolkieTranslateIcon option can be set to 'flag' to use the default flag icon, or it can be set to a FontAwesome icon class.
  *
  * @see https://help.tolkie.nl/nl/articles/12352886-hoe-voeg-ik-een-tolkie-vertaalknop-toe-aan-mijn-website
  */

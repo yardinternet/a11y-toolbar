@@ -6,7 +6,8 @@
 export const isScriptLoaded = ( scriptSrc: string ): boolean => {
 	const scriptEntries = performance
 		.getEntriesByType( 'resource' )
-		.filter( ( e: any ) => e.initiatorType === 'script' );
+		// @ts-ignore
+		.filter( ( e ) => e.initiatorType === 'script' );
 
 	for ( const entry of scriptEntries ) {
 		if ( entry.name.includes( scriptSrc ) && entry.duration > 0 ) {

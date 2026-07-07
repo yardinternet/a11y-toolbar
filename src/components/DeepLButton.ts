@@ -7,7 +7,7 @@ import * as focusTrap from 'focus-trap';
  * Internal dependencies
  */
 import { createButton, createSvgIcon } from '../utils/createButton';
-import { DefaultOptionsType } from '../types/default-options-type';
+import type { DefaultOptionsType } from '../types/default-options-type';
 import { checkCanFocusTrap } from '../utils/checkCanFocusTrap';
 
 interface SupportedLanguage {
@@ -36,7 +36,7 @@ declare global {
 /**
  * Adds a button to the toolbar that toggles the language options dropdown.
  *
- * @param {HTMLElement} toolbar - The toolbar element to add the button to.
+ * @param {HTMLElement}        toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the language button.
  */
 export const addDeepLButton = (
@@ -59,7 +59,7 @@ export const addDeepLButton = (
 			document.body.classList.remove( LANGUAGE_BODY_CLASS );
 		},
 	};
-	let trapFocus = false as any; // Couldn't get the type from the focus-trap package.
+	let trapFocus: any; // Couldn't get the type from the focus-trap package.
 
 	let languageIcon: string;
 	let languageTextAfter: string;
@@ -205,7 +205,7 @@ export const addDeepLButton = (
 				'The DeepL API is not available. Check the console for more information.';
 
 			if ( ! window.ydpl ) {
-				console.error(
+				throw new Error(
 					'window.ydpl global is not available or there is no window.ydpl.ydpl_supported_languages. Make sure the Yard DeepL plugin is configured properly.'
 				);
 			}
@@ -312,26 +312,22 @@ export const addDeepLButton = (
 			object_id: window.ydpl.ydpl_translate_post_id,
 		};
 
-		try {
-			const response = await fetch( url, {
-				method: 'POST',
-				headers,
-				credentials: 'include',
-				body: JSON.stringify( requestBody ),
-			} );
+		const response = await fetch( url, {
+			method: 'POST',
+			headers,
+			credentials: 'include',
+			body: JSON.stringify( requestBody ),
+		} );
 
-			if ( ! response.ok ) {
-				throw new Error(
-					`Request failed with status: ${ response.status }, ${ response.status }`
-				);
-			}
-
-			const responseData = await response.json();
-			applyTranslations( responseData );
-		} catch ( error ) {
+		if ( ! response.ok ) {
 			addErrorMessageToModal();
-			console.error( 'Error:', error );
+			throw new Error(
+				`Request failed with status: ${ response.status }, ${ response.status }`
+			);
 		}
+
+		const responseData = await response.json();
+		applyTranslations( responseData );
 	};
 
 	const addErrorMessageToModal = (): void => {
