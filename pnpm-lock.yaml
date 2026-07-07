@@ -33,6 +33,9 @@ importers:
       '@yardinternet/vite-config':
         specifier: ^1.3.5
         version: 1.4.0(@types/node@26.0.1)(eslint@9.39.4(jiti@1.21.7))(meow@14.1.0)(optionator@0.9.4)(postcss@8.5.16)(rollup@4.62.2)(stylelint@17.14.0(typescript@5.9.3))(typescript@5.9.3)(vite@7.3.6(@types/node@26.0.1)(jiti@1.21.7)(lightningcss@1.32.0)(sass@1.101.0)(terser@5.48.0))(webpack@5.108.3(lightningcss@1.32.0)(postcss@8.5.16))
+      deepmerge:
+        specifier: ^4.3.1
+        version: 4.3.1
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -2312,6 +2315,10 @@ packages:
 
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
+
+  deepmerge@4.3.1:
+    resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
+    engines: {node: '>=0.10.0'}
 
   define-data-property@1.1.4:
     resolution: {integrity: sha512-rBMvIzlpA8v6E+SJZoo++HAYqsLrkg7MSfIinMPFhmkorw7X+dOXVJQs+QT69zGkzMyfDnIMN2Wid1+NbL3T+A==}
@@ -7224,6 +7231,8 @@ snapshots:
       ms: 2.1.3
 
   deep-is@0.1.4: {}
+
+  deepmerge@4.3.1: {}
 
   define-data-property@1.1.4:
     dependencies:

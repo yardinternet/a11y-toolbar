@@ -12,8 +12,8 @@ import { addTextSizeButton } from './components/TextSizeButton';
 import { addTolkieTranslateButton } from './components/TolkieTranslate';
 
 import { DEFAULTS } from './constants/default-options';
-import { DefaultOptionsType } from './types/default-options-type';
-import { deepMerge } from './utils/deepMerge';
+import type { DefaultOptionsType } from './types/default-options-type';
+import {deepMerge, type IObject} from './utils/deepMerge';
 
 import './styles.scss';
 
@@ -26,9 +26,9 @@ export default class A11yToolbar {
 	private readonly selector: string;
 	private toolbar: HTMLElement | null = null;
 
-	constructor( selector: string, options?: {} ) {
+	constructor( selector: string, options?: object ) {
 		this.selector = selector;
-		this.options = deepMerge( DEFAULTS, options || {} );
+		this.options = deepMerge( DEFAULTS, (options || {}) as IObject );
 	}
 
 	/**
@@ -89,7 +89,7 @@ export default class A11yToolbar {
 	/**
 	 * Toggles the toolbar visibility on mobile devices.
 	 *
-	 * @param button - The toggle button element.
+	 * @param {HTMLButtonElement} button - The toggle button element.
 	 */
 	private toggleToolbar( button: HTMLButtonElement ): void {
 		const isOpen = document.body.classList.toggle( IS_OPEN_BODY_CLASS );

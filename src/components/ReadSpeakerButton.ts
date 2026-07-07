@@ -1,19 +1,22 @@
 /**
  * Internal dependencies
  */
-import { DefaultOptionsType } from '../types/default-options-type';
+/**
+ * Internal dependencies
+ */
+import type { DefaultOptionsType } from '../types/default-options-type';
 import { createIcon, createTextAfter } from '../utils/createButton';
 
 declare global {
 	interface Window {
-		rsConf: Object;
+		rsConf: object;
 	}
 }
 
 /**
  * Adds a button to the toolbar that activates ReadSpeaker. ReadSpeaker is a mess to work with.
  *
- * @param {HTMLElement} toolbar - The toolbar element to add the button to.
+ * @param {HTMLElement}        toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the ReadSpeaker button.
  */
 export const addReadSpeakerButton = (
@@ -68,17 +71,17 @@ export const addReadSpeakerButton = (
 	/**
 	 * Adds the ReadSpeaker script to the head of the document.
 	 *
-	 * @param {string} readSpeakerCustomerID - The ID of the ReadSpeaker instance.
+	 * @param {string} rsCustomerID - The ID of the ReadSpeaker instance.
 	 */
 	const addReadSpeakerScriptToHead = (
-		readSpeakerCustomerID: string,
-		readSpeakerDisable: string
+		rsCustomerID: string,
+		rsDisable: string
 	): void => {
 		const script = document.createElement( 'script' );
 		script.type = 'text/javascript';
 		script.crossOrigin = 'anonymous';
 		script.id = 'rs_req_Init';
-		script.src = `https://cdn-eu.readspeaker.com/script/${ readSpeakerCustomerID }/webReader/webReader.js?pids=wr&&disable=${ readSpeakerDisable }`;
+		script.src = `https://cdn-eu.readspeaker.com/script/${ rsCustomerID }/webReader/webReader.js?pids=wr&&disable=${ rsDisable }`;
 
 		document.head.appendChild( script );
 	};
@@ -86,17 +89,17 @@ export const addReadSpeakerButton = (
 	/**
 	 * Creates a ReadSpeaker button element with the specified ReadSpeaker ID and content ID.
 	 *
-	 * @param {string} readSpeakerCustomerID - The ID of the ReadSpeaker instance.
-	 * @param {string} readSpeakerContentID - The ID of the content to be read by ReadSpeaker.
-	 * @param {string} icon - The icon for the button. Can be a CSS class or an SVG string.
-	 * @param {string} textAfter - The text to be added after the icon.
-	 * @param {string} label - The label for the button.
+	 * @param {string} rsCustomerID - The ID of the ReadSpeaker instance.
+	 * @param {string} rsContentID  - The ID of the content to be read by ReadSpeaker.
+	 * @param {string} icon         - The icon for the button. Can be a CSS class or an SVG string.
+	 * @param {string} textAfter    - The text to be added after the icon.
+	 * @param {string} label        - The label for the button.
 	 *
-	 * @returns {HTMLElement} - The created ReadSpeaker button element.
+	 * @return {HTMLElement} - The created ReadSpeaker button element.
 	 */
 	const createReadSpeakerButton = (
-		readSpeakerCustomerID: string,
-		readSpeakerContentID: string,
+		rsCustomerID: string,
+		rsContentID: string,
 		icon: string,
 		textAfter: string,
 		label: string
@@ -115,7 +118,7 @@ export const addReadSpeakerButton = (
 		button.setAttribute( 'accesskey', 'L' );
 		button.setAttribute( 'aria-label', label );
 		button.setAttribute( 'title', label );
-		button.href = `//app-eu.readspeaker.com/cgi-bin/rsent?customerid=${ readSpeakerCustomerID }&lang=nl_nl&readid=${ readSpeakerContentID }&url=${ window.location.href }`;
+		button.href = `//app-eu.readspeaker.com/cgi-bin/rsent?customerid=${ rsCustomerID }&lang=nl_nl&readid=${ rsContentID }&url=${ window.location.href }`;
 
 		if ( icon !== undefined && icon !== '' ) {
 			const iconElement = createIcon( icon );

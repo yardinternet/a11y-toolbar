@@ -7,14 +7,14 @@ import * as focusTrap from 'focus-trap';
  * Internal dependencies
  */
 import { createButton } from '../utils/createButton';
-import { DefaultOptionsType } from '../types/default-options-type';
+import type { DefaultOptionsType } from '../types/default-options-type';
 import { checkCanFocusTrap } from '../utils/checkCanFocusTrap';
 import { isScriptLoaded } from '../utils/isScriptLoaded';
 
 /**
  * Adds a button to the toolbar that toggles the language options dropdown.
  *
- * @param {HTMLElement} toolbar - The toolbar element to add the button to.
+ * @param {HTMLElement}        toolbar - The toolbar element to add the button to.
  * @param {DefaultOptionsType} options - The options for the language button.
  */
 export const addLanguageButton = (
@@ -34,7 +34,7 @@ export const addLanguageButton = (
 			document.body.classList.remove( LANGUAGE_BODY_CLASS );
 		},
 	};
-	let trapFocus = false as any; // Couldn't get the type from the focus-trap package.
+	let trapFocus: { deactivate: () => void, activate: () => void }; // Couldn't get the type from the focus-trap package.
 
 	let languageIcon: string;
 	let languageTextAfter: string;
@@ -70,11 +70,9 @@ export const addLanguageButton = (
 	/**
 	 * Adds the Google Translate scripts to the head of the document.
 	 *
-	 * @param {string} includedLanguages - The languages to included in the translate widget.
+	 * @param {string} inclLanguages - The languages to included in the translate widget.
 	 */
-	const addGoogleTranslateScriptToHead = (
-		includedLanguages: string
-	): void => {
+	const addGoogleTranslateScriptToHead = ( inclLanguages: string ): void => {
 		const translateScriptSrc =
 			'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
 
@@ -92,7 +90,7 @@ export const addLanguageButton = (
 			function googleTranslateElementInit() {
 				new google.translate.TranslateElement({
 					pageLanguage: 'nl',
-					includedLanguages: '${ includedLanguages }',
+					includedLanguages: '${ inclLanguages }',
 				}, 'google_translate_element');
 			}
 		`;
