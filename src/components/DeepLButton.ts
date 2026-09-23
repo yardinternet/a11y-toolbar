@@ -13,6 +13,7 @@ import {
 	collectTranslatableTextNodes,
 	type TextNodeData,
 } from '../utils/collectTranslatableTextNodes';
+import { resolveSourceLanguage } from '../utils/resolveSourceLanguage';
 
 interface SupportedLanguage {
 	iso_alpha2: string;
@@ -64,7 +65,16 @@ export const addDeepLButton = (
 	let languageDisclaimer: string;
 	let originalTextMap: Map< string, TextNodeData[] > = new Map();
 
+	/**
+	 * Captured once in init(). updateLangAttribute() overwrites
+	 * <html lang> on every translate, so reading it later would report the
+	 * previous target language as the source of the original text.
+	 */
+	let sourceLanguage = '';
+
 	const init = (): void => {
+		sourceLanguage = resolveSourceLanguage( document.documentElement.lang );
+
 		if ( ! options || ! options.showDeepLButton ) return;
 
 		languageIcon = options.iconOptions?.languageIcon || '';
@@ -275,6 +285,7 @@ export const addDeepLButton = (
 			text: textArray,
 			target_lang: targetLang,
 			object_id: window.ydpl.ydpl_translate_post_id,
+			...( sourceLanguage ? { source_lang: sourceLanguage } : {} ),
 		};
 
 		const response = await fetch( url, {
