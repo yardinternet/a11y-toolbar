@@ -5,6 +5,21 @@ import { addDeepLButton } from '../src/components/DeepLButton';
 
 const OPTIONS = { showDeepLButton: true } as never;
 
+/**
+ * Awaits microtask ticks until `condition` holds, or gives up after
+ * `maxTicks`. Used instead of a hardcoded tick count so the test doesn't
+ * pass "by accident" if the number of microtasks needed to settle a promise
+ * chain changes.
+ */
+const flushUntil = async (
+	condition: () => boolean,
+	maxTicks = 20
+): Promise< void > => {
+	for ( let i = 0; i < maxTicks && ! condition(); i++ ) {
+		await Promise.resolve();
+	}
+};
+
 describe( 'DeepLButton request body', () => {
 	let bodies: Array< Record< string, unknown > >;
 
@@ -55,15 +70,19 @@ describe( 'DeepLButton request body', () => {
 
 		select.value = 'EN-US';
 		select.dispatchEvent( new Event( 'change' ) );
-		await Promise.resolve();
-		await Promise.resolve();
+
+		// Wait for the first translation to actually settle and mutate
+		// <html lang>, rather than trusting a fixed number of ticks. If this
+		// precondition never holds, the test fails here instead of passing
+		// for the wrong reason.
+		await flushUntil( () => document.documentElement.lang === 'EN-US' );
+		expect( document.documentElement.lang ).toBe( 'EN-US' );
 
 		// updateLangAttribute() has now overwritten <html lang> with EN-US.
 		select.value = 'EN-US';
 		select.dispatchEvent( new Event( 'change' ) );
 		await Promise.resolve();
 
-		expect( document.documentElement.lang ).toBe( 'EN-US' );
 		expect( bodies[ bodies.length - 1 ].source_lang ).toBe( 'NL' );
 	} );
 
