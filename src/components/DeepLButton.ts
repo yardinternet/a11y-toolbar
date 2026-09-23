@@ -9,15 +9,15 @@ import * as focusTrap from 'focus-trap';
 import { createButton, createSvgIcon } from '../utils/createButton';
 import type { DefaultOptionsType } from '../types/default-options-type';
 import { checkCanFocusTrap } from '../utils/checkCanFocusTrap';
+import {
+	collectTranslatableTextNodes,
+	type TextNodeData,
+} from '../utils/collectTranslatableTextNodes';
+import { resolveSourceLanguage } from '../utils/resolveSourceLanguage';
 
 interface SupportedLanguage {
 	iso_alpha2: string;
 	name: string;
-}
-
-interface TextNodeData {
-	node: Text;
-	originalText: string;
 }
 
 interface YDPL {
@@ -46,8 +46,6 @@ export const addDeepLButton = (
 	const LANGUAGE_BODY_CLASS = 'a11y-toolbar--translate-is-open';
 	const LABEL_CLASS = 'a11y-toolbar__translate-label';
 	const DEFAULT_LANGUAGE = 'NL';
-	const CONTENT_SELECTOR =
-		'div, p, span, h1, h2, h3, h4, h5, h6, li, button, blockquote, a, label, details, summary, strong, em, figcaption, code, pre, th, td, textarea, time, input[type="button"], input[type="submit"], input[type="reset"]';
 	const trapFocusOptions = {
 		allowOutsideClick: true,
 		clickOutsideDeactivates: true,
@@ -65,9 +63,12 @@ export const addDeepLButton = (
 	let languageTextAfter: string;
 	let languageLabel: string;
 	let languageDisclaimer: string;
-	const originalTextMap: Map< string, TextNodeData[] > = new Map();
+	let originalTextMap: Map< string, TextNodeData[] > = new Map();
+	let sourceLanguage = '';
 
 	const init = (): void => {
+		sourceLanguage = resolveSourceLanguage( document.documentElement.lang );
+
 		if ( ! options || ! options.showDeepLButton ) return;
 
 		languageIcon = options.iconOptions?.languageIcon || '';
@@ -103,44 +104,12 @@ export const addDeepLButton = (
 	};
 
 	/**
-	 * Captures original text nodes once and groups them by normalized text content.
-	 *
-	 * Example map entry:
-	 * {
-	 *   "Hello World": [
-	 *     { node: TextNode1, originalText: "Hello World" },
-	 *     { node: TextNode2, originalText: "Hello World" }
-	 *   ]
-	 * }
+	 * Captures the original text nodes once, grouped by normalized text content.
 	 */
 	const saveOriginalText = (): void => {
 		if ( originalTextMap.size > 0 ) return;
 
-		document.querySelectorAll( CONTENT_SELECTOR ).forEach( ( el ) => {
-			if ( ! ( el instanceof HTMLElement ) ) return;
-
-			Array.from( el.childNodes ).forEach( ( child ) => {
-				if ( child.nodeType !== Node.TEXT_NODE ) return;
-				const node = child as Text;
-				const normalizedText = ( node.textContent ?? '' )
-					.trim()
-					.replace( /\s\s+/g, ' ' );
-				if ( ! normalizedText || normalizedText.length <= 2 ) return;
-
-				const data: TextNodeData = {
-					node,
-					originalText: node.textContent ?? '',
-				};
-				const existing = originalTextMap.get( normalizedText );
-				if ( existing ) {
-					// If the same normalized text appears multiple times, we store all corresponding nodes in an array.
-					existing.push( data );
-				} else {
-					// If it's the first time we encounter this normalized text, we create a new entry in the map with an array containing the current node data.
-					originalTextMap.set( normalizedText, [ data ] );
-				}
-			} );
-		} );
+		originalTextMap = collectTranslatableTextNodes( document );
 	};
 
 	const handleButtonClick = (): void => {
@@ -310,6 +279,7 @@ export const addDeepLButton = (
 			text: textArray,
 			target_lang: targetLang,
 			object_id: window.ydpl.ydpl_translate_post_id,
+			...( sourceLanguage ? { source_lang: sourceLanguage } : {} ),
 		};
 
 		const response = await fetch( url, {
