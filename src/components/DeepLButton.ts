@@ -64,12 +64,6 @@ export const addDeepLButton = (
 	let languageLabel: string;
 	let languageDisclaimer: string;
 	let originalTextMap: Map< string, TextNodeData[] > = new Map();
-
-	/**
-	 * Captured once in init(). updateLangAttribute() overwrites
-	 * <html lang> on every translate, so reading it later would report the
-	 * previous target language as the source of the original text.
-	 */
 	let sourceLanguage = '';
 
 	const init = (): void => {
