@@ -86,6 +86,24 @@ describe( 'DeepLButton request body', () => {
 		expect( bodies[ bodies.length - 1 ].source_lang ).toBe( 'NL' );
 	} );
 
+	it( 'sends a well-formed but DeepL-unsupported document language as-is', async () => {
+		// The client is not the authority on DeepL's source-language set: it
+		// forwards the shape it found and the server decides whether the code
+		// belongs in the payload at all. Pinned so a client-side allowlist is
+		// not added here by mistake, which would only drift from the server's.
+		document.documentElement.lang = 'fy-NL';
+		addDeepLButton( document.getElementById( 'bar' )!, OPTIONS );
+
+		const select = document.querySelector(
+			'.a11y-toolbar__translate-select'
+		) as HTMLSelectElement;
+		select.value = 'EN-US';
+		select.dispatchEvent( new Event( 'change' ) );
+		await Promise.resolve();
+
+		expect( bodies[ 0 ].source_lang ).toBe( 'FY' );
+	} );
+
 	it( 'omits source_lang when the document language is unusable', async () => {
 		document.documentElement.lang = '';
 		addDeepLButton( document.getElementById( 'bar' )!, OPTIONS );

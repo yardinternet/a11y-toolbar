@@ -24,6 +24,17 @@ describe( 'resolveSourceLanguage', () => {
 		expect( resolveSourceLanguage( 'nld' ) ).toBe( '' );
 	} );
 
+	it( 'passes a well-formed but DeepL-unsupported code through unchanged', () => {
+		// Deliberate: this helper checks shape, not membership of DeepL's
+		// source-language set. The server drops a code DeepL does not accept,
+		// so DeepL auto-detects instead of answering HTTP 400. A second
+		// allowlist here would only give the two sides something to drift
+		// apart on, and the server cannot trust this one anyway.
+		expect( resolveSourceLanguage( 'fy' ) ).toBe( 'FY' );
+		expect( resolveSourceLanguage( 'lb-LU' ) ).toBe( 'LB' );
+		expect( resolveSourceLanguage( 'is' ) ).toBe( 'IS' );
+	} );
+
 	it( 'returns empty for a missing or malformed tag', () => {
 		expect( resolveSourceLanguage( '' ) ).toBe( '' );
 		expect( resolveSourceLanguage( '-' ) ).toBe( '' );
