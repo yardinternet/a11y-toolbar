@@ -36,7 +36,6 @@ export default class A11yToolbar {
 	 */
 	init(): this {
 		this.toolbar = this.createToolbar();
-		const toggleButton = this.createToggleButton();
 
 		addReadSpeakerButton( this.toolbar, this.options );
 		addTextSizeButton( this.toolbar, this.options );
@@ -48,6 +47,12 @@ export default class A11yToolbar {
 		addTolkieTranslateButton( this.toolbar, this.options );
 		addCustomButton( this.toolbar, this.options );
 
+		if ( ! this.toolbar.hasChildNodes() ) {
+			this.toolbar = null;
+			return this;
+		}
+
+		const toggleButton = this.createToggleButton();
 		const container = document.querySelector( this.selector );
 
 		container?.appendChild( this.toolbar );
