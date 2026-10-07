@@ -276,23 +276,21 @@ export const addDeepLButton = (
 		}
 	};
 
-	const restoreOriginalText = (): void => {
+	const revertToOriginalText = (): void => {
+		latestRequestId++;
 		originalTextMap.forEach( ( textNodeDataList ) => {
 			textNodeDataList.forEach( ( { node, originalText } ) => {
 				node.textContent = originalText;
 			} );
 		} );
-	};
 
-	const revertToOriginalText = (): void => {
-		latestRequestId++;
-		restoreOriginalText();
 		toggleCheckMark( false );
 		updateLangAttribute( DEFAULT_LANGUAGE );
 	};
 
 	const translatePage = async ( targetLang: string ): Promise< void > => {
-		const requestId = ++latestRequestId;
+		revertToOriginalText();
+		const requestId = latestRequestId;
 
 		try {
 			const translations = await fetchTranslations(
@@ -301,7 +299,6 @@ export const addDeepLButton = (
 			);
 			if ( requestId !== latestRequestId ) return;
 
-			restoreOriginalText();
 			applyTranslations( translations );
 			updateLangAttribute( targetLang );
 		} catch ( error ) {
