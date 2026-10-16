@@ -66,6 +66,7 @@ export const addDeepLButton = (
 	let languageLabel: string;
 	let languageDisclaimer: string;
 	const originalTextMap: Map< string, TextNodeData[] > = new Map();
+	let latestRequestId = 0;
 
 	const init = (): void => {
 		if ( ! options || ! options.showDeepLButton ) return;
@@ -276,6 +277,7 @@ export const addDeepLButton = (
 	};
 
 	const revertToOriginalText = (): void => {
+		latestRequestId++;
 		originalTextMap.forEach( ( textNodeDataList ) => {
 			textNodeDataList.forEach( ( { node, originalText } ) => {
 				node.textContent = originalText;
@@ -287,19 +289,47 @@ export const addDeepLButton = (
 	};
 
 	const translatePage = async ( targetLang: string ): Promise< void > => {
-		const uniqueTextArray = Array.from( new Set( originalTextMap.keys() ) );
-		await translateText( uniqueTextArray, targetLang );
-		updateLangAttribute( targetLang );
+		revertToOriginalText();
+		const requestId = latestRequestId;
+
+		try {
+			const translations = await fetchTranslations(
+				Array.from( originalTextMap.keys() ),
+				targetLang
+			);
+			if ( requestId !== latestRequestId ) return;
+
+			applyTranslations( translations );
+			updateLangAttribute( targetLang );
+		} catch ( error ) {
+			if ( requestId !== latestRequestId ) return;
+
+			console.error( error );
+			resetToDefaultLanguage();
+			addErrorMessageToModal();
+		}
+	};
+
+	const resetToDefaultLanguage = (): void => {
+		window.sessionStorage.setItem(
+			'DeepLSelectedLanguage',
+			DEFAULT_LANGUAGE
+		);
+		const select = document.querySelector< HTMLSelectElement >(
+			'#a11y-toolbar__translate-select'
+		);
+		if ( select ) select.value = DEFAULT_LANGUAGE;
+		revertToOriginalText();
 	};
 
 	const updateLangAttribute = ( language: string ): void => {
 		document.documentElement.lang = language;
 	};
 
-	const translateText = async (
+	const fetchTranslations = async (
 		textArray: string[],
 		targetLang: string
-	): Promise< void > => {
+	): Promise< Array< { text: string; translation: string } > > => {
 		const url = window.ydpl.ydpl_rest_translate_url;
 		const headers = {
 			'Content-Type': 'application/json',
@@ -320,14 +350,12 @@ export const addDeepLButton = (
 		} );
 
 		if ( ! response.ok ) {
-			addErrorMessageToModal();
 			throw new Error(
 				`Request failed with status: ${ response.status }, ${ response.status }`
 			);
 		}
 
-		const responseData = await response.json();
-		applyTranslations( responseData );
+		return response.json();
 	};
 
 	const addErrorMessageToModal = (): void => {
