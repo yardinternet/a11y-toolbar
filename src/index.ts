@@ -78,7 +78,7 @@ export default class A11yToolbar {
 		const button = document.createElement( 'button' );
 		button.classList.add( 'a11y-toolbar__toggle-button' );
 		button.setAttribute( 'aria-expanded', 'false' );
-		button.setAttribute( 'aria-controls', 'a11y-toolbar' );
+		button.setAttribute( 'aria-controls', 'js-a11y-toolbar' );
 		button.setAttribute( 'aria-label', 'Open toegankelijkheid toolbar' );
 
 		const icon = document.createElement( 'i' );
